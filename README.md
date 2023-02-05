@@ -1,15 +1,8 @@
 # infra
 
-The infrastructure for my network and homelab.
+My network infrastructure.
 
 TODO: network diagram
-
-## Summary
-
-- Router
-  - OPNsense (Firewall)
-  - CrowdSec (IPS)
-  - Suricata (IDS)
 
 ## References
 
