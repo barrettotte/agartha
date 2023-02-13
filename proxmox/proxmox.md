@@ -83,6 +83,31 @@ NOTE: video card passthrough has some extra step...not sure if needed yet (maybe
   - Note Template: `{{node}}-{{guestname}} ({{vmid}})`
 - on first setup, run now
 
+## iSCSI
+
+- see truenas notes for iSCSI share setup
+- https://www.youtube.com/watch?v=g5fhCiAETSU
+- https://www.wundertech.net/how-to-set-up-iscsi-storage-on-proxmox/
+- https://pve.proxmox.com/wiki/ISCSI_Multipath
+
+```sh
+apt-get install multipath-tools
+```
+
+```ini
+# set multipath and CHAP
+#
+# /etc/iscsi/iscsid.conf
+node.startup = automatic
+node.session.timeo.replacement_timeout = 15
+
+# node.session.auth.authmethod = CHAP
+# node.session.auth.username = USERNAME
+# node.session.auth.password = PASSWORD
+
+# ...actually turned off CHAP for now
+```
+
 ## Misc
 
 - When creating a VM, consider changing disk Async IO to native or threads

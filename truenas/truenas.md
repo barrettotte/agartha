@@ -45,6 +45,24 @@ Relog into Windows to update permissions.
   - Web Interface IPv4 Address: `10.42.10.21`
   - Enable Web Interface HTTP -> HTTPS Redirect
 
+## iSCSI
+
+- Wizard
+- Setup two zvols: `proxmox/proxmox-shared-0` and `proxmox/proxmox-shared-1` each 500GB
+- Block device config
+  - name: `proxmox-shared-0`
+  - extent type: Device
+  - device: `storage0/proxmox/proxmox-shared-0` 500GB
+  - sharing platform: Modern OS
+- Portal
+  - auth method: CHAP
+  - auth group: new -> ID=10,User=proxmox-shared-0
+  - ip address: `10.42.30.21:3260`, `10.42.10.21:3260`
+- Initiator
+  - Initiators: left blank
+  - Authorized Networks: `10.42.30.0/24`, `10.42.10.0/24`
+- See proxmox notes for next steps
+
 ## References
 
 - [TrueNAS Core: Configuring Shares, Permissions, Snapshots & Shadow Copies](https://www.youtube.com/watch?v=QIdy6sR0HrI)
