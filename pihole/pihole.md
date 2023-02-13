@@ -4,15 +4,14 @@ VLAN 30 (services)
 
 ## Setup
 
-- LXC container - Ubuntu 22
-- `adduser barrett`
-- `adduser barrett sudo`
-- `su barrett`
-- `sudo apt update && sudo apt upgrade -y`
-- `sudo apt install curl`
+- LXC container
+  - Ubuntu 22, 8GB disk, 1 core, 512MB RAM
+  - `vmbr1` (services), static IP `10.42.30.10/24`
+- `apt update && apt upgrade -y`
+- `apt install curl`
 - https://github.com/pi-hole/pi-hole/#one-step-automated-install
   - `curl -sSL https://install.pi-hole.net | bash`
-- Wizard
+- Wizard; defaults
 - `pihole -a -p`
 - Web UI: 
   - Settings > DNS > Interface Settings > Respond only on interface `eth0`
@@ -26,19 +25,26 @@ VLAN 30 (services)
   - Source: `This Firewall`
   - Destination Port Range: `DNS`
   - Category: `Pihole`
+- Services > DHCPv4 > [interface]
+  - DNS servers `10.42.30.10`, `8.8.8.8`
 - System > Settings > General > Networking
   - DNS servers: `10.42.30.10`, `8.8.8.8`, `8.8.4.4`
-  - DNS server options: uncheck  Allow DNS server list to be overridden by DHCP/PPP on WAN
+  - DNS server options: uncheck Allow DNS server list to be overridden by DHCP/PPP on WAN
+  - Note: this didn't seem to work for some reason...Pihole was not receiving DNS requests
 
 ## Unbound DNS
 
 https://docs.pi-hole.net/guides/dns/unbound/
 
-- `sudo apt install unbound`
-- `sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf`, add contents of `./pi-hole.conf`
-- `sudo service unbound restart`
+- `apt install unbound`
+- `nano /etc/unbound/unbound.conf.d/pi-hole.conf`, add contents of `./pi-hole.conf`
+- `service unbound restart`
 - `dig pi-hole.net @127.0.0.1 -p 5335`
 - Web UI: 
   - Settings > DNS
   - Uncheck upstream DNS (Google,Cloudflare,etc)
   - add and enable Pihole Unbound DNS to Upstream DNS Servers - `127.0.0.1#5335`
+
+## Local DNS Records
+
+- Domain: `pihole.agartha`, IP: `10.42.30.10`

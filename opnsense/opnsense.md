@@ -41,7 +41,18 @@ https://homenetworkguy.com/how-to/use-opnsense-router-behind-another-router/
 - consider System > General > Networking > DNS server options = enable
 - this also shows how to configure firewall rules for out of network devices (might be useful for media server sharing with family)
 
-## IDS
+## IDS/IPS
 
+- Suricata, CrowdSec
+- services > Intrusion Detection
+  - 
 - https://homenetworkguy.com/how-to/install-and-configure-crowdsec-on-opnsense/
 - https://homenetworkguy.com/how-to/configure-intrusion-detection-opnsense/
+
+## Netflow
+
+- System > Firmware > Plugins > os-ntopng
+- Reporting > Netflow
+  - Listening interfaces: `home,iot,LAN,management,services,WAN`
+  - WAN interfaces: `WAN`
+  - Capture local: yes

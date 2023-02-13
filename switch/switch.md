@@ -1,5 +1,11 @@
 # Switch
 
+## General
+
+- trunk ports = tagged (multi-VLAN on one single port)
+- access ports = untagged (doesn't know about VLAN tags)
+- Link Aggregation Group (LAG) - increase throughput of traffic
+
 ## Setup
 
 - disconnect switch from Opnsense and connect PC to switch
@@ -16,29 +22,33 @@
 
 ## Ports
 
-TODO:
-
-01. VLAN 10 (management)
-02. Opnsense trunk port (All VLANs)
-03. LAN access port (VLAN 0)
-04. x
-05. x
-06. x
-07. x
-08. TP-Link Archer A7 router (VLAN 0) TODO:
-09. x
-10. x
-11. x
-12. x
-13. x
-14. Proxmox - babylon; VLAN 30 (services)
-15. x
-16. Proxmox - babylon; VLAN 10 (management)
-17. VLAN 25 (guest)
-18. Proxmox - sumer; VLAN 10 (management)
-19. x
-20. Octoprint; VLAN 20 (home)
-21. VLAN 20 (home)
-22. x
-23. Main PC; VLAN 20 (home)
-24. x
+| Port | Description            | VLANs    |
+| ---- | ---------------------- | -------- |
+| 1    | emergency access       | 10       |
+| 2    | OPNSense trunk         | ALL      |
+| 3    |                        |          |
+| 4    |                        |          |
+| 5    |                        |          |
+| 6    |                        |          |
+| 7    |                        |          |
+| 8    |                        |          |
+| 9    | tigris (wireless AP)   | 20,25,50 |
+| 10   |                        |          |
+| 11   |                        |          |
+| 12   |                        |          |
+| 13   |                        |          |
+| 14   | babylon (proxmox)      | 30       |
+| 15   |                        |          |
+| 16   | babylon (proxmox)      | 10       |
+| 17   | test guest             | 25       |
+| 18   | sumer (proxmox)        | 10       |
+| 19   |                        |          |
+| 20   | octoprint              | 20       |
+| 21   | home access            | 20       |
+| 22   |                        |          |
+| 23   | Barrett-PC             | 20       |
+| 24   |                        |          |
+| 25   |                        | 5        |
+| 26   |                        | 5        |
+| 27   |                        | 5        |
+| 28   |                        | 5        |

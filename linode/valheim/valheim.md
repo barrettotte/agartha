@@ -39,3 +39,12 @@ scp USER@SERVER_IP:"~/serverfiles/valheim-server.pdf" .
 VALHEIM_USER=user
 VALHEIM_SERVER=1.1.1.1
 ```
+
+## Ports
+
+```sh
+netstat -lntu
+
+# 22:   ssh
+# 2457: valheim
+```

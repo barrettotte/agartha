@@ -21,30 +21,100 @@
   - IP Address - `10.42.10.52`
   - Hostname - `babylon.agartha`
   - Gateway/DNS - `10.42.10.1`
-- updated packages 
+- updated packages
+- `apt install sudo`
 - made new user in PAM realm with admin access
 
-## VLAN
+### PCI Passthrough
 
-Make Proxmox VLAN aware: System > Network > `vmbr0` > check VLAN aware
+- https://pve.proxmox.com/wiki/Pci_passthrough
+  - essentially, passing PCI device through to VM requires IOMMU isolation
+  - otherwise I think it passes the whole IOMMU to the VM and bricks everything on the hypervisor until reboot
+- enable IOMMU support and ACS support in BIOS
 
-TODO: virtual NICs?
+(proxmox shell)
+
+https://wiki.henryzhou.com/docs/system/proxmox/
+
+```ini
+# enable IOMMU
+
+# /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT="quiet amd_iommu=on pcie_acs_override=downstream,multifunction"
+```
+
+```sh
+update-grub
+```
+
+```ini
+# add kernel modules
+
+# /etc/modules
+vfio
+vfio_iommu_type1
+vfio_pci
+vfio_virqfd
+```
+
+```sh
+update-initramfs -u -k all
+reboot now
+```
+
+- check if IOMMU enabled - `dmesg | grep -e DMAR -e IOMMU`
+- check if IOMMUI interrupt remapping supported - `dmesg | grep 'remapping'`
+- `find /sys/kernel/iommu_groups/ -type l`
+- processor needs to have support for ACS, Ryzen 5 should be all set
+
+NOTE: video card passthrough has some extra step...not sure if needed yet (maybe for jellyfin?)
 
 ## Backups
 
-TODO: scheduled backups
+- after setting up TrueNAS, add SMB storage
+- Backup > add
+  - General
+    - storage: SMB share (`backups`)
+    - schedule: every sunday 04:00
+    - Selection mode: all
+    - Send email to: email
+    - Email: On failure only
+  - Retention > Keep Last: 3
+  - Note Template: `{{node}}-{{guestname}} ({{vmid}})`
+- on first setup, run now
 
 ## Misc
 
+- When creating a VM, consider changing disk Async IO to native or threads
+
 ### Subscription Fixes
 
-Comment out line in `/etc/apt/sources.list.d/pve-enterprise.list` to stop update error
-while trying to pull from enterprise repository.
+[node] > Updates > Repository
+  - disable enterprise proxmox repo
+  - add proxmox no-subscription repo
 
 [Remove Proxmox Subscription Notice](https://johnscs.com/remove-proxmox51-subscription-notice/)
 
 ```sh
+# Note: This probably gets removed after updating
+
 sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js && systemctl restart pveproxy.service
 ```
 
 Note: Updates will probably re-enable this
+
+### Dark Theme
+
+https://github.com/Weilbyte/PVEDiscordDark
+
+```sh
+wget https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh
+bash PVEDiscordDark.sh install
+```
+
+Alternatively and objectively easier, just use https://github.com/darkreader/darkreader
+
+### LXC Misc
+
+- Unprivleged LXC mount CIFS shares
+  - https://forum.proxmox.com/threads/tutorial-unprivileged-lxcs-mount-cifs-shares.101795/
