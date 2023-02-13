@@ -1,0 +1,87 @@
+- name: initialize and configure users
+  hosts: ansible_test
+  become: true
+
+  # TODO: support for FreeBSD (truenas)
+  # https://docs.ansible.com/ansible/2.6/user_guide/playbooks_conditionals.html
+
+  vars_files:
+    - vars/secrets.yml
+  vars:
+    - personal_user: barrett
+
+  pre_tasks:
+    - name: Update apt cache if needed.
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+  tasks:
+    - name: Ensure wheel group exists.
+      group:
+        name: wheel
+        state: present
+
+    - name: Ensure sudo is installed.
+      apt:
+        name: sudo
+        state: present
+
+    - name: Allow passwordless sudo for wheel group.
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: '/usr/sbin/visudo -cf %s'
+
+    - name: Create ansible user and add to wheel group.
+      user:
+        name: ansible
+        comment: ansible service user
+        password: "{{ ansible_password }}"
+        shell: /bin/bash
+        createhome: true
+        groups: wheel
+        append: true
+        state: present
+
+    - name: Add ansible user authorized keys.
+      ansible.posix.authorized_key:
+        user: ansible
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/ansible_id_rsa.pub') }}"
+        state: present
+
+    - name: Create personal user and add to wheel group.
+      user:
+        name: "{{ personal_user }}"
+        comment: personal
+        password: "{{ personal_password }}"
+        shell: /bin/bash
+        createhome: true
+        groups: wheel
+        append: true
+        state: present
+
+    - name: Add personal user authorized keys.
+      ansible.posix.authorized_key:
+        user: "{{ personal_user }}"
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+        state: present
+
+    # TODO: disable password auth in general?
+    #   /etc/ssh/sshd_config
+    #     PasswordAuthentication no
+    #     ChallengeResponseAuthentication no
+
+    # TODO: disable root password auth
+    # - name: Disable password authentication for root.
+    #   lineinfile:
+    #     path: /etc/ssh/sshd_config
+    #     state: present
+    #     regexp: '^#PermitRootLogin'
+    #     line: 'PermitRootLogin prohibit-password'
+
+    # TODO: disable root account? 
+    #   sudo passwd -l root
+ 
