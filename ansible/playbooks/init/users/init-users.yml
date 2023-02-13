@@ -69,19 +69,16 @@
         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
         state: present
 
-    # TODO: disable password auth in general?
-    #   /etc/ssh/sshd_config
-    #     PasswordAuthentication no
-    #     ChallengeResponseAuthentication no
-
-    # TODO: disable root password auth
-    # - name: Disable password authentication for root.
-    #   lineinfile:
-    #     path: /etc/ssh/sshd_config
-    #     state: present
-    #     regexp: '^#PermitRootLogin'
-    #     line: 'PermitRootLogin prohibit-password'
-
-    # TODO: disable root account? 
-    #   sudo passwd -l root
+    - name: Disable password authentication for all users
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      loop:
+        - regexp: '^PermitRootLogin'
+          line: 'PermitRootLogin prohibit-password'
+        # TODO: turn off password auth in general ?
+        #   PasswordAuthentication no
+        #   ChallengeResponseAuthentication no
  
