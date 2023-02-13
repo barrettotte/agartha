@@ -9,6 +9,7 @@ TODO: network diagram
 - [awesome-selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
 - [r/homelab](https://www.reddit.com/r/homelab/)
 - [Proxmox VE Full Course](https://www.youtube.com/playlist?list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo)
+- [Homelab Setup Guide - Proxmox/TrueNAS/Docker Services](https://www.youtube.com/watch?v=yDkc3D3BFhM)
 - Homelab diagram
   - https://simpleicons.org/
   - https://github.com/loganmarchione/homelab-svg-assets
