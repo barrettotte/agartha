@@ -1,33 +1,31 @@
-- name: initialize and configure users
-  hosts: ansible_test
+- name: Initialize and configure users
+  hosts: debian
   become: true
-
-  # TODO: support for FreeBSD (truenas)
-  # https://docs.ansible.com/ansible/2.6/user_guide/playbooks_conditionals.html
-
   vars_files:
     - vars/secrets.yml
   vars:
+    - ansible_user: root
+    - ansible_ssh_private_key_file: ~/.ssh/id_rsa
     - personal_user: barrett
 
   pre_tasks:
-    - name: Update apt cache if needed.
+    - name: Update apt cache if needed
       apt:
         update_cache: true
         cache_valid_time: 3600
 
   tasks:
-    - name: Ensure wheel group exists.
+    - name: Ensure wheel group exists
       group:
         name: wheel
         state: present
 
-    - name: Ensure sudo is installed.
+    - name: Ensure sudo is installed
       apt:
         name: sudo
         state: present
 
-    - name: Allow passwordless sudo for wheel group.
+    - name: Allow passwordless sudo for wheel group
       lineinfile:
         dest: /etc/sudoers
         state: present
@@ -35,7 +33,7 @@
         line: '%wheel ALL=(ALL) NOPASSWD: ALL'
         validate: '/usr/sbin/visudo -cf %s'
 
-    - name: Create ansible user and add to wheel group.
+    - name: Create ansible user and add to wheel group
       user:
         name: ansible
         comment: ansible service user
@@ -46,28 +44,28 @@
         append: true
         state: present
 
-    - name: Add ansible user authorized keys.
+    - name: Add ansible user authorized keys
       ansible.posix.authorized_key:
         user: ansible
         key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/ansible_id_rsa.pub') }}"
         state: present
 
-    - name: Create personal user and add to wheel group.
-      user:
-        name: "{{ personal_user }}"
-        comment: personal
-        password: "{{ personal_password }}"
-        shell: /bin/bash
-        createhome: true
-        groups: wheel
-        append: true
-        state: present
+    # - name: Create personal user and add to wheel group
+    #   user:
+    #     name: "{{ personal_user }}"
+    #     comment: personal
+    #     password: "{{ personal_password }}"
+    #     shell: /bin/bash
+    #     createhome: true
+    #     groups: wheel
+    #     append: true
+    #     state: present
 
-    - name: Add personal user authorized keys.
-      ansible.posix.authorized_key:
-        user: "{{ personal_user }}"
-        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
-        state: present
+    # - name: Add personal user authorized keys
+    #   ansible.posix.authorized_key:
+    #     user: "{{ personal_user }}"
+    #     key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    #     state: present
 
     - name: Disable password authentication for all users
       lineinfile:

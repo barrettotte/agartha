@@ -1,5 +1,6 @@
-- hosts: all
+- name: Test connection to hosts
+  hosts: all
   become: true
   tasks:
-    - name: Test connection to hosts.
+    - name: Ping
       ping:
