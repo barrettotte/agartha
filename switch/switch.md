@@ -22,33 +22,33 @@
 
 ## Ports
 
-| Port | Description            | VLANs    |
-| ---- | ---------------------- | -------- |
-| 1    | emergency access       | 10       |
-| 2    | OPNSense trunk         | ALL      |
-| 3    |                        |          |
-| 4    |                        |          |
-| 5    |                        |          |
-| 6    |                        |          |
-| 7    |                        |          |
-| 8    |                        |          |
-| 9    | tigris (wireless AP)   | 20,25,50 |
-| 10   |                        |          |
-| 11   |                        |          |
-| 12   |                        |          |
-| 13   |                        |          |
-| 14   | babylon (proxmox)      | 30       |
-| 15   |                        |          |
-| 16   | babylon (proxmox)      | 10       |
-| 17   | test guest             | 25       |
-| 18   | sumer (proxmox)        | 10       |
-| 19   |                        |          |
-| 20   | octoprint              | 20       |
-| 21   | home access            | 20       |
-| 22   |                        |          |
-| 23   | Barrett-PC             | 20       |
-| 24   |                        |          |
-| 25   |                        | 5        |
-| 26   |                        | 5        |
-| 27   |                        | 5        |
-| 28   |                        | 5        |
+| Port | Description            | Tagged   | Untagged |
+| ---- | ---------------------- | -------- | -------- |
+| 1    | emergency access       |          | 10       |
+| 2    | OPNSense trunk         | ALL      |          |
+| 3    |                        |          |          |
+| 4    |                        |          |          |
+| 5    |                        |          |          |
+| 6    |                        |          |          |
+| 7    |                        |          |          |
+| 8    |                        |          |          |
+| 9    | tigris (wireless AP)   | 20,25,50 | 10       |
+| 10   |                        |          |          |
+| 11   |                        |          |          |
+| 12   |                        |          |          |
+| 13   |                        |          |          |
+| 14   | babylon (proxmox)      |          | 30       |
+| 15   |                        |          |          |
+| 16   | babylon (proxmox)      |          | 10       |
+| 17   | test guest             |          | 25       |
+| 18   | sumer (proxmox)        | 10       |          |
+| 19   |                        |          |          |
+| 20   | octoprint              |          | 20       |
+| 21   | home access            |          | 20       |
+| 22   |                        |          |          |
+| 23   | Barrett-PC             |          | 20       |
+| 24   |                        |          |          |
+| 25   |                        |          | 5        |
+| 26   |                        |          | 5        |
+| 27   |                        |          | 5        |
+| 28   |                        |          | 5        |

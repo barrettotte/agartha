@@ -16,6 +16,7 @@ VLAN 30 (services)
 - Web UI: 
   - Settings > DNS > Interface Settings > Respond only on interface `eth0`
   - Set since pihole is in a separate VLAN
+  - Tools > Update Gravity
 
 ## Opnsense
 

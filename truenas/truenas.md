@@ -9,6 +9,7 @@
 - add PCI device: HBA card, rombar=0, pcie=1
 - network `vmbr1` (services)
 - https://www.truenas.com/docs/core/gettingstarted/corehardwareguide/#memory-cpu-and-network-considerations
+- set Start/Shutdown order to 1
 
 ```sh
 # add disks manually that aren't on HBA
