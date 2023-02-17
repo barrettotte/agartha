@@ -6,6 +6,7 @@ TODO: network diagram
 
 ## References
 
+- [vscode sshfs](https://github.com/SchoofsKelvin/vscode-sshfs)
 - [awesome-selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
 - [r/homelab](https://www.reddit.com/r/homelab/)
 - [Proxmox VE Full Course](https://www.youtube.com/playlist?list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo)
