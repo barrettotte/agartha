@@ -1,1 +1,15 @@
-#
+global:
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
+
+receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: 'http://temp.agartha:5001/'
+
+# TODO: gotify? Discord? email?

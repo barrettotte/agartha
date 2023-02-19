@@ -25,6 +25,40 @@ apt-get update
 apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
+## Docker Volumes NFS
+
+- https://www.youtube.com/watch?v=eKAQiYu4NyI
+- https://www.truenas.com/community/threads/core-docker-and-nfs.100568/
+
+truenas NFS service enable NFSv4
+
+setup NFS share `/mnt/mesopotamia/nfs/carthage-docker`
+  - `/portainer-data`
+allow only 10.42.30.0/24, 10.42.30.25
+
+```sh
+apt update && apt -y install nfs-common fuse-overlayfs
+systemctl stop docker && systemctl stop docker.socket
+mkdir -p /mnt/nfs
+
+# /etc/fstab
+service.truenas.agartha:/mnt/mesopotamia/nfs/carthage/docker /mnt/nfs nfs rw,soft,intr,nfsvers=4,rsize=8192,wsize=8192,timeo=14 0 0
+
+# test
+mount -v -t nfs 10.42.30.21:/mnt/mesopotamia/nfs/carthage/docker /mnt/nfs
+
+# mount.nfs: mount(2): Operation not permitted
+# ...
+# mount.nfs: portmap query failed: RPC: Remote system error - No route to host
+
+# https://theorangeone.net/posts/mount-nfs-inside-lxc/
+```
+
+Have to use **PRIVILEGED** containers
+also...trueNAS NFS service enable `NFSv3 ownership model for NFSv4`
+
+## Portainer
+
 ```sh
 # portainer
 # https://docs.portainer.io/start/install-ce/server/docker/linux
@@ -39,16 +73,42 @@ docker run -d -p 8000:8000 -p 9443:9443 --name portainer \
 # https://10.42.30.25:9443/
 ```
 
-```sh
-# compose
-
-docker compose up -d
-```
+Environments > local > Public IP = `carthage.agartha`
 
 https://github.com/stefanprodan/dockprom
+
+## Loki
+
+```sh
+# Install Grafana Loki docker driver
+docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
+
+# verify install
+docker plugin ls
+```
+
+```jsonc
+// change default logging driver
+
+// etc/docker/daemon.json
+{
+  "log-driver": "loki",
+  "log-opts": {
+    "loki-url": "http://localhost:3100/loki/api/v1/push",
+    "loki-batch-size": "400"
+  }
+}
+```
+
+```sh
+# restart docker daemon
+systemctl restart docker
+```
 
 ## Misc
 
 ```sh
+docker compose up -d
+
 docker volume rm $(docker volume ls)
 ```

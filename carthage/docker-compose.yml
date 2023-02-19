@@ -1,14 +1,44 @@
 version: '3.9'
+name: carthage
 
-networks: {}
+networks:
+  carthage_network:
 
 volumes:
   grafana_data:
     driver: local
+    driver_opts:
+      type: nfs
+      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+      device: ":/mnt/mesopotamia/nfs/carthage/docker/grafana"
+
+  # loki_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: nfs
+  #     o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+  #     device: ":/mnt/mesopotamia/nfs/carthage/docker/loki"
+
   portainer_data:
     driver: local
+    driver_opts:
+      type: nfs
+      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+      device: ":/mnt/mesopotamia/nfs/carthage/docker/portainer"
+
   prometheus_data:
     driver: local
+    driver_opts:
+      type: nfs
+      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+      device: ":/mnt/mesopotamia/nfs/carthage/docker/prometheus"
+  
+  # promtail_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: nfs
+  #     o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+  #     device: ":/mnt/mesopotamia/nfs/carthage/docker/promtail"
 
 services:
   alertmanager:
@@ -17,10 +47,12 @@ services:
     ports:
       - '9093:9093'
     volumes:
-      - ./alertmanager:/etc/alertmanager
+      - ./alertmanager/config.yml:/etc/alertmanager/config.yml
+      # TODO: alertmanager_data:/etc/alertmanager
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
+      - '--cluster.advertise-address=0.0.0.0:9093'
     restart: unless-stopped
 
   cadvisor:
@@ -47,15 +79,27 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     env_file:
       - .env
+    # user: '1000' # TODO: needed?
     restart: unless-stopped
 
-  # TODO: Grafana Loki
+  loki:
+    container_name: loki
+    image: grafana/loki:2.7.3
+    ports:
+      - '3100:3100'
+    volumes:
+      # - loki_data:/etc/loki
+      - ./loki/loki-config.yml:/etc/loki/local-config.yml
+    command:
+      - '-config.file=/etc/loki/local-config.yml'
+    restart: unless-stopped
 
   node-exporter:
     container_name: node-exporter
-    image: prom/node-exporter
+    image: prom/node-exporter:v1.5.0
     ports:
       - '9100:9100'
     volumes:
@@ -73,6 +117,7 @@ services:
     container_name: portainer
     image: portainer/portainer-ce:2.17.0
     ports:
+      - '8000:8000'
       - '9443:9443'
     volumes:
       - portainer_data:/data
@@ -85,8 +130,8 @@ services:
     ports: 
       - '9090:9090'
     volumes:
-      - ./prometheus:/etc/prometheus
       - prometheus_data:/promtheus
+      - ./prometheus:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -96,9 +141,27 @@ services:
       - '--web.enable-lifecycle'
     restart: unless-stopped
 
+  promtail:
+    container_name: promtail
+    image: grafana/promtail:2.7.3
+    ports:
+      - '1514:1514'
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - promtail_data:/etc/promtail
+      - ./promtail/promtail.yml:/etc/promtail/docker-config.yml
+    command:
+      - '-config.file=/etc/promtail/docker-config.yml'
+    depends_on:
+      - loki
+    restart: unless-stopped
+
   pushgateway:
     container_name: pushgateway
     image: prom/pushgateway:v1.5.1
     ports:
       - '9091:9091'
     restart: unless-stopped
+
+# TODO: move each service to separate docker-compose file!
