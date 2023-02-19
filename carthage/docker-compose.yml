@@ -5,6 +5,13 @@ networks:
   carthage_network:
 
 volumes:
+  alertmanager_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+      device: ":/mnt/mesopotamia/nfs/carthage/docker/alertmanager"
+
   grafana_data:
     driver: local
     driver_opts:
@@ -12,12 +19,12 @@ volumes:
       o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
       device: ":/mnt/mesopotamia/nfs/carthage/docker/grafana"
 
-  # loki_data:
-  #   driver: local
-  #   driver_opts:
-  #     type: nfs
-  #     o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-  #     device: ":/mnt/mesopotamia/nfs/carthage/docker/loki"
+  loki_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+      device: ":/mnt/mesopotamia/nfs/carthage/docker/loki"
 
   portainer_data:
     driver: local
@@ -33,12 +40,12 @@ volumes:
       o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
       device: ":/mnt/mesopotamia/nfs/carthage/docker/prometheus"
   
-  # promtail_data:
-  #   driver: local
-  #   driver_opts:
-  #     type: nfs
-  #     o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-  #     device: ":/mnt/mesopotamia/nfs/carthage/docker/promtail"
+  uptimekuma_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
+      device: ":/mnt/mesopotamia/nfs/carthage/docker/uptime-kuma"
 
 services:
   alertmanager:
@@ -47,19 +54,20 @@ services:
     ports:
       - '9093:9093'
     volumes:
+      - alertmanager_data:/alertmanager-data
       - ./alertmanager/config.yml:/etc/alertmanager/config.yml
-      # TODO: alertmanager_data:/etc/alertmanager
     command:
       - '--config.file=/etc/alertmanager/config.yml'
-      - '--storage.path=/alertmanager'
+      - '--storage.path=/alertmanager-data'
       - '--cluster.advertise-address=0.0.0.0:9093'
+    user: "0:0"
     restart: unless-stopped
 
   cadvisor:
     container_name: cadvisor
     image: gcr.io/cadvisor/cadvisor:v0.46.0
     ports:
-      - '8080:8080'
+      - '8085:8080'
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -69,6 +77,15 @@ services:
     privileged: true
     devices:
       - /dev/kmsg:/dev/kmsg
+    restart: unless-stopped
+
+  dashy:
+    container_name: dashy
+    image: lissy93/dashy:2.1.1
+    ports:
+      - '8082:80'
+    volumes:
+      - ./dashy/conf.yml:/app/public/conf.yml
     restart: unless-stopped
 
   grafana:
@@ -82,7 +99,6 @@ services:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     env_file:
       - .env
-    # user: '1000' # TODO: needed?
     restart: unless-stopped
 
   loki:
@@ -91,7 +107,7 @@ services:
     ports:
       - '3100:3100'
     volumes:
-      # - loki_data:/etc/loki
+      - loki_data:/loki
       - ./loki/loki-config.yml:/etc/loki/local-config.yml
     command:
       - '-config.file=/etc/loki/local-config.yml'
@@ -130,15 +146,16 @@ services:
     ports: 
       - '9090:9090'
     volumes:
-      - prometheus_data:/promtheus
+      - prometheus_data:/prometheus-data
       - ./prometheus:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.path=/prometheus-data'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
+    user: "0:0"
     restart: unless-stopped
 
   promtail:
@@ -149,7 +166,6 @@ services:
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      # - promtail_data:/etc/promtail
       - ./promtail/promtail.yml:/etc/promtail/docker-config.yml
     command:
       - '-config.file=/etc/promtail/docker-config.yml'
@@ -163,5 +179,14 @@ services:
     ports:
       - '9091:9091'
     restart: unless-stopped
+  
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: louislam/uptime-kuma:1
+    volumes:
+      - uptimekuma_data:/app/data
+    ports:
+      - '3001:3001'
+    restart: unless-stopped
 
-# TODO: move each service to separate docker-compose file!
+# TODO: move to smaller compose files?

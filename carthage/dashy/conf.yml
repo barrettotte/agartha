@@ -1,0 +1,199 @@
+appConfig:
+  theme: default
+  language: en
+  layout: auto
+  iconSize: medium
+pageInfo:
+  title: Agartha
+  description: ''
+  footerText: ''
+  logo: ''
+sections:
+  - name: Networking
+    displayData:
+      sortBy: alphabetical
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: OPNsense
+        description: OPNsense
+        icon: hl-opnsense
+        url: https://opnsense.agartha
+        target: null
+        id: 0_1064_opnsense
+      - title: euphrates
+        description: TPLink managed switch
+        icon: hl-tplink
+        url: http://euphrates.agartha
+        target: newtab
+        id: 1_1064_euphrates
+      - title: Unifi
+        description: unifi controller
+        icon: hl-unifi
+        url: https://unifi.agartha:8443
+        target: newtab
+        id: 2_1064_unifi
+      - title: babylon
+        description: proxmox node
+        icon: hl-proxmox
+        url: https://babylon.agartha:8006
+        target: newtab
+        id: 3_1064_babylon
+      - title: Portainer
+        description: portainer
+        icon: hl-portainer
+        url: https://carthage.agartha:9443
+        target: newtab
+        id: 4_1064_portainer
+      - title: TrueNAS
+        description: truenas
+        icon: hl-truenas
+        url: https://manage.truenas.agartha
+        target: newtab
+        id: 5_1064_truenas
+      - title: Pihole
+        description: pihole
+        icon: hl-pihole
+        url: http://pihole.agartha/admin
+        target: newtab
+        id: 6_1064_pihole
+      - title: sumer
+        description: proxmox node
+        icon: hl-proxmox
+        url: https://sumer.agartha:8006
+        target: newtab
+        id: 7_1064_sumer
+    icon: fas fa-network-wired
+  - name: System Monitoring
+    displayData:
+      sortBy: alphabetical
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Prometheus
+        description: prometheus
+        icon: hl-prometheus
+        url: http://carthage.agartha:9090
+        target: newtab
+        id: 0_1739_prometheus
+      - title: Grafana
+        description: grafana
+        icon: hl-grafana
+        url: http://carthage.agartha:3000
+        target: newtab
+        id: 1_1739_grafana
+      - title: AlertManager
+        description: alertmanager
+        icon: hl-alertmanager
+        url: http://carthage.agartha:9093
+        target: newtab
+        id: 2_1739_alertmanager
+    icon: fas fa-monitor-heart-rate
+  - name: Network Monitoring
+    icon: fas fa-tachometer-alt-fast
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Uptime Kuma
+        description: uptime-kuma
+        icon: hl-uptime-kuma
+        url: http://carthage.agartha:3001
+        target: newtab
+        id: 0_1840_uptimekuma
+  - name: Services
+    icon: mdi mdi-hammer-wrench
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items: []
+  - name: IoT
+    icon: fas fa-house-signal
+    displayData:
+      sortBy: alphabetical
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Octoprint
+        description: octoprint
+        icon: hl-octoprint
+        url: http://octoprint.agartha
+        id: 0_268_octoprint
+  - name: External Services
+    icon: mdi mdi-cloud-circle
+    displayData:
+      sortBy: alphabetical
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Github
+        description: Github
+        icon: hl-github
+        url: https://github.com/
+        target: newtab
+        id: 0_1703_github
+      - title: Trello
+        description: Trello
+        icon: favicon
+        url: https://trello.com/b/orZGAawF/personal
+        target: newtab
+        id: 1_1703_trello
+      - title: Google Drive
+        description: Google drive
+        icon: hl-google-drive
+        url: https://drive.google.com/drive/my-drive
+        target: newtab
+        id: 2_1703_googledrive
+      - title: Anilist
+        description: Anilist
+        icon: favicon
+        url: https://anilist.co/
+        target: newtab
+        id: 3_1703_anilist
+      - title: Bitwarden
+        description: Bitwarden
+        icon: hl-bitwarden
+        url: https://vault.bitwarden.com/#/login
+        target: newtab
+        id: 4_1703_bitwarden
+  - name: External Servers
+    icon: mdi mdi-cloud-circle
+    displayData:
+      sortBy: alphabetical
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - title: Linode
+        description: Linode
+        icon: hl-linode
+        url: https://cloud.linode.com/linodes
+        target: newtab
+        id: 0_1613_linode
+      - title: barrettotte
+        description: barrettotte
+        icon: 🗿
+        url: https://barrettotte.github.io
+        target: newtab
+        id: 1_1613_barrettotte
+      - title: AWS
+        description: aws
+        icon: hl-aws
+        url: https://aws.amazon.com/console/
+        target: newtab
+        id: 2_1613_aws

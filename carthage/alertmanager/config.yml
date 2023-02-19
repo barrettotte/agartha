@@ -10,6 +10,6 @@ route:
 receivers:
   - name: 'web.hook'
     webhook_configs:
-      - url: 'http://temp.agartha:5001/'
+      - url: 'http://carthage.agartha:5001/'
 
 # TODO: gotify? Discord? email?

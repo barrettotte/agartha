@@ -13,6 +13,7 @@ TODO: network diagram
 - [Homelab Setup Guide - Proxmox/TrueNAS/Docker Services](https://www.youtube.com/watch?v=yDkc3D3BFhM)
 - Homelab diagram
   - https://simpleicons.org/
+  - https://github.com/walkxcode/dashboard-icons
   - https://github.com/loganmarchione/homelab-svg-assets
     - https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/main/homelab-svg-assets.xml
   - https://fontawesome.com/icons

@@ -109,6 +109,10 @@ systemctl restart docker
 
 ```sh
 docker compose up -d
-
 docker volume rm $(docker volume ls)
+
+du -sh /mnt/nfs
+du -h /mnt/nfs
+
+docker container exec -it loki /bin/sh
 ```

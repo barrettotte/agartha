@@ -37,6 +37,12 @@ NOTE: When testing adding user to group on Windows, disconnect all SMB shares.
 It seems like having an open SMB share causes issues with updating permissions or something.
 Relog into Windows to update permissions.
 
+## NFS
+
+- Setting up NFS for docker volume
+  - All dirs
+  - Maproot user = root, Maproot group = wheel
+
 ## TrusNAS Misc Config
 
 - Network > Interfaces 
