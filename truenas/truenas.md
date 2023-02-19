@@ -42,6 +42,7 @@ Relog into Windows to update permissions.
 - Setting up NFS for docker volume
   - All dirs
   - Maproot user = root, Maproot group = wheel
+- also needed to enable `NMFSv3 ownership model for NFSv4` for docker volumes...not sure why
 
 ## TrusNAS Misc Config
 

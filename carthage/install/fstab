@@ -1,0 +1,1 @@
+service.truenas.agartha:/mnt/mesopotamia/nfs/carthage/docker /mnt/nfs nfs rw,soft,intr,nfsvers=4,rsize=8192,wsize=8192,timeo=14 0 0
