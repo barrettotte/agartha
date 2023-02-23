@@ -1,0 +1,22 @@
+- name: Update apt cache if needed
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure wheel group exists
+  group:
+    name: wheel
+    state: present
+
+- name: Ensure sudo is installed
+  apt:
+    name: sudo
+    state: present
+
+- name: Allow passwordless sudo for wheel group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: '/usr/sbin/visudo -cf %s'

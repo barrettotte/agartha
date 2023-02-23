@@ -108,6 +108,10 @@ ansible babylon.agartha -m setup
 - `ansible-playbook ./playbooks/apt.yml --user ansible --ask-become-pass -i inventory.yml`
 - use variables from file: `--extra-vars "@some_file.yaml"`
 
+## Roles
+
+- `ansible-galaxy install -r requirements.yml`
+
 ## Ansible Vault
 
 - `ansible-vault encrypt vars/secrets.yml`

@@ -1,0 +1,19 @@
+- name: Create user
+  user:
+    name: "{{ user.username }}"
+    comment: "{{ user.comment }}"
+    password: "{{ user.password }}"
+    shell: /bin/bash
+    createhome: true
+    groups: "{{ user.groups }}"
+    append: true
+    state: present
+
+- name: Add user authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ user.username }}"
+    key: "{{ user.public_key }}"
+    state: present
+
+- name: Test new user connection
+  ping:

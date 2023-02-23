@@ -1,5 +1,6 @@
+---
 - name: Test connection to hosts
-  hosts: all
+  hosts: "{{ target_hosts | default('all') }}"
   become: true
   tasks:
     - name: Ping

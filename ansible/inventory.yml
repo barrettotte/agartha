@@ -8,8 +8,9 @@ agartha:
 
     debian:
       hosts:
-        octoprint.agartha:
-        pihole.agartha:
+        carthage.agartha:
+        test.agartha:
+        # pihole.agartha:
       children:
         proxmox:
 
@@ -17,6 +18,13 @@ agartha:
       hosts:
         truenas.agartha:
 
+    docker:
+      hosts:
+        carthage.agartha:
+
     ansible_test:
       hosts:
         10.42.30.60:
+
+# athens.agartha ?
+# octoprint.agartha ?

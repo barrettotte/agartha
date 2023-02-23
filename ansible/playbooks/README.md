@@ -1,19 +1,4 @@
-# TODO:
-
-- FreeBSD support (truenas)
-  - https://docs.ansible.com/ansible/2.6/user_guide/playbooks_conditionals.html
-  - init users
-  - update
-- proxmox setup new node
-- update Pihole
-- setup unifi
-- setup switch
-- setup Opnsense
-- setup Octoprint
-- setup 
-- replace secrets.yml files with HashiCorp Vault lookups
-
-## Run Playbooks
+# Ansible
 
 ## Init Users
 
@@ -22,7 +7,8 @@ After this playbook is run, should no longer need to use root user.
 ```sh
 ### remote
 # /etc/ssh/sshd_config
-#   PermitRootLogin yes
+#   PermitRootLogin prohibit-password
+# TODO: add this step to proxmox debian-lxc setup
 systemctl restart ssh
 
 ### local
@@ -30,7 +16,20 @@ ansible-playbook ./playbooks/test/ping.yml --user=root
 ansible-playbook ./playbooks/init/users/init-users.yml
 ```
 
-## Other
+## Setup Machines
+
+```sh
+# Setup carthage.agartha
+
+ansible-playbook ./playbooks/init/init-users.yml --limit carthage.agartha
+ansible-playbook ./playbooks/test/ping.yml --limit carthage.agartha
+ansible-playbook ./playbooks/init/init-docker.yml --limit carthage.agartha
+```
+
+## Misc
 
 - test connections - `ansible-playbook ./playbooks/test/ping.yml`
 - update Debian-based servers - `ansible-playbook ./playbooks/update/update-debian.yml`
+- limiting to one host - `ansible-playbook ./playbooks/init/init-docker.yml --limit carthage.agartha`
+
+`ssh-copy-id -i ~/.ssh/id_rsa.pub user@host`
