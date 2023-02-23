@@ -5,10 +5,33 @@ LXC with various docker containers
 ## Setup
 
 - debian, 16GB storage, 4GB RAM, 2 cores, vmbr1, 10.42.30.25
-- see `install.sh` and mount NFS via `/etc/fstab`
+- dependencies
+- `apt-get update`
+- `apt-get upgrade -y`
+- `nano /etc/ssh/sshd_config` - `PermitRootLogin prohibit-password`
 
-truenas NFS service enable NFSv4
+```ini
+# /etc/network/interfaces
+source /etc/network/interfaces.d/*
+auto lo
+iface lo inet loopback
 
-setup NFS share `/mnt/mesopotamia/nfs/carthage-docker`
-  - `/portainer-data`
-allow only 10.42.30.0/24, 10.42.30.25
+allow-hotplug enp6s18
+iface enp6s18 inet static
+    address 10.42.30.25/24
+    gateway 10.42.30.1
+    dns-nameservers 10.42.30.10
+    dns-search agartha
+```
+
+`ansible-playbook ../ansible/playbooks/main/carthage.yml`
+
+
+
+### Misc
+
+```sh
+# Grafana permission fix
+mkdir -p /mnt/nfs/docker/grafana
+chown -R 472:472 /mnt/nfs/docker/grafana/
+```

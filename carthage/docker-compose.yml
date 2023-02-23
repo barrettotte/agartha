@@ -4,49 +4,6 @@ name: carthage
 networks:
   carthage_network:
 
-volumes:
-  alertmanager_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-      device: ":/mnt/mesopotamia/nfs/carthage/docker/alertmanager"
-
-  grafana_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-      device: ":/mnt/mesopotamia/nfs/carthage/docker/grafana"
-
-  loki_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-      device: ":/mnt/mesopotamia/nfs/carthage/docker/loki"
-
-  portainer_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-      device: ":/mnt/mesopotamia/nfs/carthage/docker/portainer"
-
-  prometheus_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-      device: ":/mnt/mesopotamia/nfs/carthage/docker/prometheus"
-  
-  uptimekuma_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "nfsvers=4,addr=service.truenas.agartha,nolock,soft,rw"
-      device: ":/mnt/mesopotamia/nfs/carthage/docker/uptime-kuma"
-
 services:
   alertmanager:
     container_name: alertmanager
@@ -54,13 +11,12 @@ services:
     ports:
       - '9093:9093'
     volumes:
-      - alertmanager_data:/alertmanager-data
+      - /mnt/docker/alertmanager:/alertmanager-data
       - ./alertmanager/config.yml:/etc/alertmanager/config.yml
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager-data'
       - '--cluster.advertise-address=0.0.0.0:9093'
-    user: "0:0"
     restart: unless-stopped
 
   cadvisor:
@@ -94,7 +50,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - grafana_data:/var/lib/grafana
+      - /mnt/docker/grafana:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     env_file:
@@ -107,7 +63,7 @@ services:
     ports:
       - '3100:3100'
     volumes:
-      - loki_data:/loki
+      - /mnt/docker/loki:/loki
       - ./loki/loki-config.yml:/etc/loki/local-config.yml
     command:
       - '-config.file=/etc/loki/local-config.yml'
@@ -136,7 +92,7 @@ services:
       - '8000:8000'
       - '9443:9443'
     volumes:
-      - portainer_data:/data
+      - /mnt/docker/portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
@@ -146,7 +102,7 @@ services:
     ports: 
       - '9090:9090'
     volumes:
-      - prometheus_data:/prometheus-data
+      - /mnt/docker/prometheus:/prometheus-data
       - ./prometheus:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -155,7 +111,6 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
-    user: "0:0"
     restart: unless-stopped
 
   promtail:
@@ -184,7 +139,7 @@ services:
     container_name: uptime-kuma
     image: louislam/uptime-kuma:1
     volumes:
-      - uptimekuma_data:/app/data
+      - /mnt/docker/uptimekuma:/app/data
     ports:
       - '3001:3001'
     restart: unless-stopped
