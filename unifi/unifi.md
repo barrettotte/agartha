@@ -6,7 +6,7 @@
 - setup MFA
 - https://gist.github.com/davecoutts/5ccb403c3d90fcf9c8c4b1ea7616948d?permalink_comment_id=4240092#gistcomment-4240092
 - LXC Debian 11.3
-- 2GB RAM, 512MB swap, 1 Core, 8GB disk
+- 1GB RAM, 512MB swap, 1 Core, 4GB disk
 - network `en01`, static IP `10.42.10.8`
 
 https://florianmuller.com/setup-a-self-hosted-unifi-controller-on-a-hardened-proxmox-lxc-ubuntu-container

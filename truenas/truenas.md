@@ -71,6 +71,10 @@ Relog into Windows to update permissions.
   - Authorized Networks: `10.42.30.0/24`, `10.42.10.0/24`
 - See proxmox notes for next steps
 
+## TrueNAS Config Backup
+
+- TODO:
+
 ## References
 
 - [TrueNAS Core: Configuring Shares, Permissions, Snapshots & Shadow Copies](https://www.youtube.com/watch?v=QIdy6sR0HrI)

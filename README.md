@@ -8,9 +8,11 @@ TODO: network diagram
 
 - [vscode sshfs](https://github.com/SchoofsKelvin/vscode-sshfs)
 - [awesome-selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
+- [awesome-sysadmin](https://github.com/awesome-foss/awesome-sysadmin)
 - [r/homelab](https://www.reddit.com/r/homelab/)
 - [Proxmox VE Full Course](https://www.youtube.com/playlist?list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo)
 - [Homelab Setup Guide - Proxmox/TrueNAS/Docker Services](https://www.youtube.com/watch?v=yDkc3D3BFhM)
+- [Dashy icons](https://dashy.to/docs/icons/)
 - Homelab diagram
   - https://simpleicons.org/
   - https://github.com/walkxcode/dashboard-icons

@@ -1,5 +1,19 @@
 # Opnsense
 
+## Hardware
+
+Originally used https://store.minisforum.com/products/minisforum-gk41-mini-pc
+
+- Intel Celeron J4125 (AES-NI supported)
+- 8GB DDR4 RAM, 128GB SSD
+- 2x Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller
+
+Switched to intel NIC-based mini PC - https://www.amazon.com/gp/product/B09J4H9ZXY
+
+- Intel Celeron J4125 (AES-NI supported)
+- 8GB DDR RAM, 128GB SSD
+- 4x Intel 2.5gigabit ethernet ports
+
 ## Setup
 
 - Using Opnsense 22.7
@@ -56,3 +70,20 @@ https://homenetworkguy.com/how-to/use-opnsense-router-behind-another-router/
   - Listening interfaces: `home,iot,LAN,management,services,WAN`
   - WAN interfaces: `WAN`
   - Capture local: yes
+
+## WAN isn't 1000M ?
+
+```sh
+pciconf -lv re0 # Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller
+pciconf -lv re1 # Realtek RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller
+
+ifconfig re0 # Ethernet autoselect (1000baseT <full-duplex>)
+ifconfig re1 # Ethernet autoselect (100baseTX <full-duplex>)
+
+sysctl hw.pci.enable_msi # 1
+sysctl hw.pci.enable_msix # 1
+```
+
+https://forum.opnsense.org/index.php?topic=26589.0
+
+install plugin `os-realtek-re` and reboot...no change

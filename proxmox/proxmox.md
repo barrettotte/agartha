@@ -82,6 +82,25 @@ NOTE: video card passthrough has some extra step...not sure if needed yet (maybe
   - Retention > Keep Last: 3
   - Note Template: `{{node}}-{{guestname}} ({{vmid}})`
 - on first setup, run now
+- Backups to NFS
+  - `mkdir -p /mnt/tmpdir`
+  - add `tmpdir: /mnt/tmpdir` to `/etc/vzdump.conf`
+  - https://forum.proxmox.com/threads/permission-denied-while-doing-a-backup-for-vm-that-is-stored-in-a-directory.94344/
+
+## NFS Shares in Unprivileged LXC
+
+### Mount NFS
+
+setup NFS share on truenas - `/mnt/mesopotamia/nfs/docker`
+
+pass via bind mount...we're sticking with unprivileged containers
+
+https://pve.proxmox.com/wiki/Linux_Container#_bind_mount_points
+
+Map UID/GID https://pve.proxmox.com/wiki/Unprivileged_LXC_containers
+
+https://www.reddit.com/r/Proxmox/comments/slfhka/two_reliable_ways_to_bindmount_a_host_directory/
+https://gist.github.com/ajmassi/e6862294d114467b46f9b7f073921352
 
 ## Misc
 

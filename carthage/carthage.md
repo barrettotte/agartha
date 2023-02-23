@@ -25,13 +25,3 @@ iface enp6s18 inet static
 ```
 
 `ansible-playbook ../ansible/playbooks/main/carthage.yml`
-
-
-
-### Misc
-
-```sh
-# Grafana permission fix
-mkdir -p /mnt/nfs/docker/grafana
-chown -R 472:472 /mnt/nfs/docker/grafana/
-```
