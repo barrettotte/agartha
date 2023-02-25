@@ -2,7 +2,7 @@ appConfig:
   theme: fallout
   language: en
   layout: auto
-  iconSize: medium
+  iconSize: small
 pageInfo:
   title: Agartha
   description: ''
@@ -105,6 +105,12 @@ sections:
         url: http://kuma.carthage.agartha
         target: newtab
         id: 3_1062_uptimekuma
+      - title: Librespeed
+        description: Speed test
+        icon: hl-librespeed
+        url: http://speedtest.carthage.agartha
+        target: newtab
+        id: 4_1062_librespeed
     icon: fas fa-monitor-heart-rate
   - name: Services
     icon: mdi mdi-hammer-wrench
@@ -195,3 +201,9 @@ sections:
         url: https://aws.amazon.com/console/
         target: newtab
         id: 2_1613_aws
+      - title: PUB400
+        icon: >-
+          https://usercontent.one/wp/www.rzkh-gmbh.de/wp-content/uploads/2021/06/cropped-Bunkerlogo-192x192.jpeg
+        url: https://www.pub400.com/
+        target: newtab
+        id: 3_1613_pub

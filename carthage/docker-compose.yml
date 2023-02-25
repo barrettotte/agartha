@@ -54,7 +54,19 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     env_file:
-      - .env
+      - ./env/grafana.env
+    restart: unless-stopped
+  
+  librespeed:
+    container_name: librespeed
+    image: linuxserver/librespeed:5.2.5
+    ports:
+      - '4080:80'
+    volumes:
+      - /home/docker/volumes/librespeed:/config # no NFS
+      - ./librespeed/index.html:/config/www/index.html
+    env_file:
+      - ./env/librespeed.env
     restart: unless-stopped
 
   loki:
@@ -125,6 +137,8 @@ services:
   promtail:
     container_name: promtail
     image: grafana/promtail:2.7.3
+    ports:
+      - '1514:1514'
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
@@ -145,7 +159,7 @@ services:
     ports:
       - '9091:9091'
     restart: unless-stopped
-  
+
   uptime-kuma:
     container_name: uptime-kuma
     image: louislam/uptime-kuma:1
@@ -157,6 +171,6 @@ services:
 
 # TODO: move to smaller compose files?
 # separate networks for monitoring vs misc?
-# grafana/grafana-image-renderer
+# grafana/grafana-image-renderer ?
 
 
