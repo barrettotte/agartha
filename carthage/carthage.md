@@ -25,3 +25,7 @@ iface enp6s18 inet static
 ```
 
 `ansible-playbook ../ansible/playbooks/main/carthage.yml`
+
+## References
+
+- https://zeigren.com/posts/monitoring_prometheus_loki/

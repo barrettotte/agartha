@@ -1,11 +1,12 @@
 appConfig:
-  theme: default
+  theme: fallout
   language: en
   layout: auto
   iconSize: medium
 pageInfo:
   title: Agartha
   description: ''
+  navLinks: []
   footerText: ''
   logo: ''
 sections:
@@ -18,55 +19,61 @@ sections:
       hideForGuests: false
     items:
       - title: OPNsense
-        description: OPNsense
+        description: Firewall + router
         icon: hl-opnsense
         url: https://opnsense.agartha
-        target: null
+        target: newtab
         id: 0_1064_opnsense
       - title: euphrates
-        description: TPLink managed switch
+        description: Managed switch
         icon: hl-tplink
         url: http://euphrates.agartha
         target: newtab
         id: 1_1064_euphrates
       - title: Unifi
-        description: unifi controller
+        description: WiFi
         icon: hl-unifi
         url: https://unifi.agartha:8443
         target: newtab
         id: 2_1064_unifi
       - title: babylon
-        description: proxmox node
+        description: Proxmox node
         icon: hl-proxmox
         url: https://babylon.agartha:8006
         target: newtab
         id: 3_1064_babylon
       - title: Portainer
-        description: portainer
+        description: Container management
         icon: hl-portainer
-        url: https://carthage.agartha:9443
+        url: http://portainer.carthage.agartha
         target: newtab
         id: 4_1064_portainer
       - title: TrueNAS
-        description: truenas
+        description: NAS
         icon: hl-truenas
         url: https://manage.truenas.agartha
         target: newtab
         id: 5_1064_truenas
       - title: Pihole
-        description: pihole
+        description: DNS + Ad-blocking
         icon: hl-pihole
         url: http://pihole.agartha/admin
         target: newtab
         id: 6_1064_pihole
       - title: sumer
-        description: proxmox node
+        description: Proxmox node
         icon: hl-proxmox
         url: https://sumer.agartha:8006
         target: newtab
         id: 7_1064_sumer
+      - title: ISP
+        description: ISP edge router
+        icon: hl-router
+        url: http://192.168.1.1
+        target: newtab
+        id: 8_1064_isp
     icon: fas fa-network-wired
-  - name: System Monitoring
+  - name: Monitoring
     displayData:
       sortBy: alphabetical
       rows: 1
@@ -75,39 +82,30 @@ sections:
       hideForGuests: false
     items:
       - title: Prometheus
-        description: prometheus
+        description: Metrics
         icon: hl-prometheus
-        url: http://carthage.agartha:9090
+        url: http://prometheus.carthage.agartha
         target: newtab
-        id: 0_1739_prometheus
+        id: 0_1062_prometheus
       - title: Grafana
-        description: grafana
+        description: Dashboards
         icon: hl-grafana
-        url: http://carthage.agartha:3000
+        url: http://grafana.carthage.agartha
         target: newtab
-        id: 1_1739_grafana
+        id: 1_1062_grafana
       - title: AlertManager
-        description: alertmanager
+        description: Prometheus alerting
         icon: hl-alertmanager
-        url: http://carthage.agartha:9093
+        url: http://alertmanager.carthage.agartha
         target: newtab
-        id: 2_1739_alertmanager
-    icon: fas fa-monitor-heart-rate
-  - name: Network Monitoring
-    icon: fas fa-tachometer-alt-fast
-    displayData:
-      sortBy: default
-      rows: 1
-      cols: 1
-      collapsed: false
-      hideForGuests: false
-    items:
+        id: 2_1062_alertmanager
       - title: Uptime Kuma
-        description: uptime-kuma
+        description: Uptime monitoring
         icon: hl-uptime-kuma
-        url: http://carthage.agartha:3001
+        url: http://kuma.carthage.agartha
         target: newtab
-        id: 0_1840_uptimekuma
+        id: 3_1062_uptimekuma
+    icon: fas fa-monitor-heart-rate
   - name: Services
     icon: mdi mdi-hammer-wrench
     displayData:
@@ -127,7 +125,7 @@ sections:
       hideForGuests: false
     items:
       - title: Octoprint
-        description: octoprint
+        description: 3D printer
         icon: hl-octoprint
         url: http://octoprint.agartha
         id: 0_268_octoprint
@@ -141,31 +139,31 @@ sections:
       hideForGuests: false
     items:
       - title: Github
-        description: Github
+        description: ''
         icon: hl-github
-        url: https://github.com/
+        url: https://github.com/barrettotte
         target: newtab
         id: 0_1703_github
       - title: Trello
-        description: Trello
+        description: ''
         icon: favicon
         url: https://trello.com/b/orZGAawF/personal
         target: newtab
         id: 1_1703_trello
       - title: Google Drive
-        description: Google drive
+        description: ''
         icon: hl-google-drive
         url: https://drive.google.com/drive/my-drive
         target: newtab
         id: 2_1703_googledrive
       - title: Anilist
-        description: Anilist
+        description: ''
         icon: favicon
-        url: https://anilist.co/
+        url: https://anilist.co/user/barrettotte/
         target: newtab
         id: 3_1703_anilist
       - title: Bitwarden
-        description: Bitwarden
+        description: ''
         icon: hl-bitwarden
         url: https://vault.bitwarden.com/#/login
         target: newtab
@@ -180,20 +178,20 @@ sections:
       hideForGuests: false
     items:
       - title: Linode
-        description: Linode
+        description: ''
         icon: hl-linode
         url: https://cloud.linode.com/linodes
         target: newtab
         id: 0_1613_linode
       - title: barrettotte
-        description: barrettotte
+        description: Personal site
         icon: 🗿
         url: https://barrettotte.github.io
         target: newtab
         id: 1_1613_barrettotte
       - title: AWS
-        description: aws
-        icon: hl-aws
+        description: ''
+        icon: si-amazonaws
         url: https://aws.amazon.com/console/
         target: newtab
         id: 2_1613_aws
