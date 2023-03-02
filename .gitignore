@@ -5,3 +5,5 @@
 # environment files
 *.env
 !*.template.env
+
+id_rsa.pub

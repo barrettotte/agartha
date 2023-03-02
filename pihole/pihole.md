@@ -46,6 +46,4 @@ https://docs.pi-hole.net/guides/dns/unbound/
   - Uncheck upstream DNS (Google,Cloudflare,etc)
   - add and enable Pihole Unbound DNS to Upstream DNS Servers - `127.0.0.1#5335`
 
-## Local DNS Records
-
-- Domain: `pihole.agartha`, IP: `10.42.30.10`
+TODO: init pihole playbook

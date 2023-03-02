@@ -105,8 +105,20 @@ ansible babylon.agartha -m setup
 
 ## Playbooks
 
-- `ansible-playbook ./playbooks/apt.yml --user ansible --ask-become-pass -i inventory.yml`
-- use variables from file: `--extra-vars "@some_file.yaml"`
+- `ansible-playbook ./playbooks/playbook.yml --user ansible --ask-become-pass -i inventory.yml`
+- `ansible-playbook ./playbooks/main/init-docker.yml -i inventory.yml`
+- use variables from file - `--extra-vars "@some_file.yaml"`
+- debug root connection - `ansible-playbook ./playbooks/test/ping.yml -i inventory.yml -vvvv -k`
+
+## Setup Debian Docker Machines
+
+```sh
+#!/bin/bash
+
+ansible-playbook ./playbooks/main/init-root-ssh.yml -i inventory.yml -k
+ansible-playbook ./playbooks/main/init-users.yml -i inventory.yml
+ansible-playbook ./playbooks/main/init-docker.yml -i inventory.yml
+```
 
 ## Roles
 

@@ -1,7 +1,7 @@
----
 - name: Test connection to hosts
-  hosts: "{{ target_hosts | default('all') }}"
+  hosts: docker
   become: true
+  # remote_user: root
   tasks:
     - name: Ping
       ping:

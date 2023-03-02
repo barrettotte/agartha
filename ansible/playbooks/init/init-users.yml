@@ -1,0 +1,24 @@
+- name: Create base users
+  hosts: debian
+  become: true
+  remote_user: root
+  vars_files:
+    - ../vars/secrets.yml
+  tasks:
+    - include_tasks: ../tasks/update/update.yml
+    - include_tasks: ../tasks/user/create-wheel-group.yml
+    - include_tasks: ../tasks/user/create-user.yml
+      vars:
+        - user: "{{ item }}"
+      loop:
+        - username: barrett
+          password: "{{ personal_password }}"
+          public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+          comment: 'personal'
+          groups: 'wheel'
+        - username: ansible
+          password: "{{ ansible_password }}"
+          public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/ansible_id_rsa.pub') }}"
+          comment: 'ansible service'
+          groups: 'wheel'
+    - include_tasks: ../tasks/ssh/disable-password-auth.yml

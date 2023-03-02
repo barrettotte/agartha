@@ -1,0 +1,10 @@
+- name: Add pubkey to root authorized keys
+  hosts: debian
+  become: true
+  remote_user: root
+  tasks:
+    - name: Add authorized key
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"

@@ -1,0 +1,38 @@
+- name: Install Docker and mount NFS
+  hosts: docker
+  become: true
+  vars_files: 
+    - ../vars/secrets.yml
+  tasks:
+    - name: Update
+      include_tasks: ../tasks/update/update.yml
+
+    - name: Create base users
+      include_tasks: ../tasks/user/create-user.yml
+      vars:
+        - user:
+            username: docker
+            password: "{{ docker_password }}"
+            public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/docker_id_rsa.pub') }}"
+            comment: 'docker service'
+            groups: 'wheel'
+
+    - name: Install Docker
+      include_role:
+        name: geerlingguy.docker
+      vars:
+        docker_users: ['docker']
+
+    - name: Install NFS for volume storage
+      apt:
+        pkg: [nfs-common]
+        state: latest
+        update_cache: true
+
+    - name: Mount TrueNAS NFS entry
+      mount:
+        src: "{{ nfs_path }}"
+        path: '/mnt/docker'
+        opts: rw,soft,intr,nfsvers=4
+        state: mounted
+        fstype: nfs
