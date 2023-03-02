@@ -44,6 +44,10 @@ Relog into Windows to update permissions.
   - Maproot user = root, Maproot group = wheel
 - also needed to enable `NMFSv3 ownership model for NFSv4` for docker volumes...not sure why
 
+```txt
+/mesopotamia/nfs/proxmox/docker/
+```
+
 ## TrusNAS Misc Config
 
 - Network > Interfaces 

@@ -38,7 +38,7 @@
 | 12   |                        |          |          |
 | 13   |                        |          |          |
 | 14   | babylon (proxmox)      |          | 30       |
-| 15   |                        |          |          |
+| 15   | babylon (proxmox)      |          | 35       |
 | 16   | babylon (proxmox)      |          | 10       |
 | 17   | test guest             |          | 25       |
 | 18   | sumer (proxmox)        | 10       |          |
