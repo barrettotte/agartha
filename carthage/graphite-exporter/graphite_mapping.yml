@@ -1,0 +1,180 @@
+# source: https://alexandre.deverteuil.net/post/monitoring-truenas-with-prometheus-and-loki/
+
+# All FreeNAS metrics start with server.<server_name>
+# https://www.truenas.com/community/threads/mapping-of-freenas-data-sent-to-graphite_exporter-part-of-prometheus.80948/
+# https://blog.bradbeattie.com/freenas-to-prometheus/
+
+# Validate configuration with:
+# /path/to/graphite_exporter --check-config --graphite.mapping-config=/path/to/this_file.yml
+# graphite_exporter --check-config --graphite.mapping-config=files/configs/present/graphite_mapping-2.yml
+
+# To develop mappings locally:
+# graphite_exporter --log.level=debug --graphite.mapping-config=
+# nc localhost 9109 < graphite-sample.txt
+# curl localhost:9108/metrics -s | grep ^freenas | less
+
+# Mapping syntax is based on statsd_exporter.
+# https://github.com/prometheus/statsd_exporter#regular-expression-matching
+
+# line="servers.truenas_agartha.aggregation-cpu-sum.gauge-nice 0 1677462341"
+# servers\.([^_]*)_([^_]*)
+
+mappings:
+  - match: "servers.*.*.*"
+    name: "${3}"
+    labels:
+      instance: "${1}"
+      job: "truenas-graphite"
+      type: "${2}"
+  - match: "servers.*.*.*.*"
+    name: "${3}_${4}"
+    labels:
+      instance: "${1}"
+      job: "truenas-graphite"
+      type: "${2}"
+
+# mappings:
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.disktemp-(.*)\.temperature'
+#     match_type: regex
+#     name: "truenas_disk_temperature"
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       disk: '${3}'
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.cputemp-(.*)\.temperature'
+#     match_type: regex
+#     name: "truenas_cpu_temperature"
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       cpu: '${3}'
+
+#   # When "Report CPU usage in percent" is NOT selected. (default)
+#   - match: 'servers\.([^_]*)_([^_]*)\.aggregation_cpu_(.*)\.percent-(.*)'
+#     match_type: regex
+#     name: "truenas_cpu_percent_${3}"
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       mode: '${4}'
+
+#   # When "Report CPU usage in percent" is selected.
+#   - match: 'servers\.([^_]*)_([^_]*)\.aggregation_cpu_(.*)\.cpu-(.*)'
+#     match_type: regex
+#     name: "truenas_cpu_usage_${3}"
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       mode: '${4}'
+
+#   # When "Report CPU usage in percent" is NOT selected. (default)
+#   - match: 'servers\.([^_]*)_([^_]*)\.cpu-(.*)\.cpu-(.*)'
+#     match_type: regex
+#     name: "truenas_cpu_usage"
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       cpu: '${3}'
+#       mode: '${4}'
+
+#   # When "Report CPU usage in percent" is selected.
+#   - match: 'servers\.([^_]*)_([^_]*)\.cpu-(.*)\.percent-(.*)'
+#     match_type: regex
+#     name: "truenas_cpu_percent"
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       cpu: '${3}'
+#       mode: '${4}'
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.df-(.*)\.df_complex-(.*)'
+#     match_type: regex
+#     name: 'truenas_df_${4}'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       filesystem: '${3}'
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.disk-(.*)\.disk_(.*)\.(.*)'
+#     match_type: regex
+#     name: 'truenas_disk_${4}_${5}'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       device: '${3}'
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.interface-(.*)\.if_(.*)\.(.*)'
+#     match_type: regex
+#     name: 'truenas_interface_${5}_${4}'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+#       interface: '${3}'
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.load\.load\.longterm'
+#     match_type: regex
+#     name: 'truenas_load_15'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.load\.load\.midterm'
+#     match_type: regex
+#     name: 'truenas_load_5'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.load\.load\.shortterm'
+#     match_type: regex
+#     name: 'truenas_load_1'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.memory\.memory-(.*)'
+#     match_type: regex
+#     name: 'truenas_memory_${3}'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.swap\.swap-(.*)'
+#     match_type: regex
+#     name: 'truenas_swap_${3}'
+#     labels:
+#       instance: '${1}.${2}'
+#       job: truenas-graphite
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.uptime\.uptime'
+#     match_type: regex
+#     name: truenas_uptime
+#     labels:
+#       job: truenas-graphite
+#       instance: '${1}.${2}'
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.processes\.ps_state-(.*)'
+#     match_type: regex
+#     name: truenas_processes
+#     labels:
+#       job: truenas-graphite
+#       instance: '${1}.${2}'
+#       state: "${3}"
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.([^.]*)\.([^.]*)$'
+#     match_type: regex
+#     name: truenas_graphite_${3}
+#     labels:
+#       job: truenas-graphite-raw
+#       instance: '${1}.${2}'
+#       item: "${4}"
+
+#   - match: 'servers\.([^_]*)_([^_]*)\.(.*)'
+#     match_type: regex
+#     name: truenas_graphite_raw
+#     labels:
+#       job: truenas-graphite-raw
+#       instance: '${1}.${2}'
+#       graphite_metric: "${3}"

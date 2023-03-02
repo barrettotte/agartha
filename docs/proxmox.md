@@ -2,6 +2,8 @@
 
 ## Hardware
 
+### Babylon
+
 - AMD Ryzen 5 5600X; AM4, 6 core, 3.7GHz, 65W
 - Gigabyte B550 Aurus Elite AX V2; AM4 socket, Supports ECC/Non-ECC Unbuffered DDR4
 - 2 x Corsair Vengeance LPX 32GB DDR4 3200
@@ -11,6 +13,12 @@
 - Sapphire Radeon HD6450; 1GB DDR3
 - Intel I350 4 Port Gigabit NIC; PCI Express 2.1 x4
 - Corsair RM750x 750 W Gold PSU
+
+### Sumer
+
+- Dell Optiplex 7010
+- Intel i5-3570 3.4GHz
+- 4 x 4GB DDR3 1600
 
 ## Setup
 
@@ -87,21 +95,6 @@ NOTE: video card passthrough has some extra step...not sure if needed yet (maybe
   - add `tmpdir: /mnt/tmpdir` to `/etc/vzdump.conf`
   - https://forum.proxmox.com/threads/permission-denied-while-doing-a-backup-for-vm-that-is-stored-in-a-directory.94344/
 
-## NFS Shares in Unprivileged LXC
-
-### Mount NFS
-
-setup NFS share on truenas - `/mnt/mesopotamia/nfs/docker`
-
-pass via bind mount...we're sticking with unprivileged containers
-
-https://pve.proxmox.com/wiki/Linux_Container#_bind_mount_points
-
-Map UID/GID https://pve.proxmox.com/wiki/Unprivileged_LXC_containers
-
-https://www.reddit.com/r/Proxmox/comments/slfhka/two_reliable_ways_to_bindmount_a_host_directory/
-https://gist.github.com/ajmassi/e6862294d114467b46f9b7f073921352
-
 ## Misc
 
 - When creating a VM, consider changing disk Async IO to native or threads
@@ -121,3 +114,33 @@ sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/
 ```
 
 Note: Updates will probably re-enable this
+
+### InfluxDB Metric Server
+
+- Datacenter > Metric Server
+- Add
+  - server=influxdb.carthage.agartha
+  - port=8086
+  - protocol=http
+  - organization=agartha
+  - bucket=proxmox
+  - token=API_TOKEN
+
+## Docker VM Setup
+
+- `nano /etc/ssh/sshd_config` - `PermitRootLogin prohibit-password`
+
+```ini
+# /etc/network/interfaces
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback
+
+allow-hotplug enp6s18
+iface enp6s18 inet static
+    address 10.42.?.?/24
+    gateway 10.42.?.1
+    dns-nameservers 10.42.30.10
+    dns-search agartha
+```

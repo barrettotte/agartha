@@ -1,0 +1,7 @@
+version: '3.9'
+name: rhodes
+
+networks:
+  rhodes_network:
+
+services: {}

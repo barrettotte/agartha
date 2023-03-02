@@ -1,0 +1,7 @@
+version: '3.9'
+name: jericho
+
+networks:
+  jericho_network:
+
+services: {}

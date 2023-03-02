@@ -1,1 +1,7 @@
+# VS Code
 .vscode/
+*.code-workspace
+
+# environment files
+*.env
+!*.template.env

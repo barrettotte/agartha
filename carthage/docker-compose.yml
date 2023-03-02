@@ -43,6 +43,33 @@ services:
     volumes:
       - ./dashy/conf.yml:/app/public/conf.yml
     restart: unless-stopped
+  
+  # gotify:
+  #   container_name: gotify
+  #   image: gotify/server:latest
+  #   ports:
+  #     - '8001:80'
+  #   env_file:
+  #     - ./env/gotify.env
+  #   volumes:
+  #     - ./gotify/config.yml:/etc/gotify/config.yml
+  #     - /mnt/docker/gotify:/app/data
+  #   restart: unless-stopped
+
+  graphite-exporter:
+    container_name: graphite-exporter
+    image: prom/graphite-exporter:v0.13.1
+    ports:
+      - '2003:9109/tcp' # mock graphite carbon receiver (plaintext), TrueNAS needs to use graphite on port 2003
+      - '2003:9109/udp'
+      - '9108:9108' # prometheus scrape target
+    volumes:
+      - ./graphite-exporter/graphite_mapping.yml:/etc/graphite_mapping.yml
+    command:
+      - '--graphite.mapping-config=/etc/graphite_mapping.yml'
+      - '--log.level=debug'
+      # - '--graphite.listen-address=":2003"'
+    restart: unless-stopped
 
   grafana:
     container_name: grafana
@@ -55,6 +82,17 @@ services:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     env_file:
       - ./env/grafana.env
+    restart: unless-stopped
+
+  influxdb:
+    container_name: influxdb
+    image: influxdb:2.6-alpine
+    ports:
+      - '8086:8086'
+    volumes:
+      - /home/docker/volumes/influxdb:/var/lib/influxdb2 # no NFS
+    env_file:
+      - ./env/influxdb.env
     restart: unless-stopped
   
   librespeed:
@@ -138,14 +176,15 @@ services:
     container_name: promtail
     image: grafana/promtail:2.7.3
     ports:
-      - '1514:1514'
+      - '1514:1514/tcp'
+      - '1514:1514/udp'
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/log:/ext_logs:ro
-      - ./promtail/promtail.yml:/etc/promtail/docker-config.yml
+      - ./promtail/promtail.yml:/etc/promtail/config.yml
     command:
-      - '-config.file=/etc/promtail/docker-config.yml'
+      - '-config.file=/etc/promtail/config.yml'
       - '-config.expand-env'
     environment:
       - HOSTNAME=carthage
@@ -168,9 +207,3 @@ services:
     ports:
       - '3001:3001'
     restart: unless-stopped
-
-# TODO: move to smaller compose files?
-# separate networks for monitoring vs misc?
-# grafana/grafana-image-renderer ?
-
-

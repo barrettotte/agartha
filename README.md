@@ -4,22 +4,32 @@ My network infrastructure.
 
 TODO: network diagram
 
+TODO: summary
+
 ## References
 
 - [vscode sshfs](https://github.com/SchoofsKelvin/vscode-sshfs)
 - [awesome-selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
 - [awesome-sysadmin](https://github.com/awesome-foss/awesome-sysadmin)
 - [r/homelab](https://www.reddit.com/r/homelab/)
-- [Proxmox VE Full Course](https://www.youtube.com/playlist?list=PLT98CRl2KxKHnlbYhtABg6cF50bYa8Ulo)
-- [Homelab Setup Guide - Proxmox/TrueNAS/Docker Services](https://www.youtube.com/watch?v=yDkc3D3BFhM)
 - [Dashy icons](https://dashy.to/docs/icons/)
 - Homelab diagram
+  - https://app.diagrams.net/
   - https://simpleicons.org/
   - https://github.com/walkxcode/dashboard-icons
   - https://github.com/loganmarchione/homelab-svg-assets
-    - https://raw.githubusercontent.com/loganmarchione/homelab-svg-assets/main/homelab-svg-assets.xml
   - https://fontawesome.com/icons
   - https://github.com/usini/diagrams
   - https://thenounproject.com/
-  - https://devicon.dev/
-- [ZFS for Newbies](https://www.youtube.com/watch?v=3oG-1U5AI9A)
+- Youtube channels
+  - https://www.youtube.com/@christianlempa
+  - https://www.youtube.com/@HardwareHaven
+  - https://www.youtube.com/@JeffGeerling
+  - https://www.youtube.com/@LAWRENCESYSTEMS
+  - https://www.youtube.com/@LearnLinuxTV
+  - https://www.youtube.com/@RaidOwl
+  - https://www.youtube.com/@TechnoTim
+  - https://www.youtube.com/@VirtualizationHowto
+  - https://www.youtube.com/@WolfgangsChannel
+- Server naming - https://en.wikipedia.org/wiki/Category:Ancient_cities
+- https://zeigren.com/posts/monitoring_prometheus_loki/

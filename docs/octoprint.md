@@ -56,3 +56,8 @@ __plugin_hooks__ = {
 
 - [Benchy](https://www.thingiverse.com/thing:763622)
 - [Bed Level Helpers](https://www.thingiverse.com/thing:3235018)
+
+## Plugins
+
+- https://github.com/j7126/OctoPrint-Dashboard
+- https://github.com/tg44/OctoPrint-Prometheus-Exporter

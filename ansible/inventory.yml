@@ -8,9 +8,13 @@ agartha:
 
     debian:
       hosts:
+        ansible.agartha:
+        athens.agartha:
         carthage.agartha:
-        test.agartha:
+        giza.agartha:
+        jericho.agartha:
         # pihole.agartha:
+        # unifi.agartha
       children:
         proxmox:
 
@@ -20,11 +24,15 @@ agartha:
 
     docker:
       hosts:
+        athens.agartha:
         carthage.agartha:
-
-    ansible_test:
+        giza.agartha:
+        jericho.agartha:
+    
+    torrent:
       hosts:
-        10.42.30.60:
+        rhodes.agartha:
 
-# athens.agartha ?
-# octoprint.agartha ?
+    octoprint:
+      hosts:
+        octoprint.agartha:

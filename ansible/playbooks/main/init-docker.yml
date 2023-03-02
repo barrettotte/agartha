@@ -1,5 +1,5 @@
 - name: Root user tasks
-  hosts: carthage.agartha
+  hosts: docker
   become: true
   vars_files: 
     - ../vars/secrets.yml
@@ -38,7 +38,7 @@
   roles:
     - role: geerlingguy.docker
       vars:
-        docker_users: ['docker']
+        docker_users: ['docker', 'barrett']
   tasks:
     - name: Install NFS dependencies
       apt:

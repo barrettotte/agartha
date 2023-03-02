@@ -71,9 +71,23 @@ Relog into Windows to update permissions.
   - Authorized Networks: `10.42.30.0/24`, `10.42.10.0/24`
 - See proxmox notes for next steps
 
-## TrueNAS Config Backup
+## Logging/Metrics
 
-- TODO:
+## Graphite Metrics
+
+- setup graphite-exporter container to convert graphite metrics to prometheus
+- report CPU as percent
+- hostname=carthage.agartha:2003
+- graph age in months = 12
+- number of graph points 1200
+
+## Syslogs To Loki
+
+- System > Advanced > Syslog
+  - use FQDN for logging
+  - Syslog level=Debug
+  - Syslog server=syslog.carthage.agartha
+  - Syslog transport=UDP
 
 ## References
 

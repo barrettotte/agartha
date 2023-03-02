@@ -1,0 +1,16 @@
+server:
+  listenaddr: "" # empty = all addresses
+  port: 80
+  ssl:
+    enabled: false
+  responseheaders:
+    Access-Control-Allow-Origin: "*"
+    Access-Control-Allow-Methods: "GET,POST"
+
+database:
+  dialect: sqlite3
+  connection: data/gotify.db
+
+passstrength: 10
+uploadedimagesdir: data/images
+pluginsdir: data/plugins

@@ -35,7 +35,7 @@ storage_config:
   boltdb_shipper:
     active_index_directory: /tmp/loki/boltdb-shipper-active
     cache_location: /tmp/loki/boltdb-shipper-cache
-    cache_ttl: 24h         # Can be increased for faster performance over longer query periods, uses more disk space
+    cache_ttl: 24h
     shared_store: filesystem
   filesystem:
     directory: /tmp/loki/chunks
@@ -61,7 +61,7 @@ ruler:
     local:
       directory: /tmp/loki/rules
   rule_path: /loki/rules-temp
-  alertmanager_url: http://localhost:9093
+  alertmanager_url: http://alertmanager:9093
   ring:
     kvstore:
       store: inmemory

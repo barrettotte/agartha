@@ -55,21 +55,11 @@ https://homenetworkguy.com/how-to/use-opnsense-router-behind-another-router/
 - consider System > General > Networking > DNS server options = enable
 - this also shows how to configure firewall rules for out of network devices (might be useful for media server sharing with family)
 
-## IDS/IPS
+## CrowdSec
 
-- Suricata, CrowdSec
-- services > Intrusion Detection
-  - 
 - https://homenetworkguy.com/how-to/install-and-configure-crowdsec-on-opnsense/
 - https://homenetworkguy.com/how-to/configure-intrusion-detection-opnsense/
-
-## Netflow
-
-- System > Firmware > Plugins > os-ntopng
-- Reporting > Netflow
-  - Listening interfaces: `home,iot,LAN,management,services,WAN`
-  - WAN interfaces: `WAN`
-  - Capture local: yes
+- https://docs.crowdsec.net/docs/getting_started/install_crowdsec_opnsense/#remote-lapi-setup-optional
 
 ## WAN isn't 1000M ?
 
@@ -87,3 +77,19 @@ sysctl hw.pci.enable_msix # 1
 https://forum.opnsense.org/index.php?topic=26589.0
 
 install plugin `os-realtek-re` and reboot...no change
+
+## Plugins
+
+- `os-api-backup` - download config.xml file
+- `os-node_exporter` - promtheus export
+- `os-crowdsec` - security engine
+- `os-ntopng` - traffic analysis
+- `os-theme-rebellion` - dark theme
+
+## Performance Tuning
+
+https://teklager.se/en/knowledge-base/opnsense-performance-optimization/
+
+- System > Settings > Tunables
+  - Spectre/Meltdown disable
+  - 

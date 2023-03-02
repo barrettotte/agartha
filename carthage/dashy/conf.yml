@@ -111,6 +111,12 @@ sections:
         url: http://speedtest.carthage.agartha
         target: newtab
         id: 4_1062_librespeed
+      - title: InfluxDB
+        description: InfluxDB
+        icon: hl-influxdb
+        url: http://influxdb.carthage.agartha
+        target: newtab
+        id: 5_1062_influxdb
     icon: fas fa-monitor-heart-rate
   - name: Services
     icon: mdi mdi-hammer-wrench
@@ -130,7 +136,7 @@ sections:
       collapsed: false
       hideForGuests: false
     items:
-      - title: Octoprint
+      - title: OctoPrint
         description: 3D printer
         icon: hl-octoprint
         url: http://octoprint.agartha
@@ -207,3 +213,9 @@ sections:
         url: https://www.pub400.com/
         target: newtab
         id: 3_1613_pub
+      - title: Cloudflare
+        description: Cloudflare dashboard
+        icon: hl-cloudflare
+        url: https://dash.cloudflare.com
+        target: newtab
+        id: 4_1613_cloudflare

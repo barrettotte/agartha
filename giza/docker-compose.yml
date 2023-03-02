@@ -1,0 +1,7 @@
+version: '3.9'
+name: giza
+
+networks:
+  giza_network:
+
+services: {}

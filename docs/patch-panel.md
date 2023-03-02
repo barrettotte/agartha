@@ -35,7 +35,7 @@ TODO:
 31. x
 32. x
 33. x
-34. ISP router
+34. ISP edge router
 35. x
 36. x
 37. x
