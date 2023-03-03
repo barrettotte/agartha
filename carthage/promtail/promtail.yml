@@ -51,18 +51,7 @@ scrape_configs:
         target_label: facility
       - source_labels: [__syslog_connection_hostname]
         target_label: connection_hostname
-    
+
     # https://www.virtualizationhowto.com/2022/11/grafana-loki-configuration-syslog-server-for-home-labs/
     # test -> nc -w0 -u 10.42.30.25 1514 <<< 'testing syslog'
     # /etc/rsyslog.config
-
-  # - job_name: journal
-  #   journal:
-  #     max_age: 12h
-  #     labels:
-  #       job: systemd-journal
-  #   relabel_configs:
-  #     - source_labels: ["__journal__systemd_unit"]
-  #       target_label: "unit"
-  #     - source_labels: ["__journal__hostname"]
-  #       target_label: "hostname"

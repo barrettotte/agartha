@@ -29,6 +29,11 @@ scrape_configs:
     static_configs:
       - targets: ['graphite-exporter:9108']
 
+  # TODO: add athens scrape
+  # TODO: add giza scrape
+  # TODO: add jericho scrape
+  # TODO: add rhodes scrape
+
 alerting:
   alertmanagers:
     - scheme: http

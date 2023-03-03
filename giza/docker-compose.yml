@@ -4,4 +4,98 @@ name: giza
 networks:
   giza_network:
 
-services: {}
+services:
+  cadvisor:
+    container_name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:v0.46.0
+    ports:
+      - '8085:8080'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    restart: unless-stopped
+
+  # TODO: calibre
+
+  dashy:
+    container_name: dashy
+    image: lissy93/dashy:2.1.1
+    ports:
+      - '8082:80'
+    volumes:
+      - ./dashy/conf.yml:/app/public/conf.yml
+    restart: unless-stopped
+  
+  # gotify:
+  #   container_name: gotify
+  #   image: gotify/server:latest
+  #   ports:
+  #     - '8001:80'
+  #   env_file:
+  #     - ./env/gotify.env
+  #   volumes:
+  #     - ./gotify/config.yml:/etc/gotify/config.yml
+  #     - /mnt/docker/gotify:/app/data
+  #   restart: unless-stopped
+
+  # TODO: jellyfin
+
+  librespeed:
+    container_name: librespeed
+    image: linuxserver/librespeed:5.2.5
+    ports:
+      - '4080:80'
+    volumes:
+      - /home/docker/volumes/librespeed:/config # no NFS
+    env_file:
+      - ./env/librespeed.env
+    restart: unless-stopped
+
+  # TODO: nextcloud
+
+  node-exporter:
+    container_name: node-exporter
+    image: prom/node-exporter:v1.5.0
+    ports:
+      - '9100:9100'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+
+  portainer-agent:
+    container_name: portainer-agent
+    image: portainer/agent:2.17.1-alpine
+    ports:
+      - '9001:9001'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    restart: unless-stopped
+
+  promtail:
+    container_name: promtail
+    image: grafana/promtail:2.7.3
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log:/ext_logs:ro
+      - ./promtail/promtail.yml:/etc/promtail/config.yml
+    command:
+      - '-config.file=/etc/promtail/config.yml'
+      - '-config.expand-env'
+    environment:
+      - HOSTNAME=giza
+    restart: unless-stopped
