@@ -1,14 +1,5 @@
 # provision debian-11 VM template on proxmox
 
-packer {
-  required_plugins {
-    proxmox = {
-      version = " >= 1.1.2"
-      source  = "github.com/hashicorp/proxmox"
-    }
-  }
-}
-
 # optional variables
 
 variable "vm_name" {
