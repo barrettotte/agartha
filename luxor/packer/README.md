@@ -26,6 +26,8 @@ pveum aclmod / -user packer@pve -role packer
 #
 # The user above is missing some permission and doesn't seem to be documented...
 #   error => proxmox.debian-11: Error updating template: 403 Permission check failed (/vms/900, VM.Config.Cloudinit)
+#
+# TODO: resolve this permission problem through trial and error
 ```
 
 Create new API token - Datacenter > Permissions > API Tokens
@@ -38,8 +40,9 @@ Record API token ID and secret in credentials file
 
 ## Build VM Templates
 
+- init debian11 - `packer init debian11/debian11.pkr.hcl`
 - build all VM templates - `make all`
-- build all Debian-11 templates - `make debian-11`
+- build all Debian11 templates - `make debian11`
 - build single VM template - `make vm900`
 
 ## Misc
@@ -58,6 +61,8 @@ ls /var/lib/cloud-init/
 # note: user-data needs to be put in /var/lib/cloud/instance/user-data.txt
 ```
 
+Note: `*.auto.pkrvars.hcl` works like Terraform's `*.auto.tfvars`
+
 ## References
 
 - https://www.youtube.com/watch?v=1nf3WOEFq1Y
@@ -65,3 +70,4 @@ ls /var/lib/cloud-init/
 - https://github.com/romantomjak/packer-proxmox-template
 - https://www.debian.org/releases/stable/example-preseed.txt
 - https://github.com/ChristianLempa/boilerplates/tree/main/packer/proxmox
+- https://github.com/sdhibit/packer-proxmox-templates/tree/main#running-on-nated-network-chromeos-linux-wsl2
