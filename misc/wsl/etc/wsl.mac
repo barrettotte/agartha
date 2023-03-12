@@ -1,0 +1,13 @@
+mac=MAC_ADDRESS
+gateway=$(ip route | awk '/default via /{print $3; exit}' 2>/dev/null)
+
+if ! ip link show | grep -q $mac; then
+    sudo ip link set dev eth0 down
+    sudo ip link set dev eth0 name eth1
+    sudo ip link set dev eth1 up
+    sudo ip route add default via $gateway dev eth1
+    sudo ip link set dev bond0 down
+    sudo ip link set dev bond0 address $mac
+    sudo ip link set dev bond0 name eth0
+    sudo ip link set dev eth0 up
+fi
