@@ -8,7 +8,7 @@ init:
 provision:
 	$(TERRAFORM) validate
 	$(TERRAFORM) plan
-	$(TERRAFORM) apply -auto-approve -parallelism 2
+	$(TERRAFORM) apply -auto-approve -parallelism 3
 
 format:
 	$(TERRAFORM) fmt .

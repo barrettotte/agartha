@@ -1,13 +1,3 @@
-
-#   device-mapper: resume ioctl on  (253:10) failed: Invalid argument
-#   Unable to resume ssd0-vm--900--disk--0 (253:10).
-# TASK ERROR: clone failed: can't refresh LV '/dev/ssd0/vm-900-disk-0' for activation:   Failed to reactivate ssd0/vm-900-disk-0.
-
-# device-mapper: resume ioctl on failed: Invalid argument
-# https://support.hpe.com/hpesc/public/docDisplay?docId=c03744232&docLocale=en_US
-
-# note: could it be trying to use cloud_init drive instead of 16G disk by accident?
-
 resource "proxmox_vm_qemu" "vm_qemu_cloudinit" {
   target_node = var.proxmox_node
   vmid        = var.vm_id
@@ -36,6 +26,21 @@ resource "proxmox_vm_qemu" "vm_qemu_cloudinit" {
     tag    = var.vlan_tag
   }
 
+  disk {
+    backup       = true
+    cache        = "none"
+    discard      = "on"
+    file         = "vm-${var.vm_id}-disk-0"
+    format       = "raw"
+    iothread     = 1
+    size         = var.disk_size
+    slot         = 0
+    ssd          = 1
+    storage      = var.disk_location
+    type         = "scsi"
+    volume       = "${var.disk_location}:vm-${var.vm_id}-disk-0"
+  }
+
   ipconfig0    = "ip=${var.static_ipv4}/24,gw=${var.gateway}"
   nameserver   = var.dns_server
   searchdomain = var.search_domain
@@ -46,14 +51,9 @@ resource "proxmox_vm_qemu" "vm_qemu_cloudinit" {
 
   lifecycle {
     ignore_changes = [
-      ciuser,
-      sshkeys,
-      network
+      network,
+      disk,
+      qemu_os,
     ]
   }
-
-  # note: PCI passthrough doesn't seem to be available...will complete in later in-between step
-  # VM Configuration - https://pve.proxmox.com/pve-docs/qm.1.html
-  # qm set VMID -hostpci0 00:02.0
-  # qm set VMID -hostpci0 02:00,pcie=on,x-vga=on
 }

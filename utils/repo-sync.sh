@@ -8,7 +8,7 @@
 
 set -e
 
-ssh_user=docker
+ssh_user=ansible
 domain=.agartha
 machines=(athens carthage giza jericho luxor rhodes)
 

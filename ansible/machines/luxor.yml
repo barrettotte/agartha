@@ -6,8 +6,6 @@
   vars_files:
     - ../vars/secrets.yml
   tasks:
-    # TODO: check for vm 900, add when condition to steps below
-
     - name: create luxor LXC
       proxmox:
         vmid: 200
@@ -57,7 +55,7 @@
         seconds: 10
       when: luxor_create.changed
 
-    - name: upgrade packages to resolve systemd + sshd crash problem
+    - name: upgrade packages
       shell: pct exec 200 -- bash -c "apt update && apt upgrade -y"
       changed_when: false
       when: luxor_create.changed
@@ -69,6 +67,11 @@
     
     - name: enable ssh public key authentication
       shell: pct exec 200 -- bash -c "sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config"
+      changed_when: false
+      when: luxor_create.changed
+    
+    - name: fix sshd
+      shell: pct exec 200 -- bash -c "echo 'RuntimeDirectoryPreserve=yes' >> /lib/systemd/system/ssh@.service"
       changed_when: false
       when: luxor_create.changed
 
@@ -93,35 +96,38 @@
         timeout: 300
       when: luxor_create.changed
 
-# TODO: turn play above into role
-
 - name: setup luxor ssh and users
   hosts: luxor.agartha
   become: true
-  remote_user: root
   vars_files:
     - ../vars/secrets.yml
   roles:
     - ../roles/sshd
     - ../roles/common
 
-- name: init packer and terraform
+- name: provision resources with packer and terraform
   hosts: luxor.agartha
   become: true
   gather_facts: false
   tasks:
+    - name: check if packer and terraform is installed
+      shell: command -v packer && command -v terraform > /dev/null 2>&1
+      register: are_deps_installed
+      ignore_errors: true
+      changed_when: are_deps_installed.rc != 0
+
     - name: install hashicorp gpg key
       shell: |
         wget -O- https://apt.releases.hashicorp.com/gpg |
         gpg --dearmor |
         sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-      changed_when: false
+      when: are_deps_installed.rc != 0
 
     - name: add hashicorp repo
       shell: |
         echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" |
         sudo tee /etc/apt/sources.list.d/hashicorp.list
-      changed_when: false
+      when: are_deps_installed.rc != 0
 
     - name: install terraform and packer from hashicorp repo
       apt:
@@ -130,6 +136,7 @@
           - packer
         state: latest
         update_cache: true
+      when: are_deps_installed.rc != 0
 
     - name: push repo subdirectory to remote
       copy:
@@ -138,44 +145,36 @@
         owner: ansible
         group: ansible
         mode: 0770
-    
-    # TODO: copy ansible private key to luxor
 
     - name: init packer and terraform
-      shell: make init
-      args:
+      make:
         chdir: /home/ansible/luxor
+        target: init
+      when: are_deps_installed.rc != 0
 
-- name: provision VM templates
-  hosts: luxor.agartha
-  become: true
-  gather_facts: false
-  tasks:
+    - name: check if Debian VM template exists
+      stat:
+        path: /etc/pve/qemu-server/900.conf
+      register: vm_900
+      delegate_facts: true
+      delegate_to: babylon.agartha
+
     - name: packer build
-      shell: 'make || true' # avoid template exists error
-      args:
+      make:
         chdir: /home/ansible/luxor/packer
-  # TODO: when
+        target: all
+      when: not vm_900.stat.exists
 
-- name: configure VM template properties not supported by packer proxmox provider
-  hosts: babylon.agartha
-  become: true
-  remote_user: root
-  gather_facts: false
-  tasks:
     - name: enable discard and ssd emulation for template disk
       lineinfile:
         path: /etc/pve/qemu-server/900.conf
         regexp: '^scsi0'
         line: 'scsi0: ssd0:vm-900-disk-0,discard=on,iothread=1,size=16G,ssd=1'
+      delegate_to: babylon.agartha
 
-- name: provision VMs
-  hosts: luxor.agartha
-  become: true
-  gather_facts: false
-  tasks:
     - name: terraform provisioning
-      shell: make
-      args:
+      make:
         chdir: /home/ansible/luxor/terraform
-  # TODO: when
+        target: all
+      register: terraform_result
+      changed_when: "'Resources: 0 added, 0 changed, 0 destroyed.' not in terraform_result.stdout"
