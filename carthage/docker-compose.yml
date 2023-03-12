@@ -58,6 +58,8 @@ services:
       - /mnt/docker/grafana:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+    user: '472:472' 
+    # sudo chown -R 472:472 /mnt/docker/grafana
     env_file:
       - ./env/grafana.env
     restart: unless-stopped
@@ -119,6 +121,9 @@ services:
     volumes:
       - /mnt/docker/prometheus:/prometheus-data
       - ./prometheus:/etc/prometheus
+    user: '1002:1003' 
+    # sudo chown -R 1002:1003 /mnt/docker/prometheus
+    # TODO: maybe need to have this as ansible template?
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus-data'
