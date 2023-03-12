@@ -1,0 +1,35 @@
+- name: init primary proxmox node
+  hosts: babylon.agartha
+  become: true
+  remote_user: root
+  vars_files:
+    - vars/secrets.yml
+  tasks:
+    - name: install pip
+      apt:
+        pkg: [python3-pip]
+        state: latest
+        update_cache: true
+    - name: install ansible dependencies
+      pip:
+        name:
+          - proxmoxer
+          - requests
+  roles:
+    - sshd
+    - common
+
+- name: create luxor server
+  import_playbook: machines/luxor.yml
+
+# Create VM templates using Packer
+
+# Create VMs on luxor using Terraform
+
+# Ping test all servers
+
+# Configure misc servers
+
+# Configure each debian VM
+
+# Start docker containers on each debian VM

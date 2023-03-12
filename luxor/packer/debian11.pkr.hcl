@@ -57,9 +57,10 @@ source "proxmox-iso" "debian11" {
   http_port_max     = 8802
 
   # Boot commands
-  boot         = null # boot order
+  boot         = "order=scsi0;ide2;net0"
   boot_command = ["<esc><wait>auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<enter>"]
   boot_wait    = "10s"
+  machine      = "q35"
 
   ssh_username = var.ssh_username
   ssh_password = var.ssh_temp_password # changed during cloudinit
@@ -81,8 +82,9 @@ build {
       # change root password
       "echo 'root:${var.root_password_hash}' | chpasswd -e",
 
-      # trim disk size
-      "fstrim -av",
+      # add cloud init config
+      "echo 'datasource_list: [ NoCloud, ConfigDrive, None ]' > /etc/cloud/cloud.cfg.d/99_pve.cfg",
+      "chmod 644 /etc/cloud/cloud.cfg.d/99_pve.cfg",
 
       # misc cleaning
       "rm /etc/ssh/ssh_host_*",

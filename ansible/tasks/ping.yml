@@ -1,5 +1,5 @@
 - name: Test connection to hosts
-  hosts: docker
+  hosts: all
   become: true
   # remote_user: root
   tasks:

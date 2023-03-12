@@ -1,2 +1,3 @@
-# Roles
-- src: geerlingguy.docker
+roles:
+  - name: geerlingguy.docker
+  # - name: geerlingguy.packer

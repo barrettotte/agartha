@@ -23,6 +23,8 @@
       vars:
         docker_users: ['docker']
 
+        # TODO: systemctl enable docker.service
+
     - name: Install NFS for volume storage
       apt:
         pkg: [nfs-common]

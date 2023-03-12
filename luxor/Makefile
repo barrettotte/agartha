@@ -1,10 +1,9 @@
 PACKER_DIR := packer
 TERRAFORM_DIR := terraform
 
-all: vm_templates
+all: vm_templates provision
 
 init:
-	sudo ./install.sh
 	$(MAKE) -C $(PACKER_DIR) init
 	$(MAKE) -C $(TERRAFORM_DIR) init
 
@@ -14,7 +13,6 @@ provision:
 
 vm_templates:
 	$(MAKE) -C $(PACKER_DIR) || true
-	echo 'TODO: fix VM template via Ansible playbooks'
 
 format:
 	$(MAKE) -C $(PACKER_DIR) format

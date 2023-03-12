@@ -14,27 +14,16 @@ resource "proxmox_vm_qemu" "vm_qemu_cloudinit" {
   name        = var.vm_name
   desc        = var.vm_desc
 
-  agent      = 1 # enable qemu-guest-agent
   clone      = var.vm_template
   full_clone = true
   sshkeys    = var.ssh_pub_key
   onboot     = true # start when PVE node starts
   oncreate   = true # start after creation
+  agent      = 1 # enable qemu-guest-agent
 
   sockets = 1
   cores   = var.cores
   memory  = var.memory
-
-  # disk {
-  #   type = "virtio"
-  #   storage = var.disk_location
-  #   size = var.disk_size
-  #   format = "raw"
-  #   iothread = 1
-  #   ssd = 1
-  #   discard = "on"
-  #   media = "disk"
-  # }
 
   qemu_os          = "l26"
   scsihw           = "virtio-scsi-single"
@@ -63,35 +52,8 @@ resource "proxmox_vm_qemu" "vm_qemu_cloudinit" {
     ]
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "ip a"
-    ]
-  }
-
   # note: PCI passthrough doesn't seem to be available...will complete in later in-between step
   # VM Configuration - https://pve.proxmox.com/pve-docs/qm.1.html
   # qm set VMID -hostpci0 00:02.0
   # qm set VMID -hostpci0 02:00,pcie=on,x-vga=on
-
-  # wait for provision to finish
-  # provisioner "local-exec" {
-  #   command = "sleep 15; while ! echo exit | nc ${var.static_ipv4} 22; do sleep 3; done"
-  # }
-
-  # connectivity check
-  # provisioner "remote-exec" {
-  #   connection {
-  #     type = "ssh"
-  #     host = var.static_ipv4
-  #     user = var.default_user
-  #     private_key = var.private_key
-  #     timeout = "3m"
-  #   }
-  #   inline = ["echo Connected!"]
-  # }
-
-  # copy over ansible playbooks?
-
-  # ansible playbook trigger?
 }

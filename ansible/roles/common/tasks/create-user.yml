@@ -8,12 +8,10 @@
     groups: "{{ user.groups }}"
     append: true
     state: present
+  when: ansible_os_family == 'Debian'
 
 - name: Add user authorized keys
   ansible.posix.authorized_key:
     user: "{{ user.username }}"
     key: "{{ user.public_key }}"
     state: present
-
-- name: Test new user connection
-  ping:

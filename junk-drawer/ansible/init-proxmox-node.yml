@@ -1,3 +1,5 @@
+# TODO: not tested!
+
 - name: Initialize proxmox node
   hosts: proxmox
   become: true
@@ -35,12 +37,12 @@
       apt:
         name: sudo
         state: present
-    
+  
     - name: Upgrade all packages
       ansible.builtin.apt:
         upgrade: dist
         force_apt_get: true
-  
+
     - name: Check CPU vendor
       shell: cat /proc/cpuinfo | grep "vendor_id"
       register: cpu_vendor
@@ -58,11 +60,11 @@
       # when: cpu_vendor | search("GenuineIntel")
 
       # TODO: use variable instead? iommu = is_amd ? amd_iommu : intel_iommu
-    
+
     - name: Update GRUB
       shell: update-grub
       when: grub.changed
-    
+
     - name: Enable IOMMU kernel modules
       lineinfile:
         path: /etc/modules
@@ -74,11 +76,11 @@
         - vfio_pci
         - vfio_virqfd
       register: kernel_modules
-    
+
     - name: Update root file system
       shell: update-initramfs -u -k all
       when: kernel_modules.changed
-    
+
     - name: Reboot to finish installing IOMMU kernel modules
       reboot:
         msg: "Reboot started by Ansible to install kernel updates"
@@ -93,4 +95,3 @@
       shell: find /sys/kernel/iommu_groups/ -type l
       register: iommu_groups
     - debug: msg="{{ iommu_groups.stdout }}"
-  

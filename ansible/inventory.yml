@@ -5,21 +5,13 @@ agartha:
     carthage.agartha:
     euphrates.agartha:
     giza.agartha:
-    octoprint.agartha:
+    jericho.agartha:
+    luxor.agartha:
     opnsense.agartha:
     pihole.agartha:
     rhodes.agartha:
-    tigris.agartha:
-    truenas.agartha:
     sumer.agartha:
-    unifi.agartha:
-  vars:
-    personal_user: barrett
-    base_repo_path: "{{ (inventory_dir + '/../') | realpath }}"
-
-bsd:
-  hosts:
-    truenas.agartha:
+    tigris.agartha:
 
 debian:
   hosts:
@@ -27,32 +19,13 @@ debian:
     carthage.agartha:
     giza.agartha:
     jericho.agartha:
-    pihole.agartha:
+    luxor.agartha:
     rhodes.agartha:
 
 docker:
   hosts:
     athens.agartha:
-      nfs_path: manage.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/athens
-      repo_subpath: athens
     carthage.agartha:
-      nfs_path: service.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/carthage
-      repo_subpath: carthage
     giza.agartha:
-      nfs_path: service.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/giza
-      repo_subpath: giza
     jericho.agartha:
-      nfs_path: service.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/jericho
-      repo_subpath: jericho
     rhodes.agartha:
-      nfs_path: torrent.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/rhodes
-      repo_subpath: rhodes
-
-octoprint:
-  hosts:
-    octoprint.agartha:
-
-proxmox:
-  hosts:
-    babylon.agartha:
-    sumer.agartha:
