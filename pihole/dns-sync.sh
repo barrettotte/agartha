@@ -1,9 +1,11 @@
 #!/bin/bash
 # sync local DNS files with pihole
 
+# TODO: convert to ansible playbook
+
 set -e
 
-ssh_user=root
+ssh_user=barrett
 pihole=pihole.agartha
 
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -20,18 +22,16 @@ action=$1
 
 if [ $action == 'push' ]; then
     echo Pushing to $pihole...
-    scp $script_dir/dns-custom.list $ssh_user@$pihole:/etc/pihole/custom.list
-    scp $script_dir/dns-cnames.conf $ssh_user@$pihole:/etc/dnsmasq.d/05-pihole-custom-cname.conf
+    scp -r $script_dir/dns-custom.list $ssh_user@$pihole:/etc/pihole/custom.list
+    scp -r $script_dir/dns-cnames.conf $ssh_user@$pihole:/etc/dnsmasq.d/05-pihole-custom-cname.conf
 elif [ $action == 'pull' ]; then
     echo Pulling from $pihole...
-    scp $ssh_user@$pihole:/etc/pihole/custom.list $script_dir/dns-custom.list
-    scp $ssh_user@$pihole:/etc/dnsmasq.d/05-pihole-custom-cname.conf $script_dir/dns-cnames.conf
+    scp -r $ssh_user@$pihole:/etc/pihole/custom.list $script_dir/dns-custom.list
+    scp -r $ssh_user@$pihole:/etc/dnsmasq.d/05-pihole-custom-cname.conf $script_dir/dns-cnames.conf
 else
     echo Invalid action $action
     echo $usage
     exit 1
 fi
-
-scp $src $dest
 
 echo DNS sync done.
