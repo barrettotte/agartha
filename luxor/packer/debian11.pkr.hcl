@@ -39,11 +39,6 @@ source "proxmox-iso" "debian11" {
     vlan_tag = var.network_vlan
   }
 
-  # vga {
-  #   type   = "std"
-  #   memory = 32
-  # }
-
   iso_file    = var.iso_file
   unmount_iso = true
 

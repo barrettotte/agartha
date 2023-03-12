@@ -1,10 +1,3 @@
-# 
-# https://github.com/Telmate/terraform-provider-proxmox/blob/master/docs/resources/vm_qemu.md#disk-block
-#
-#  device-mapper: resume ioctl on  (253:10) failed: Invalid argument
-#   Unable to resume ssd0-vm--900--disk--0 (253:10).
-# TASK ERROR: clone failed: can't refresh LV '/dev/ssd0/vm-900-disk-0' for activation:   Failed to reactivate ssd0/vm-900-disk-0.
-
 module "athens" {
   source = "./modules/vm"
 
@@ -89,9 +82,3 @@ module "rhodes" {
   gateway      = local.torrent_gw
   nic          = local.torrent_nic
 }
-
-# Error: clone failed: can't refresh LV '/dev/ssd0/vm-900-disk-0' for activation:   Failed to reactivate ssd0/vm-900-disk-0.
-# │ 
-# │   with module.carthage.proxmox_vm_qemu.vm_qemu_cloudinit,
-# │   on modules/vm/main.tf line 6, in resource "proxmox_vm_qemu" "vm_qemu_cloudinit":
-# │    6: resource "proxmox_vm_qemu" "vm_qemu_cloudinit" {

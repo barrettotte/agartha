@@ -4,11 +4,13 @@
 # Used mainly to sync docker compose/config from local to remote without
 # needing to commit, push, and pull my git repo repeatedly.
 
+# TODO: convert to ansible playbook
+
 set -e
 
 ssh_user=docker
 domain=.agartha
-machines=(athens carthage giza jericho rhodes)
+machines=(athens carthage giza jericho luxor rhodes)
 
 script_dir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 repo_dir=$(builtin cd "$script_dir/../"; pwd)
