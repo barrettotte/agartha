@@ -4,32 +4,43 @@
   remote_user: root
   vars_files:
     - vars/secrets.yml
+  roles:
+    - role: sshd
+    - role: wheel
+
+    - role: user
+      vars:
+        user: "{{ personal_user }}"
+        comment: 'personal user'
+        password: "{{ personal_password }}"
+        user_groups: 'wheel'
+        ssh_pub: "{{ personal_ssh_pub }}"
+
+    - role: user
+      vars:
+        user: "{{ ansible_user }}"
+        comment: 'ansible service user'
+        user_groups: 'wheel'
+        ssh_pub: "{{ ansible_ssh_pub }}"
+
   tasks:
-    - name: install pip
+    - name: install general dependencies
       apt:
-        pkg: [python3-pip]
+        pkg:
+          - sudo
+          - curl
+          - python3-pip
         state: latest
         update_cache: true
-    - name: install ansible dependencies
+
+    - name: install python packages
       pip:
         name:
           - proxmoxer
           - requests
-  roles:
-    - sshd
-    - common
 
-- name: create luxor server
-  import_playbook: machines/luxor.yml
+- name: provision and configure luxor server
+  import_playbook: playbooks/luxor.yml
 
-# Create VM templates using Packer
-
-# Create VMs on luxor using Terraform
-
-# Ping test all servers
-
-# Configure misc servers
-
-# Configure each debian VM
-
-# Start docker containers on each debian VM
+- name: provision core VMs with packer and terraform on luxor
+  import_playbook: playbooks/core_vms.yml

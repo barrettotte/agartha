@@ -5,6 +5,7 @@
   gather_facts: false
   vars_files:
     - ../vars/secrets.yml
+    # - ../host_vars/luxor.agartha.yml
   tasks:
     - name: create luxor LXC
       proxmox:
@@ -26,13 +27,14 @@
         netif: '{"net0":"name=eth0,gw=10.42.10.1,ip=10.42.10.26/24,bridge=vmbr0"}'
         nameserver: "{{ dns_server }}"
         searchdomain: "{{ domain }}"
-        pubkey: "{{ ssh_pubkey }}"
+        pubkey: "{{ ansible_ssh_pub }}"
         onboot: true
         unprivileged: true
         features:
           - nesting=1
         state: present
       register: luxor_create
+      # TODO: use vars
 
     - name: wait for create to finish
       pause:
@@ -49,7 +51,7 @@
         unprivileged: true
         state: started
       when: luxor_create.changed
-    
+
     - name: wait for boot to finish
       pause:
         seconds: 10
@@ -57,23 +59,27 @@
 
     - name: upgrade packages
       shell: pct exec 200 -- bash -c "apt update && apt upgrade -y"
-      changed_when: false
+      changed_when: luxor_create.changed
       when: luxor_create.changed
-    
+      # TODO: use vars
+
     - name: enable root ssh login
       shell: pct exec 200 -- bash -c "sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/g' /etc/ssh/sshd_config"
-      changed_when: false
+      changed_when: luxor_create.changed
       when: luxor_create.changed
-    
+      # TODO: use vars
+
     - name: enable ssh public key authentication
       shell: pct exec 200 -- bash -c "sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config"
-      changed_when: false
+      changed_when: luxor_create.changed
       when: luxor_create.changed
-    
+      # TODO: use vars
+
     - name: fix sshd
       shell: pct exec 200 -- bash -c "echo 'RuntimeDirectoryPreserve=yes' >> /lib/systemd/system/ssh@.service"
-      changed_when: false
+      changed_when: luxor_create.changed
       when: luxor_create.changed
+      # TODO: use vars
 
     - name: restart luxor
       proxmox:
@@ -84,7 +90,7 @@
         api_token_secret: "{{ api_token_secret }}"
         unprivileged: true
         state: restarted
-      changed_when: false
+      changed_when: luxor_create.changed
       when: luxor_create.changed
 
     - name: wait for ssh port available
@@ -96,85 +102,51 @@
         timeout: 300
       when: luxor_create.changed
 
-- name: setup luxor ssh and users
+- name: configure luxor server
   hosts: luxor.agartha
   become: true
+  remote_user: root
   vars_files:
     - ../vars/secrets.yml
   roles:
-    - ../roles/sshd
-    - ../roles/common
+    - role: ../roles/sshd
+    - role: ../roles/wheel
 
-- name: provision resources with packer and terraform
-  hosts: luxor.agartha
-  become: true
-  gather_facts: false
+    - role: ../roles/user
+      vars:
+        user: "{{ personal_user }}"
+        comment: 'personal user'
+        password: "{{ personal_password }}"
+        user_groups: 'wheel'
+        ssh_pub: "{{ personal_ssh_pub }}"
+
+    - role: ../roles/user
+      vars:
+        user: ansible
+        comment: 'ansible service user'
+        user_groups: 'wheel'
+        ssh_pub: "{{ ansible_ssh_pub }}"
+
+    - role: ../roles/user
+      vars:
+        user: docker
+        comment: 'docker service user'
+        user_groups: 'wheel'
+        ssh_pub: "{{ docker_ssh_pub }}"
+
+    # - role: geerlingguy.docker
+    #   vars:
+    #     docker_users: ['docker']
+
   tasks:
-    - name: check if packer and terraform is installed
-      shell: command -v packer && command -v terraform > /dev/null 2>&1
-      register: are_deps_installed
-      ignore_errors: true
-      changed_when: are_deps_installed.rc != 0
-
-    - name: install hashicorp gpg key
-      shell: |
-        wget -O- https://apt.releases.hashicorp.com/gpg |
-        gpg --dearmor |
-        sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-      when: are_deps_installed.rc != 0
-
-    - name: add hashicorp repo
-      shell: |
-        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" |
-        sudo tee /etc/apt/sources.list.d/hashicorp.list
-      when: are_deps_installed.rc != 0
-
-    - name: install terraform and packer from hashicorp repo
+    - name: install general dependencies
       apt:
         pkg:
-          - terraform
-          - packer
+          - git
+          - vim
+          - curl
+          - python3-pip
+          - build-essential
+          - lsb-release
         state: latest
         update_cache: true
-      when: are_deps_installed.rc != 0
-
-    - name: push repo subdirectory to remote
-      copy:
-        src: ../../luxor
-        dest: /home/ansible
-        owner: ansible
-        group: ansible
-        mode: 0770
-
-    - name: init packer and terraform
-      make:
-        chdir: /home/ansible/luxor
-        target: init
-      when: are_deps_installed.rc != 0
-
-    - name: check if Debian VM template exists
-      stat:
-        path: /etc/pve/qemu-server/900.conf
-      register: vm_900
-      delegate_facts: true
-      delegate_to: babylon.agartha
-
-    - name: packer build
-      make:
-        chdir: /home/ansible/luxor/packer
-        target: all
-      when: not vm_900.stat.exists
-
-    - name: enable discard and ssd emulation for template disk
-      lineinfile:
-        path: /etc/pve/qemu-server/900.conf
-        regexp: '^scsi0'
-        line: 'scsi0: ssd0:vm-900-disk-0,discard=on,iothread=1,size=16G,ssd=1'
-      delegate_to: babylon.agartha
-
-    - name: terraform provisioning
-      make:
-        chdir: /home/ansible/luxor/terraform
-        target: all
-      register: terraform_result
-      changed_when: "'Resources: 0 added, 0 changed, 0 destroyed.' not in terraform_result.stdout"

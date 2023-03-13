@@ -1,0 +1,17 @@
+- name: Create user
+  user:
+    name: "{{ user }}"
+    comment: "{{ comment }}"
+    password: "{{ password }}"
+    shell: "{{ shell }}"
+    createhome: "{{ create_home }}"
+    groups: "{{ user_groups }}"
+    append: true
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Add user authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ user }}"
+    key: "{{ ssh_pub }}"
+    state: present

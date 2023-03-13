@@ -1,0 +1,20 @@
+- name: install sudo
+  apt:
+    pkg: [sudo]
+    state: latest
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: create wheel group
+  group:
+    name: wheel
+    state: present
+
+- name: allow passwordless sudo for wheel group
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: '/usr/sbin/visudo -cf %s'
+  when: ansible_os_family == "Debian"
