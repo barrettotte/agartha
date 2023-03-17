@@ -6,6 +6,8 @@ TODO: network diagram
 
 TODO: summary
 
+TODO: machine summary
+
 ## References
 
 - [vscode sshfs](https://github.com/SchoofsKelvin/vscode-sshfs)

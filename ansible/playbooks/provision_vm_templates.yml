@@ -34,3 +34,5 @@
         regexp: '^scsi0'
         line: 'scsi0: ssd0:vm-900-disk-0,discard=on,iothread=1,size=16G,ssd=1'
       delegate_to: babylon.agartha
+
+  # TODO: convert this to a role?
