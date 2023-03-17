@@ -150,10 +150,15 @@
   tasks:
     - name: start docker containers
       shell:
-        cmd: 'docker compose up -d --force-recreate'
+        cmd: 'docker compose up --detach --remove-orphans'
         chdir: "/home/docker/{{ repo_subdir }}"
       changed_when: false
-      # TODO: check if containers running already
+    
+    # - name: restart docker containers
+    #   shell:
+    #     cmd: 'docker compose restart'
+    #     chdir: "/home/docker/{{ repo_subdir }}"
+    #   changed_when: false
 
     - name: get docker container info
       shell: docker ps
@@ -163,28 +168,84 @@
     - debug:
         msg: "{{ docker_info.stdout_lines }}"
 
+    - name: remove unused docker images, containers, volumes
+      shell: docker system prune --all --force
+      changed_when: false
+
 - name: configure portainer
   hosts: athens.agartha
   become: true
   remote_user: docker
+  vars_files:
+    - ../vars/secrets.yml
   tasks:
     - name: init portainer admin user
-      shell: echo 'TODO:'
-      # https://docs.portainer.io/admin/environments/add/api#preparation
-      # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module.html
-    
-    - name: get portainer admin jwt
-      shell: echo 'TODO:'
-      # http POST https://my-portainer-server:9443/api/auth Username="admin" Password="adminpassword"
-    
-    - name: add local environment
-      shell: echo 'TODO:'
-      # http --form POST https://my-portainer-server:9443/api/endpoints \
-      # "Authorization: Bearer TOKEN" \
-      # Name="test-local" EndpointCreationType=1
+      uri:
+        method: POST
+        url: https://localhost:9443/api/users/admin/init
+        headers:
+          accept: application/json
+          Content-Type: application/json
+        body_format: json
+        body: '{"Username": "admin", "Password": "{{ portainer_password }}"}'
+        validate_certs: false
+        status_code: [200, 409]
+        return_content: true
+      changed_when: false
+      register: portainer_init
 
-    - name: add remote portainer agent environments
-      shell: echo 'TODO:'
-      # http --form POST https://my-portainer-server:9443/api/endpoints \
-      # "Authorization: Bearer TOKEN" \
-      # Name="test-remote" URL="tcp://carthage.agartha:9001" EndpointCreationType=1
+    - name: generate auth token
+      uri:
+        method: POST
+        url: https://localhost:9443/api/auth
+        headers:
+          accept: application/json
+          Content-Type: application/json
+        body_format: json
+        body: '{"Username": "admin", "Password": "{{ portainer_password }}"}'
+        validate_certs: false
+        return_content: true
+      changed_when: false
+      register: portainer_jwt
+
+    - debug:
+        msg: "jwt -> {{ (portainer_jwt.content | from_json).jwt }}"
+
+    - name: add environment for local docker socket
+      uri:
+        method: POST
+        url: https://localhost:9443/api/endpoints
+        headers:
+          accept: application/json
+          Content-Type: multipart/form-data
+          Authorization: "Bearer {{ (portainer_jwt.content | from_json).jwt }}"
+        body_format: form-multipart
+        body:
+          Name: "athens"
+          EndpointCreationType: '1'
+        validate_certs: false
+        status_code: [200]
+
+    - name: add environments for remote portainer-agents
+      uri:
+        method: POST
+        url: https://localhost:9443/api/endpoints
+        headers:
+          accept: application/json
+          Content-Type: multipart/form-data
+          Authorization: "Bearer {{ (portainer_jwt.content | from_json).jwt }}"
+        body_format: form-multipart
+        body:
+          Name: "{{ item }}"
+          URL: "tcp://{{ item }}.agartha:9001"
+          EndpointCreationType: '2'
+          TLS: 'true'
+          TLSSkipVerify: 'true'
+          TLSSkipClientVerify: 'true'
+        validate_certs: false
+        status_code: [200]
+      loop:
+        - carthage
+        - giza
+        - jericho
+        - rhodes

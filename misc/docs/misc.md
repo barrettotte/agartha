@@ -20,17 +20,7 @@
 - remove all volumes - `docker volume rm $(docker volume ls -q) > /dev/null 2>&1`
 - remove all containers - `docker container rm $(docker ps -qa) > /dev/null 2>&1`
 - force recreate on container `docker compose up -d --force-recreate CONTAINER`
-
-```sh
-# Find volumes associated to containers
-volumes=$(docker volume ls  --format '{{.Name}}')
-
-for volume in $volumes
-do
-  echo -n volume=$volume '->'
-  docker ps -a --filter volume="$volume"  --format '{{.Names}}' | sed 's/^/  /'
-done
-```
+- view how image was built `docker history --human --no-trunc influxdb:2.6-alpine --format '{{.CreatedBy}}'`
 
 ## SSH Init
 

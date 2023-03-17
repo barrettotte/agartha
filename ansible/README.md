@@ -25,8 +25,6 @@ PubKeyAuthentication yes
 PasswordAuthentication no
 ```
 
-
-
 ## References
 
 - https://www.nathancurry.com/blog/14-ansible-deployment-with-proxmox/
