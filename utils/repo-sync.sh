@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # sync local repo directory with remote machine
 #
 # Used mainly to sync docker compose/config from local to remote without

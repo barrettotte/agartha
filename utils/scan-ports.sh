@@ -1,7 +1,6 @@
 #!/bin/bash
-# sanity check to scan all cleVLANs
 
-# apt-get install nmap
+# sanity check for VLAN isolation
 
 base_addr=10.42
 declare -a subnets=(0 5 10 25 30 35 40 50)

@@ -48,3 +48,5 @@ wget --no-check-certificate -qO- https://localhost:8443/status | python3 -m json
 journalctl --no-pager --unit unifi.service
 cat /usr/lib/unifi/logs/server.log
 cat /usr/lib/unifi/logs/mongod.log
+
+# TODO: convert to ansible playbook!
