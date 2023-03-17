@@ -1,0 +1,4 @@
+# athens config
+
+repo_subdir: athens
+truenas_nfs_path: manage.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/athens

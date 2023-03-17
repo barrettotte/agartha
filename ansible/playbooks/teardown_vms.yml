@@ -1,0 +1,14 @@
+- name: teardown vms
+  hosts: babylon.agartha
+  become: true
+  gather_facts: false
+  vars_files:
+    - ../vars/luxor.yml
+  tasks:
+    - name: destroy VM resources
+      shell:
+        cmd: terraform destroy -auto-approve
+        chdir: /home/ansible/infra/luxor/terraform
+      delegate_to: luxor.agartha
+      ignore_errors: true
+      ignore_unreachable: true

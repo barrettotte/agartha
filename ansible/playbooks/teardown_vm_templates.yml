@@ -1,0 +1,22 @@
+- name: teardown vm templates and luxor
+  hosts: babylon.agartha
+  become: true
+  gather_facts: false
+  vars_files:
+    - ../vars/luxor.yml
+  tasks:
+    - name: destroy VM templates
+      shell: "qm stop {{ item }} || true; qm destroy {{ item }} || true"
+      loop:
+        - 900
+      # TODO: get list of templates from config
+
+    - name: stop luxor
+      shell: "pct stop {{ vm_id }}"
+
+    - name: wait for luxor to stop
+      wait_for:
+        timeout: 5
+
+    - name: delete luxor
+      shell: "pct destroy {{ vm_id }}"

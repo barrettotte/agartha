@@ -1,0 +1,36 @@
+- name: provision vm templates with packer
+  hosts: luxor.agartha
+  become: true
+  gather_facts: false
+  tasks:
+    - name: check if debian11 VM template exists
+      stat:
+        path: /etc/pve/qemu-server/900.conf
+      register: vm_900
+      delegate_facts: true
+      delegate_to: babylon.agartha
+
+    - name: init vm template
+      shell:
+        cmd: packer init ./
+        chdir: /home/ansible/infra/luxor/packer/debian11
+      when: not vm_900.stat.exists
+
+    - name: validate vm template
+      shell:
+        cmd: packer validate ./
+        chdir: /home/ansible/infra/luxor/packer/debian11
+      when: not vm_900.stat.exists
+
+    - name: provision vm template
+      shell:
+        cmd: packer build ./
+        chdir: /home/ansible/infra/luxor/packer/debian11
+      when: not vm_900.stat.exists
+
+    - name: enable discard and ssd emulation for template disk
+      lineinfile:
+        path: /etc/pve/qemu-server/900.conf
+        regexp: '^scsi0'
+        line: 'scsi0: ssd0:vm-900-disk-0,discard=on,iothread=1,size=16G,ssd=1'
+      delegate_to: babylon.agartha

@@ -1,9 +1,6 @@
 version: '3.9'
 name: giza
 
-networks:
-  giza_network:
-
 services:
   cadvisor:
     container_name: cadvisor
@@ -31,7 +28,7 @@ services:
     volumes:
       - ./dashy/conf.yml:/app/public/conf.yml
     restart: unless-stopped
-  
+
   # gotify:
   #   container_name: gotify
   #   image: gotify/server:latest

@@ -1,0 +1,189 @@
+- name: create luxor
+  hosts: babylon.agartha
+  become: true
+  remote_user: root
+  gather_facts: false
+  vars_files:
+    - ../vars/secrets.yml
+    - ../vars/luxor.yml
+  tasks:
+    - name: create luxor
+      proxmox:
+        vmid: "{{ vm_id }}"
+        description: "{{ vm_desc }}"
+        hostname: "{{ vm_name }}"
+        password: "{{ luxor_password }}"
+        node: "{{ primary_pve_node }}"
+        api_host: "{{ primary_pve_node + '.' + domain }}"
+        api_user: "{{ api_user }}"
+        api_token_id: "{{ api_token_id }}"
+        api_token_secret: "{{ api_token_secret }}"
+        ostemplate: "{{ vm_iso }}"
+        cores: "{{ vm_cores }}"
+        storage: "{{ vm_storage }}"
+        disk: "{{ vm_storage }}:{{ vm_disk_size }}"
+        memory: "{{ vm_memory }}"
+        swap: "{{ vm_swap }}"
+        netif: "{{ vm_nic }}"
+        nameserver: "{{ dns_server }}"
+        searchdomain: "{{ domain }}"
+        pubkey: "{{ ansible_ssh_pub }}"
+        onboot: true
+        unprivileged: true
+        features:
+          - nesting=1
+        state: present
+      register: luxor_vm
+
+    - name: wait for create to finish
+      pause:
+        seconds: 10
+      when: luxor_vm.changed
+
+    - name: deploy luxor
+      proxmox:
+        hostname: "{{ vm_name }}"
+        api_host: "{{ primary_pve_node + '.' + domain }}"
+        api_user: "{{ api_user }}"
+        api_token_id: "{{ api_token_id }}"
+        api_token_secret: "{{ api_token_secret }}"
+        unprivileged: true
+        state: started
+      when: luxor_vm.changed
+
+    - name: wait for boot to finish
+      pause:
+        seconds: 10
+      when: luxor_vm.changed
+
+    - name: upgrade packages
+      shell: "pct exec {{ vm_id }} -- bash -c 'apt update && apt upgrade -y'"
+      changed_when: luxor_vm.changed
+      when: luxor_vm.changed
+
+    - name: enable root ssh login
+      shell: pct exec {{ vm_id }} -- bash -c "sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/g' /etc/ssh/sshd_config"
+      changed_when: luxor_vm.changed
+      when: luxor_vm.changed
+
+    - name: enable ssh public key authentication
+      shell: pct exec {{ vm_id }} -- bash -c "sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config"
+      changed_when: luxor_vm.changed
+      when: luxor_vm.changed
+
+    - name: fix sshd
+      shell: pct exec {{ vm_id }} -- bash -c "echo 'RuntimeDirectoryPreserve=yes' >> /lib/systemd/system/ssh@.service"
+      changed_when: luxor_vm.changed
+      when: luxor_vm.changed
+
+    - name: restart luxor
+      proxmox:
+        hostname: "{{ vm_name }}"
+        api_host: "{{ primary_pve_node + '.' + domain }}"
+        api_user: "{{ api_user }}"
+        api_token_id: "{{ api_token_id }}"
+        api_token_secret: "{{ api_token_secret }}"
+        unprivileged: true
+        state: restarted
+      changed_when: luxor_vm.changed
+      when: luxor_vm.changed
+
+    - name: wait for ssh port available
+      wait_for:
+        host: "{{ vm_name + '.' + domain }}"
+        port: 22
+        delay: 10
+        state: started
+        timeout: 300
+      when: luxor_vm.changed
+
+- name: setup luxor users
+  hosts: luxor.agartha
+  become: true
+  remote_user: root
+  vars_files:
+    - ../vars/secrets.yml
+  roles:
+    - name: update packages
+      role: ../roles/update
+
+    - name: configure sshd
+      role: ../roles/sshd
+
+    - name: add wheel group
+      role: ../roles/wheel
+
+    - name: add personal user
+      role: ../roles/user
+      vars:
+        user: "{{ personal_user }}"
+        comment: 'personal user'
+        password: "{{ personal_password }}"
+        user_groups: 'wheel'
+        ssh_pub: "{{ personal_ssh_pub }}"
+
+    - name: add ansible user
+      role: ../roles/user
+      vars:
+        user: ansible
+        comment: 'ansible service user'
+        user_groups: 'wheel'
+        ssh_pub: "{{ ansible_ssh_pub }}"
+
+- name: configure luxor
+  hosts: luxor.agartha
+  become: true
+  tasks:
+    - name: install general dependencies
+      apt:
+        pkg:
+          - git
+          - vim
+          - curl
+          - python3-pip
+          - build-essential
+          - lsb-release
+          - rsync
+        state: latest
+        update_cache: true
+    
+    - name: push subdirectories to remote
+      synchronize:
+        src: ../../../{{ item }}
+        dest: "/home/ansible/infra"
+        recursive: true
+        checksum: true
+        archive: false
+        rsync_opts:
+          - '--chown=ansible:ansible'
+      loop:
+        - ansible
+        - luxor
+
+    - name: check if packer and terraform is installed
+      shell: command -v packer && command -v terraform > /dev/null 2>&1
+      register: are_deps_installed
+      ignore_errors: true
+      changed_when: are_deps_installed.rc != 0
+
+    - name: install hashicorp gpg key
+      shell: |
+        wget -O- https://apt.releases.hashicorp.com/gpg |
+        gpg --dearmor |
+        sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+      when: are_deps_installed.rc != 0
+
+    - name: add hashicorp repo
+      shell: |
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" |
+        sudo tee /etc/apt/sources.list.d/hashicorp.list
+      when: are_deps_installed.rc != 0
+
+    - name: install terraform and packer from hashicorp repo
+      apt:
+        pkg:
+          - terraform
+          - packer
+        state: latest
+        update_cache: true
+      when: are_deps_installed.rc != 0

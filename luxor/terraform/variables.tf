@@ -1,21 +1,12 @@
-# secrets
-
-variable "proxmox_babylon_api_token_id" {
-  type      = string
+variable proxmox_secrets {
+  type = map(object({
+    api_token_id     = string
+    api_token_secret = string
+  }))
   sensitive = true
 }
 
-variable "proxmox_babylon_api_token_secret" {
-  type      = string
-  sensitive = true
-}
-
-variable "proxmox_sumer_api_token_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "proxmox_sumer_api_token_secret" {
-  type      = string
+variable "ci_passwords" {
+  type      = map(string)
   sensitive = true
 }

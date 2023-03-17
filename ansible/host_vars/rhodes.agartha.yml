@@ -1,0 +1,4 @@
+# rhodes config
+
+repo_subdir: rhodes
+truenas_nfs_path: torrent.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/rhodes

@@ -1,0 +1,190 @@
+- name: provision core vms with terraform
+  hosts: luxor.agartha
+  become: true
+  gather_facts: false
+  tasks:
+    - name: init terraform
+      shell:
+        cmd: terraform init
+        chdir: /home/ansible/infra/luxor/terraform
+      changed_when: false
+
+    - name: validate terraform
+      shell:
+        cmd: terraform validate
+        chdir: /home/ansible/infra/luxor/terraform
+      changed_when: false
+
+    - name: apply terraform
+      shell:
+        cmd: terraform apply -auto-approve -parallelism 2
+        chdir: /home/ansible/infra/luxor/terraform
+      register: terraform_result
+      changed_when: "'Resources: 0 added, 0 changed, 0 destroyed.' not in terraform_result.stdout"
+
+- name: base configuration for each vm
+  hosts: core
+  become: true
+  vars_files:
+    - ../vars/secrets.yml
+  roles:
+    - name: configure sshd
+      role: ../roles/sshd
+
+    - name: add wheel group
+      role: ../roles/wheel
+
+    - name: add personal user
+      role: ../roles/user
+      vars:
+        user: "{{ personal_user }}"
+        comment: 'personal user'
+        password: "{{ personal_password }}"
+        user_groups: 'wheel'
+        ssh_pub: "{{ personal_ssh_pub }}"
+    
+    - name: add docker user
+      role: ../roles/user
+      vars:
+        user: docker
+        comment: 'docker service user'
+        user_groups: 'wheel'
+        ssh_pub: "{{ docker_ssh_pub }}"
+
+  tasks:
+    - name: ensure packer user is removed
+      user:
+        name: packer
+        state: absent
+        remove: yes
+
+- name: configure each vm
+  hosts: core
+  become: true
+  pre_tasks:
+    - name: install general dependencies
+      apt:
+        pkg:
+          - sudo
+          - git
+          - vim
+          - curl
+          - python3-pip
+          - build-essential
+          - lsb-release
+          - rsync
+          - nfs-common
+          - apparmor
+        state: latest
+        update_cache: true
+
+    - name: Check for reboot
+      stat:
+        path: /var/run/reboot-required
+        get_md5: false
+      register: reboot_required
+
+    - name: Reboot if kernel updates need installed
+      reboot:
+        msg: "Reboot started by Ansible to install kernel updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required.stat.exists
+
+  tasks:
+    - name: Mount TrueNAS NFS
+      mount:
+        src: "{{ truenas_nfs_path }}"
+        path: /mnt/docker
+        opts: rw,soft,intr,nfsvers=4
+        fstype: nfs
+        state: mounted
+    
+    - name: push docker files to remote
+      synchronize:
+        src: "../../../{{ repo_subdir }}"
+        dest: /home/docker
+        recursive: true
+        checksum: true
+        archive: false
+
+    - name: set owner and permissions of pushed files
+      file:
+        path: "/home/docker/{{ repo_subdir }}"
+        owner: docker
+        group: nogroup
+        mode: '0776'
+        recurse: yes
+
+- name: configure grafana volume
+  hosts: carthage.agartha
+  become: true
+  remote_user: root
+  tasks:
+    - name: set owner for grafana
+      file:
+        path: /mnt/docker/grafana
+        owner: 472
+        group: 472
+        recurse: true
+
+- name: start docker containers
+  hosts: core
+  become: true
+  remote_user: docker
+  roles:
+    - name: install docker
+      role: geerlingguy.docker
+      vars:
+        docker_users: 
+          - docker
+          - ansible
+          - "{{ personal_user }}"
+        docker_install_compose_plugin: true
+        docker_compose_package: docker-compose-plugin
+        docker_compose_package_state: present
+
+  tasks:
+    - name: start docker containers
+      shell:
+        cmd: 'docker compose up -d --force-recreate'
+        chdir: "/home/docker/{{ repo_subdir }}"
+      changed_when: false
+      # TODO: check if containers running already
+
+    - name: get docker container info
+      shell: docker ps
+      register: docker_info
+      changed_when: false
+
+    - debug:
+        msg: "{{ docker_info.stdout_lines }}"
+
+- name: configure portainer
+  hosts: athens.agartha
+  become: true
+  remote_user: docker
+  tasks:
+    - name: init portainer admin user
+      shell: echo 'TODO:'
+      # https://docs.portainer.io/admin/environments/add/api#preparation
+      # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module.html
+    
+    - name: get portainer admin jwt
+      shell: echo 'TODO:'
+      # http POST https://my-portainer-server:9443/api/auth Username="admin" Password="adminpassword"
+    
+    - name: add local environment
+      shell: echo 'TODO:'
+      # http --form POST https://my-portainer-server:9443/api/endpoints \
+      # "Authorization: Bearer TOKEN" \
+      # Name="test-local" EndpointCreationType=1
+
+    - name: add remote portainer agent environments
+      shell: echo 'TODO:'
+      # http --form POST https://my-portainer-server:9443/api/endpoints \
+      # "Authorization: Bearer TOKEN" \
+      # Name="test-remote" URL="tcp://carthage.agartha:9001" EndpointCreationType=1

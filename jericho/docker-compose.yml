@@ -1,9 +1,6 @@
 version: '3.9'
 name: jericho
 
-networks:
-  jericho_network:
-
 services:
   cadvisor:
     container_name: cadvisor
@@ -46,6 +43,30 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     restart: unless-stopped
 
-  # TODO: portainer-agent
+  portainer-agent:
+    container_name: portainer-agent
+    image: portainer/agent:2.17.1-alpine
+    ports:
+      - '9001:9001'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    restart: unless-stopped
 
-  # TODO: promtail
+  promtail:
+    container_name: promtail
+    image: grafana/promtail:2.7.3
+    ports:
+      - '1514:1514/tcp'
+      - '1514:1514/udp'
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log:/ext_logs:ro
+      - ./promtail/promtail.yml:/etc/promtail/config.yml
+    command:
+      - '-config.file=/etc/promtail/config.yml'
+      - '-config.expand-env'
+    environment:
+      - HOSTNAME=jericho
+    restart: unless-stopped

@@ -1,5 +1,18 @@
-# proxmox_babylon_api_token_id = "terraform@pve!terraform" # user@realm!token
-# proxmox_babylon_api_token_secret = "TOKEN_SECRET"
+# ci_passwords = {
+#   "athens"   = "ATHENS_PASSWORD"
+#   "carthage" = "CARTHAGE_PASSWORD"
+#   "giza"     = "GIZA_PASSWORD"
+#   "jericho"  = "JERICHO_PASSWORD"
+#   "rhodes"   = "RHODES_PASSWORD"
+# }
 
-# proxmox_sumer_api_token_id = ""
-# proxmox_sumer_api_token_secret = "TOKEN_SECRET"
+# proxmox_secrets = {
+#   "babylon" = {
+#     api_token_id = "API_TOKEN_ID"
+#     api_token_secret = "API_TOKEN_SECRET"
+#   }
+#   "sumer" = {
+#     api_token_id = "API_TOKEN_ID"
+#     api_token_secret = "API_TOKEN_SECRET"
+#   }
+# }

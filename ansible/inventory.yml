@@ -7,25 +7,45 @@ agartha:
     giza.agartha:
     jericho.agartha:
     luxor.agartha:
+    octoprint.agartha:
     opnsense.agartha:
     pihole.agartha:
     rhodes.agartha:
     sumer.agartha:
     tigris.agartha:
+    truenas.agartha:
+    unifi.agartha:
+
+bsd:
+  hosts:
+    truenas.agartha:
+    opnsense.agartha:
+
+core:
+  hosts:
+    athens.agartha:
+    carthage.agartha:
+    giza.agartha:
+    jericho.agartha:
+    rhodes.agartha:
 
 debian:
   hosts:
-    athens.agartha:
-    carthage.agartha:
-    giza.agartha:
-    jericho.agartha:
     luxor.agartha:
-    rhodes.agartha:
+    # pihole.agartha:
+    # octoprint.agartha:
+    unifi.agartha:
+  children:
+    core:
+    proxmox:
 
 docker:
   hosts:
-    athens.agartha:
-    carthage.agartha:
-    giza.agartha:
-    jericho.agartha:
-    rhodes.agartha:
+    # luxor.agartha:
+  children:
+    core:
+
+proxmox:
+  hosts:
+    babylon.agartha:
+    sumer.agartha:

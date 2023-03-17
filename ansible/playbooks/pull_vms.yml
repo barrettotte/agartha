@@ -1,0 +1,13 @@
+- name: pull docker directories from all core vms
+  hosts: localhost
+  become: true
+  tasks:
+    - name: pull docker directory from each core vm
+      synchronize:
+        dest: "../../../{{ repo_subdir }}"
+        src: /home/docker
+        mode: pull
+        recursive: true
+        checksum: true
+        archive: false
+      delegate_to: core

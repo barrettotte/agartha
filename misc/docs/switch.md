@@ -1,5 +1,7 @@
 # Switch
 
+TP-Link 1600G-28TS
+
 ## General
 
 - trunk ports = tagged (multi-VLAN on one single port)
@@ -19,6 +21,21 @@
 - layer 3 routing added interfaces for VLAN (temp)
   - VLAN10 10.42.0.2 (management?)
   - VLAN20 10.42.20.2 (home)
+
+## SSH
+
+```sh
+# Upload SSH-1 RSA public key via web interface
+
+ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 -o HostKeyAlgorithms=ssh-dss -c aes256-cbc barrett@euphrates.agartha
+# Note: Not using secure enough algorithms/cipher...
+
+?
+enable # Privileged EXEC Mode
+
+# https://static.tp-link.com/res/down/doc/TL-SG3216(UN)_V2.0_CLI.pdf
+show system-info
+```
 
 ## Ports
 

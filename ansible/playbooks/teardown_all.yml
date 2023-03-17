@@ -1,0 +1,5 @@
+- name: teardown vms
+  import_playbook: teardown_vms.yml
+
+- name: teardown vm templates
+  import_playbook: teardown_vm_templates.yml

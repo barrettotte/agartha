@@ -52,7 +52,7 @@ Record API token ID and secret in credentials file
 cat /etc/machine-id
 
 # check cloud init logs
-less /var/log/cloud-init.log   
+less /var/log/cloud-init.log
 less /var/log/cloud-init-output.log
 
 # verify cloud init files
@@ -71,3 +71,4 @@ Note: `*.auto.pkrvars.hcl` works like Terraform's `*.auto.tfvars`
 - https://www.debian.org/releases/stable/example-preseed.txt
 - https://github.com/ChristianLempa/boilerplates/tree/main/packer/proxmox
 - https://github.com/sdhibit/packer-proxmox-templates/tree/main#running-on-nated-network-chromeos-linux-wsl2
+- https://www.hashicorp.com/blog/using-template-files-with-hashicorp-packer

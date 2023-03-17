@@ -1,0 +1,13 @@
+# luxor config
+
+vm_iso: 'local:vztmpl/debian-11-standard_11.6-1_amd64.tar.zst'
+vm_id: 200
+vm_name: luxor
+vm_desc: 'Automation server'
+
+vm_cores: 1
+vm_storage: ssd0
+vm_disk_size: 16
+vm_memory: 2048
+vm_swap: 2048
+vm_nic: '{"net0":"name=eth0,gw=10.42.10.1,ip=10.42.10.26/24,bridge=vmbr0"}'

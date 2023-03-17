@@ -25,10 +25,7 @@ PubKeyAuthentication yes
 PasswordAuthentication no
 ```
 
-## Commands
 
-- `ansible-playbook main.yml`
-- add `-vvvv` for debugging
 
 ## References
 
