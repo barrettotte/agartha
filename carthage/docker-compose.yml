@@ -44,6 +44,7 @@ services:
     command:
       - '--graphite.mapping-config=/etc/graphite_mapping.yml'
       - '--log.level=debug'
+      - '--graphite.sample-expiry=10m' # prevent disk fill up
     restart: unless-stopped
 
   grafana:
