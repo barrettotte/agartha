@@ -1,0 +1,100 @@
+- name: configure portainer
+  hosts: athens.agartha
+  become: true
+  remote_user: docker
+  vars_files:
+    - ../vars/secrets.yml
+  tasks:
+    - name: init portainer admin user
+      uri:
+        method: POST
+        url: https://localhost:9443/api/users/admin/init
+        headers:
+          accept: application/json
+          Content-Type: application/json
+        body_format: json
+        body: '{"Username": "admin", "Password": "{{ portainer_password }}"}'
+        validate_certs: false
+        status_code: [200, 409]
+        return_content: true
+      changed_when: false
+      register: portainer_init
+
+    - name: generate auth token
+      uri:
+        method: POST
+        url: https://localhost:9443/api/auth
+        headers:
+          accept: application/json
+          Content-Type: application/json
+        body_format: json
+        body: '{"Username": "admin", "Password": "{{ portainer_password }}"}'
+        validate_certs: false
+        return_content: true
+      changed_when: false
+      register: portainer_auth_raw
+
+    - name: set portainer jwt fact
+      set_fact:
+        portainer_jwt: "{{ (portainer_auth_raw.content | from_json).jwt }}"
+
+    - name: get known endpoints
+      uri:
+        method: GET
+        url: https://localhost:9443/api/endpoints
+        headers:
+          accept: application/json
+          Authorization: "Bearer {{ portainer_jwt }}"
+        return_content: true
+        validate_certs: false
+      changed_when: false
+      register: portainer_endpoints_raw
+
+    - name: set known portainer endpoints
+      set_fact:
+        portainer_endpoints: "{{ portainer_endpoints_raw.json | map(attribute='Name') | list }}"
+
+    - name: show known portainer endpoints
+      debug:
+        msg: "{{ portainer_endpoints }}"
+
+    - name: add environment for local docker socket
+      uri:
+        method: POST
+        url: https://localhost:9443/api/endpoints
+        headers:
+          accept: application/json
+          Content-Type: multipart/form-data
+          Authorization: "Bearer {{ portainer_jwt }}"
+        body_format: form-multipart
+        body:
+          Name: "athens"
+          EndpointCreationType: '1'
+        validate_certs: false
+        status_code: [200]
+      when: "'athens' not in portainer_endpoints"
+
+    - name: add environments for remote portainer-agents
+      uri:
+        method: POST
+        url: https://localhost:9443/api/endpoints
+        headers:
+          accept: application/json
+          Content-Type: multipart/form-data
+          Authorization: "Bearer {{ portainer_jwt }}"
+        body_format: form-multipart
+        body:
+          Name: "{{ item }}"
+          URL: "tcp://{{ item }}.agartha:9001"
+          EndpointCreationType: '2'
+          TLS: 'true'
+          TLSSkipVerify: 'true'
+          TLSSkipClientVerify: 'true'
+        validate_certs: false
+        status_code: [200]
+      loop:
+        - carthage
+        - giza
+        - jericho
+        - rhodes
+      when: "item not in portainer_endpoints"

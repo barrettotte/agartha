@@ -154,11 +154,12 @@
         chdir: "/home/docker/{{ repo_subdir }}"
       changed_when: false
     
-    # - name: restart docker containers
-    #   shell:
-    #     cmd: 'docker compose restart'
-    #     chdir: "/home/docker/{{ repo_subdir }}"
-    #   changed_when: false
+    - name: restart docker containers
+      shell:
+        cmd: 'docker compose restart'
+        chdir: "/home/docker/{{ repo_subdir }}"
+      changed_when: false
+    # TODO: somehow only fire this on changes to pushed repo?
 
     - name: get docker container info
       shell: docker ps
@@ -172,80 +173,5 @@
       shell: docker system prune --all --force
       changed_when: false
 
-- name: configure portainer
-  hosts: athens.agartha
-  become: true
-  remote_user: docker
-  vars_files:
-    - ../vars/secrets.yml
-  tasks:
-    - name: init portainer admin user
-      uri:
-        method: POST
-        url: https://localhost:9443/api/users/admin/init
-        headers:
-          accept: application/json
-          Content-Type: application/json
-        body_format: json
-        body: '{"Username": "admin", "Password": "{{ portainer_password }}"}'
-        validate_certs: false
-        status_code: [200, 409]
-        return_content: true
-      changed_when: false
-      register: portainer_init
-
-    - name: generate auth token
-      uri:
-        method: POST
-        url: https://localhost:9443/api/auth
-        headers:
-          accept: application/json
-          Content-Type: application/json
-        body_format: json
-        body: '{"Username": "admin", "Password": "{{ portainer_password }}"}'
-        validate_certs: false
-        return_content: true
-      changed_when: false
-      register: portainer_jwt
-
-    - debug:
-        msg: "jwt -> {{ (portainer_jwt.content | from_json).jwt }}"
-
-    - name: add environment for local docker socket
-      uri:
-        method: POST
-        url: https://localhost:9443/api/endpoints
-        headers:
-          accept: application/json
-          Content-Type: multipart/form-data
-          Authorization: "Bearer {{ (portainer_jwt.content | from_json).jwt }}"
-        body_format: form-multipart
-        body:
-          Name: "athens"
-          EndpointCreationType: '1'
-        validate_certs: false
-        status_code: [200]
-
-    - name: add environments for remote portainer-agents
-      uri:
-        method: POST
-        url: https://localhost:9443/api/endpoints
-        headers:
-          accept: application/json
-          Content-Type: multipart/form-data
-          Authorization: "Bearer {{ (portainer_jwt.content | from_json).jwt }}"
-        body_format: form-multipart
-        body:
-          Name: "{{ item }}"
-          URL: "tcp://{{ item }}.agartha:9001"
-          EndpointCreationType: '2'
-          TLS: 'true'
-          TLSSkipVerify: 'true'
-          TLSSkipClientVerify: 'true'
-        validate_certs: false
-        status_code: [200]
-      loop:
-        - carthage
-        - giza
-        - jericho
-        - rhodes
+- name: configure Portainer on athens
+  import_playbook: athens_portainer.yml
