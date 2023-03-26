@@ -1,4 +1,4 @@
 # jericho config
 
 repo_subdir: jericho
-truenas_nfs_path: service.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/jericho
+truenas_nfs_path: truenas-service.agartha:/mnt/mesopotamia/nfs/proxmox/docker/jericho

@@ -8,13 +8,6 @@
 - disk usage by folder - `du -h / | less`
 - check port - `nc -zv 10.42.30.26 22`
 
-## Domain Transfer
-
-- previous registrar - iwebfusion
-- new registrar Cloudflare
-- https://my.iwebfusion.net/knowledgebase/33/How-do-I-transfer-my-domain-name.html
-- https://developers.cloudflare.com/registrar/get-started/transfer-domain-to-cloudflare/
-
 ## Docker
 
 - remove all volumes - `docker volume rm $(docker volume ls -q) > /dev/null 2>&1`

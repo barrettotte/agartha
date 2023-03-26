@@ -125,3 +125,24 @@ Note: Updates will probably re-enable this
   - organization=agartha
   - bucket=proxmox
   - token=API_TOKEN
+
+## SSL Certs
+
+https://3os.org/infrastructure/proxmox/lets-encrypt-cloudflare/#instalaion-and-configuration
+
+- Datacenter > ACME
+- Add account
+- Add ACME DNS Plugin
+  - id: acme-cloudflare
+  - DNS API: Cloudflare Managed DNS
+  - CF_ACCOUNT_ID: Cloudflare account ID
+  - CF_Email: email
+  - CF_TOKEN: Cloudflare API token
+
+- Select PVE server > System > Certificates
+  - Add ACME domain
+    - Challenge Type: DNS
+    - Plugin: acme-cloudflare
+    - Domain: *.agartha.barrettotte.com
+
+hmm not doing this for now...

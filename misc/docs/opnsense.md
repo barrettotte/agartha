@@ -93,3 +93,37 @@ https://teklager.se/en/knowledge-base/opnsense-performance-optimization/
 - System > Settings > Tunables
   - Spectre/Meltdown disable
   - 
+
+## SSL Certs
+
+Setup domain, need to stop using self-signed certs.
+
+- Installed `os-acme-client` plugin
+- Services > ACME Client
+  - Settings > Enabled plugin
+  - Accounts > Add account
+    - Name: Let's Encrypt
+    - Email: Email
+    - CA: Let's Encrypt
+  - Challenge Types > Add Challenge Type
+    - Name: Cloudflare
+    - Challenge Type: DNS-01
+    - DNS Service: CloudFlare.com
+    - CF Account ID: Cloudflare account id (in URI after logging into cloudflare dashboard)
+    - CF API Token: Cloudflare API key
+  - Automations > Add Automation
+    - Name: Restart web UI
+    - Run Command: Restart OPNsense Web UI
+  - Certificates > Add Certificate
+    - Common Name: `*.agartha.barrettotte.com`
+    - Alt Names: `*.barrettotte.com`
+    - ACME Account: Let's Encrypt
+    - Auto Renewal: yes
+    - Renewal Interval: 60
+    - Automations: Restart web UI
+
+System > Settings
+
+- Protocol: HTTPS
+- SSL Certificate: `*.agartha.barrettotte.com (ACME Client)`
+- HTTP Redirect: yes

@@ -5,10 +5,10 @@ appConfig:
   iconSize: small
 pageInfo:
   title: Agartha
-  description: ''
+  description: ""
   navLinks: []
-  footerText: ''
-  logo: ''
+  footerText: ""
+  logo: ""
 sections:
   - name: Networking
     displayData:
@@ -45,13 +45,13 @@ sections:
       - title: Portainer
         description: Container management
         icon: hl-portainer
-        url: http://portainer.carthage.agartha
+        url: https://athens.agartha:9443
         target: newtab
         id: 4_1064_portainer
       - title: TrueNAS
         description: NAS
         icon: hl-truenas
-        url: https://manage.truenas.agartha
+        url: https://truenas-manage.agartha
         target: newtab
         id: 5_1064_truenas
       - title: Pihole
@@ -69,9 +69,15 @@ sections:
       - title: ISP
         description: ISP edge router
         icon: hl-router
-        url: http://192.168.1.1
+        url: http://wan.agartha
         target: newtab
         id: 8_1064_isp
+      - title: Proxy Admin
+        description: Nginx Proxy Manager
+        icon: hl-nginxproxymanager
+        url: http://proxy-admin.agartha.barrettotte.com
+        target: newtab
+        id: 9_1064_proxyadmin
     icon: fas fa-network-wired
   - name: Monitoring
     displayData:
@@ -84,37 +90,37 @@ sections:
       - title: Prometheus
         description: Metrics
         icon: hl-prometheus
-        url: http://prometheus.carthage.agartha
+        url: http://prometheus.agartha.barrettotte.com
         target: newtab
         id: 0_1062_prometheus
       - title: Grafana
         description: Dashboards
         icon: hl-grafana
-        url: http://grafana.carthage.agartha
+        url: http://grafana.agartha.barrettotte.com
         target: newtab
         id: 1_1062_grafana
       - title: AlertManager
         description: Prometheus alerting
         icon: hl-alertmanager
-        url: http://alertmanager.carthage.agartha
+        url: http://alertmanager.agartha.barrettotte.com
         target: newtab
         id: 2_1062_alertmanager
       - title: Uptime Kuma
         description: Uptime monitoring
         icon: hl-uptime-kuma
-        url: http://kuma.carthage.agartha
+        url: http://kuma.agartha.barrettotte.com
         target: newtab
         id: 3_1062_uptimekuma
       - title: Librespeed
         description: Speed test
         icon: hl-librespeed
-        url: http://speedtest.carthage.agartha
+        url: http://speedtest.agartha.barrettotte.com
         target: newtab
         id: 4_1062_librespeed
       - title: InfluxDB
         description: InfluxDB
         icon: hl-influxdb
-        url: http://influxdb.carthage.agartha
+        url: https://influxdb.agartha.barrettotte.com
         target: newtab
         id: 5_1062_influxdb
     icon: fas fa-monitor-heart-rate
@@ -139,7 +145,7 @@ sections:
       - title: OctoPrint
         description: 3D printer
         icon: hl-octoprint
-        url: http://octoprint.agartha
+        url: http://octoprint.agartha.barrettotte.com
         id: 0_268_octoprint
   - name: External Services
     icon: mdi mdi-cloud-circle
@@ -151,31 +157,31 @@ sections:
       hideForGuests: false
     items:
       - title: Github
-        description: ''
+        description: ""
         icon: hl-github
         url: https://github.com/barrettotte
         target: newtab
         id: 0_1703_github
       - title: Trello
-        description: ''
+        description: ""
         icon: favicon
         url: https://trello.com/b/orZGAawF/personal
         target: newtab
         id: 1_1703_trello
       - title: Google Drive
-        description: ''
+        description: ""
         icon: hl-google-drive
         url: https://drive.google.com/drive/my-drive
         target: newtab
         id: 2_1703_googledrive
       - title: Anilist
-        description: ''
+        description: ""
         icon: favicon
         url: https://anilist.co/user/barrettotte/
         target: newtab
         id: 3_1703_anilist
       - title: Bitwarden
-        description: ''
+        description: ""
         icon: hl-bitwarden
         url: https://vault.bitwarden.com/#/login
         target: newtab
@@ -190,7 +196,7 @@ sections:
       hideForGuests: false
     items:
       - title: Linode
-        description: ''
+        description: ""
         icon: hl-linode
         url: https://cloud.linode.com/linodes
         target: newtab
@@ -202,7 +208,7 @@ sections:
         target: newtab
         id: 1_1613_barrettotte
       - title: AWS
-        description: ''
+        description: ""
         icon: si-amazonaws
         url: https://aws.amazon.com/console/
         target: newtab

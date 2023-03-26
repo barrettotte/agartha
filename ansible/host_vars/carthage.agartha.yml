@@ -1,4 +1,4 @@
 # carthage config
 
 repo_subdir: carthage
-truenas_nfs_path: service.truenas.agartha:/mnt/mesopotamia/nfs/proxmox/docker/carthage
+truenas_nfs_path: truenas-service.agartha:/mnt/mesopotamia/nfs/proxmox/docker/carthage
