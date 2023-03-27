@@ -18,6 +18,10 @@ VLAN 30 (services)
   - Set since pihole is in a separate VLAN
   - Tools > Update Gravity
 
+## Update
+
+`pihole -up`
+
 ## Opnsense
 
 - Firewall > New Floating Rule

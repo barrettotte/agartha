@@ -39,6 +39,8 @@ show system-info
 
 ## Ports
 
+TODO: double check this
+
 | Port | Description            | Tagged   | Untagged |
 | ---- | ---------------------- | -------- | -------- |
 | 1    | emergency access       |          | 10       |
@@ -53,14 +55,14 @@ show system-info
 | 10   |                        |          |          |
 | 11   |                        |          |          |
 | 12   |                        |          |          |
-| 13   |                        |          |          |
+| 13   | test guest             |          | 25       |
 | 14   | babylon (proxmox)      |          | 30       |
 | 15   | babylon (proxmox)      |          | 35       |
 | 16   | babylon (proxmox)      |          | 10       |
-| 17   | test guest             |          | 25       |
+| 17   | Philips hue bridge     |          | 50       |
 | 18   | sumer (proxmox)        | 10       |          |
 | 19   |                        |          |          |
-| 20   | octoprint              |          | 20       |
+| 20   | octoprint              |          | 50       |
 | 21   | home access            |          | 20       |
 | 22   |                        |          |          |
 | 23   | Barrett-PC             |          | 20       |

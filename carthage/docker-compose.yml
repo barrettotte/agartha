@@ -67,7 +67,7 @@ services:
     ports:
       - '8086:8086'
     volumes:
-      - /home/docker/volumes/influxdb:/var/lib/influxdb2 # no NFS
+      - influxdb_data:/var/lib/influxdb2
     env_file:
       - ./env/influxdb.env
     restart: unless-stopped
@@ -154,3 +154,6 @@ services:
     ports:
       - '9091:9091'
     restart: unless-stopped
+
+volumes:
+  influxdb_data:
