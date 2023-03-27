@@ -1,5 +1,13 @@
 version: '3.9'
+
 name: carthage
+
+x-logging: 
+  &default-logging
+    driver: "json-file"
+    options:
+      max-size: "100m"
+      max-file: 3
 
 services:
   alertmanager:
@@ -8,12 +16,15 @@ services:
     ports:
       - '9093:9093'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /mnt/docker/alertmanager:/alertmanager-data
       - ./alertmanager/config.yml:/etc/alertmanager/config.yml
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager-data'
       - '--cluster.advertise-address=0.0.0.0:9093'
+    logging: *default-logging
     restart: unless-stopped
 
   cadvisor:
@@ -22,6 +33,8 @@ services:
     ports:
       - '8085:8080'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
@@ -30,6 +43,7 @@ services:
     privileged: true
     devices:
       - /dev/kmsg:/dev/kmsg
+    logging: *default-logging
     restart: unless-stopped
 
   graphite-exporter:
@@ -40,11 +54,14 @@ services:
       - '2003:9109/udp'
       - '9108:9108' # prometheus scrape target
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - ./graphite-exporter/graphite_mapping.yml:/etc/graphite_mapping.yml
     command:
       - '--graphite.mapping-config=/etc/graphite_mapping.yml'
       - '--log.level=debug'
       - '--graphite.sample-expiry=10m' # prevent disk fill up
+    logging: *default-logging
     restart: unless-stopped
 
   grafana:
@@ -53,12 +70,15 @@ services:
     ports:
       - '3000:3000'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /mnt/docker/grafana:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-    user: '472:472'
     env_file:
       - ./env/grafana.env
+    user: '472:472'
+    logging: *default-logging
     restart: unless-stopped
 
   influxdb:
@@ -67,9 +87,12 @@ services:
     ports:
       - '8086:8086'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - influxdb_data:/var/lib/influxdb2
     env_file:
       - ./env/influxdb.env
+    logging: *default-logging
     restart: unless-stopped
 
   loki:
@@ -78,10 +101,13 @@ services:
     ports:
       - '3100:3100'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /mnt/docker/loki:/loki
       - ./loki/loki-config.yml:/etc/loki/local-config.yml
     command:
       - '-config.file=/etc/loki/local-config.yml'
+    logging: *default-logging
     restart: unless-stopped
 
   node-exporter:
@@ -90,6 +116,8 @@ services:
     ports:
       - '9100:9100'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
@@ -98,6 +126,7 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    logging: *default-logging
     restart: unless-stopped
 
   portainer-agent:
@@ -106,8 +135,11 @@ services:
     ports:
       - '9001:9001'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
+    logging: *default-logging
     restart: unless-stopped
 
   prometheus:
@@ -116,9 +148,10 @@ services:
     ports: 
       - '9090:9090'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /mnt/docker/prometheus:/prometheus-data
       - ./prometheus:/etc/prometheus
-    user: '65534:65534'
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus-data'
@@ -126,6 +159,8 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
+    user: '65534:65534'
+    logging: *default-logging
     restart: unless-stopped
 
   promtail:
@@ -135,24 +170,31 @@ services:
       - '1514:1514/tcp'
       - '1514:1514/udp'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/log:/ext_logs:ro
       - ./promtail/promtail.yml:/etc/promtail/config.yml
+    environment:
+      - HOSTNAME=carthage
     command:
       - '-config.file=/etc/promtail/config.yml'
       - '-config.expand-env'
-    environment:
-      - HOSTNAME=carthage
+    logging: *default-logging
+    restart: unless-stopped
     depends_on:
       - loki
-    restart: unless-stopped
 
   pushgateway:
     container_name: pushgateway
     image: prom/pushgateway:v1.5.1
     ports:
       - '9091:9091'
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    logging: *default-logging
     restart: unless-stopped
 
 volumes:

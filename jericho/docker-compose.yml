@@ -1,5 +1,13 @@
 version: '3.9'
+
 name: jericho
+
+x-logging: 
+  &default-logging
+    driver: "json-file"
+    options:
+      max-size: "100m"
+      max-file: 3
 
 services:
   cadvisor:
@@ -8,6 +16,8 @@ services:
     ports:
       - '8085:8080'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
@@ -16,6 +26,7 @@ services:
     privileged: true
     devices:
       - /dev/kmsg:/dev/kmsg
+    logging: *default-logging
     restart: unless-stopped
 
   nginx-proxy-manager:
@@ -25,15 +36,18 @@ services:
       - '80:80'
       - '443:443'
       - '81:81' # admin ui
-    healthcheck:
-      test: ["CMD", "/bin/check-health"]
-      interval: 10s
-      timeout: 3s
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - ./nginx/data:/data
       - ./letsencrypt:/etc/letsencrypt
     environment:
       - DISABLE_IPV6=true
+    healthcheck:
+      test: ["CMD", "/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+    logging: *default-logging
     restart: unless-stopped
 
   node-exporter:
@@ -42,6 +56,8 @@ services:
     ports:
       - '9100:9100'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
@@ -50,6 +66,7 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    logging: *default-logging
     restart: unless-stopped
 
   portainer-agent:
@@ -58,8 +75,11 @@ services:
     ports:
       - '9001:9001'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
+    logging: *default-logging
     restart: unless-stopped
 
   promtail:
@@ -69,13 +89,16 @@ services:
       - '1514:1514/tcp'
       - '1514:1514/udp'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/log:/ext_logs:ro
       - ./promtail/promtail.yml:/etc/promtail/config.yml
+    environment:
+      - HOSTNAME=jericho
     command:
       - '-config.file=/etc/promtail/config.yml'
       - '-config.expand-env'
-    environment:
-      - HOSTNAME=jericho
+    logging: *default-logging
     restart: unless-stopped
