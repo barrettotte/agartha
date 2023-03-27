@@ -41,6 +41,15 @@ services:
   #     - /mnt/docker/gotify:/app/data
   #   restart: unless-stopped
 
+  home-assistant:
+    container_name: home-assistant
+    image: homeassistant/home-assistant:2023.3
+    ports:
+      - '8123:8123'
+    volumes:
+      - './home-assistant:/config'
+    restart: unless-stopped
+
   # TODO: jellyfin
 
   librespeed:
@@ -49,7 +58,7 @@ services:
     ports:
       - '4080:80'
     volumes:
-      - /home/docker/volumes/librespeed:/config # no NFS
+      - librespeed_data:/config
     env_file:
       - ./env/librespeed.env
     restart: unless-stopped
@@ -96,3 +105,6 @@ services:
     environment:
       - HOSTNAME=giza
     restart: unless-stopped
+
+volumes:
+  librespeed_data:

@@ -2,7 +2,7 @@ appConfig:
   theme: fallout
   language: en
   layout: auto
-  iconSize: small
+  iconSize: medium
 pageInfo:
   title: Agartha
   description: ""
@@ -132,7 +132,13 @@ sections:
       cols: 1
       collapsed: false
       hideForGuests: false
-    items: []
+    items:
+      - title: Home Assistant
+        description: Home Assistant
+        icon: hl-home-assistant-circle
+        url: http://home-assistant.agartha.barrettotte.com
+        target: newtab
+        id: 0_836_homeassistant
   - name: IoT
     icon: fas fa-house-signal
     displayData:
