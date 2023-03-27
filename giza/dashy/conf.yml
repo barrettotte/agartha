@@ -1,14 +1,259 @@
 appConfig:
-  theme: fallout
+  theme: nord-frost
   language: en
   layout: auto
   iconSize: medium
+  customColors:
+    fallout:
+      primary: '#aabbc3'
+      background: '#263238'
+      background-darker: '#1f282c'
+      info: '#04e4f4'
+      success: '#20e253'
+      warning: '#f6f000'
+      error: '#fca016'
+      danger: '#f80363'
+      neutral: '#272f4d'
+      white: '#fff'
+      black: '#000'
+      item-group-background: none
+      medium-grey: '#5e6474'
+      item-background: none
+      item-background-hover: rgba(96,125,139,0.30196078431372547)
+      transparent-70: rgba(0,0,0,0.7019607843137254)
+      transparent-50: rgba(0,0,0,0.5019607843137255)
+      transparent-30: rgba(0,0,0,0.30196078431372547)
+      transparent-white-70: hsla(0,0%,100%,0.7019607843137254)
+      transparent-white-50: hsla(0,0%,100%,0.5019607843137255)
+      transparent-white-30: hsla(0,0%,100%,0.30196078431372547)
+      heading-text-color: '#aabbc3'
+      nav-link-text-color: '#aabbc3'
+      nav-link-background-color: none
+      nav-link-text-color-hover: '#aabbc3'
+      nav-link-background-color-hover: none
+      nav-link-border-color: transparent
+      nav-link-border-color-hover: rgba(173,233,0,0.8)
+      nav-link-shadow: none
+      nav-link-shadow-hover: none
+      item-text-color: '#aabbc3'
+      item-text-color-hover: rgba(173,233,0,0.8)
+      item-group-outer-background: none
+      item-group-heading-text-color: '#aabbc3'
+      item-group-heading-text-color-hover: rgba(173,233,0,0.8)
+      settings-text-color: '#aabbc3'
+      settings-background: '#263238'
+      config-settings-color: '#aabbc3'
+      config-settings-background: '#1f282c'
+      config-code-color: '#263238'
+      config-code-background: '#fff'
+      code-editor-color: '#000'
+      code-editor-background: '#fff'
+      widget-text-color: '#aabbc3'
+      widget-background-color: '#1f282c'
+      widget-accent-color: '#263238'
+      widget-base-background: transparent
+      interactive-editor-color: '#aabbc3'
+      interactive-editor-background: '#263238'
+      interactive-editor-background-darker: '#1f282c'
+      cloud-backup-color: '#aabbc3'
+      cloud-backup-background: '#1f282c'
+      search-container-background: '#1f282c'
+      search-field-background: '#263238'
+      search-label-color: '#aabbc3'
+      footer-text-color: '#5e6474'
+      footer-text-color-link: '#aabbc3'
+      footer-background: '#1f282c'
+      context-menu-background: '#263238'
+      context-menu-color: '#aabbc3'
+      context-menu-secondary-color: '#1f282c'
+      side-bar-background: '#1f282c'
+      side-bar-background-lighter: '#263238'
+      side-bar-color: '#aabbc3'
+      side-bar-item-background: '#1f282c'
+      side-bar-item-color: '#aabbc3'
+      workspace-web-content-background: '#263238'
+      minimal-view-background-color: '#263238'
+      minimal-view-title-color: '#aabbc3'
+      minimal-view-settings-color: '#aabbc3'
+      minimal-view-section-heading-color: '#aabbc3'
+      minimal-view-section-heading-background: '#1f282c'
+      minimal-view-search-background: '#1f282c'
+      minimal-view-search-color: '#aabbc3'
+      minimal-view-group-color: '#aabbc3'
+      minimal-view-group-background: '#1f282c'
+      login-form-color: '#aabbc3'
+      login-form-background: '#263238'
+      login-form-background-secondary: '#1f282c'
+      about-page-color: '#fff'
+      about-page-background: '#263238'
+      about-page-accent: '#aabbc3'
+      scroll-bar-color: '#aabbc3'
+      scroll-bar-background: '#1f282c'
+      highlight-color: '#263238'
+      highlight-background: '#aabbc3'
+      progress-bar: '#aabbc3'
+      loading-screen-color: '#aabbc3'
+      loading-screen-background: '#263238'
+      status-check-tooltip-background: '#1f282c'
+      status-check-tooltip-color: '#aabbc3'
+      welcome-popup-background: '#1f282c'
+      welcome-popup-text-color: '#aabbc3'
+      toast-background: '#aabbc3'
+      toast-color: '#263238'
+      description-tooltip-background: '#1f282c'
+      description-tooltip-color: '#aabbc3'
+      outline-color: none
+      curve-factor: 5px
+      curve-factor-navbar: 10px
+      curve-factor-small: 2px
+      dimming-factor: '0.7'
+      scroll-bar-width: 8px
+      header-height: 6.3rem
+      footer-height: 128px
+      item-group-padding: 0px
+      item-shadow: none
+      item-hover-shadow: '2px 3px 5px #1f282c'
+      item-icon-transform: drop-shadow(2px 4px 6px rgba(0,0,0,0.5019607843137255)) saturate(0.95)
+      item-icon-transform-hover: drop-shadow(4px 8px 3px rgba(0,0,0,0.5019607843137255)) saturate(2)
+      item-group-shadow: none
+      context-menu-shadow: none
+      section-max-height: 3000px
+      settings-container-shadow: none
+      side-bar-width: 3.5rem
+      tooltip-arrow-size: 6px
+      tooltip-width: 250px
+      tooltip-padding: 0.2rem
+      font-body: '"Roboto",serif'
+      font-headings: '"Inconsolata","Georgia",sans-serif'
+      font-monospace: '"PTMono","Courier New",monospace'
+    nord-frost:
+      primary: '#d8dee9'
+      background: '#3b4252'
+      background-darker: '#2e3440'
+      info: '#04e4f4'
+      success: '#20e253'
+      warning: '#f6f000'
+      error: '#fca016'
+      danger: '#f80363'
+      neutral: '#272f4d'
+      white: '#fff'
+      black: '#000'
+      item-group-background: rgba(11,16,33,0.8)
+      medium-grey: '#5e6474'
+      item-background: '#434c5e'
+      item-background-hover: '#4c566a'
+      transparent-70: rgba(0,0,0,0.7019607843137254)
+      transparent-50: rgba(0,0,0,0.5019607843137255)
+      transparent-30: rgba(0,0,0,0.30196078431372547)
+      transparent-white-70: hsla(0,0%,100%,0.7019607843137254)
+      transparent-white-50: hsla(0,0%,100%,0.5019607843137255)
+      transparent-white-30: hsla(0,0%,100%,0.30196078431372547)
+      heading-text-color: '#d8dee9'
+      nav-link-text-color: '#d8dee9'
+      nav-link-background-color: rgba(96,125,139,0.2)
+      nav-link-text-color-hover: '#d8dee9'
+      nav-link-background-color-hover: rgba(96,125,139,0.2)
+      nav-link-border-color: transparent
+      nav-link-border-color-hover: '#d8dee9'
+      nav-link-shadow: '1px 1px 2px #232323'
+      nav-link-shadow-hover: '1px 1px 2px #232323'
+      item-text-color: '#d8dee9'
+      item-text-color-hover: '#d8dee9'
+      item-group-outer-background: '#d8dee9'
+      item-group-heading-text-color: rgba(11,16,33,0.8)
+      item-group-heading-text-color-hover: '#3b4252'
+      settings-text-color: '#d8dee9'
+      settings-background: '#3b4252'
+      config-settings-color: '#d8dee9'
+      config-settings-background: '#2e3440'
+      config-code-color: '#3b4252'
+      config-code-background: '#fff'
+      code-editor-color: '#000'
+      code-editor-background: '#fff'
+      widget-text-color: '#d8dee9'
+      widget-background-color: '#2e3440'
+      widget-accent-color: '#3b4252'
+      widget-base-background: transparent
+      interactive-editor-color: '#d8dee9'
+      interactive-editor-background: '#3b4252'
+      interactive-editor-background-darker: '#2e3440'
+      cloud-backup-color: '#d8dee9'
+      cloud-backup-background: '#2e3440'
+      search-container-background: '#2e3440'
+      search-field-background: '#3b4252'
+      search-label-color: '#d8dee9'
+      footer-text-color: '#5e6474'
+      footer-text-color-link: '#d8dee9'
+      footer-background: '#2e3440'
+      context-menu-background: '#3b4252'
+      context-menu-color: '#d8dee9'
+      context-menu-secondary-color: '#2e3440'
+      side-bar-background: '#2e3440'
+      side-bar-background-lighter: '#3b4252'
+      side-bar-color: '#d8dee9'
+      side-bar-item-background: '#2e3440'
+      side-bar-item-color: '#d8dee9'
+      workspace-web-content-background: '#3b4252'
+      minimal-view-background-color: '#3b4252'
+      minimal-view-title-color: '#d8dee9'
+      minimal-view-settings-color: '#d8dee9'
+      minimal-view-section-heading-color: '#d8dee9'
+      minimal-view-section-heading-background: '#2e3440'
+      minimal-view-search-background: '#2e3440'
+      minimal-view-search-color: '#d8dee9'
+      minimal-view-group-color: '#d8dee9'
+      minimal-view-group-background: '#2e3440'
+      login-form-color: '#d8dee9'
+      login-form-background: '#3b4252'
+      login-form-background-secondary: '#2e3440'
+      about-page-color: '#fff'
+      about-page-background: '#3b4252'
+      about-page-accent: '#d8dee9'
+      scroll-bar-color: '#d8dee9'
+      scroll-bar-background: '#2e3440'
+      highlight-color: '#3b4252'
+      highlight-background: '#d8dee9'
+      progress-bar: '#d8dee9'
+      loading-screen-color: '#d8dee9'
+      loading-screen-background: '#3b4252'
+      status-check-tooltip-background: '#2e3440'
+      status-check-tooltip-color: '#d8dee9'
+      welcome-popup-background: '#2e3440'
+      welcome-popup-text-color: '#d8dee9'
+      toast-background: '#d8dee9'
+      toast-color: '#3b4252'
+      description-tooltip-background: '#2e3440'
+      description-tooltip-color: '#d8dee9'
+      outline-color: none
+      curve-factor: 5px
+      curve-factor-navbar: 16px
+      curve-factor-small: 2px
+      dimming-factor: '0.7'
+      scroll-bar-width: 8px
+      header-height: 6.3rem
+      footer-height: 128px
+      item-group-padding: 0px
+      item-shadow: '1px 1px 2px #130f23'
+      item-hover-shadow: '1px 2px 4px #373737'
+      item-icon-transform: drop-shadow(2px 4px 6px rgba(0,0,0,0.5019607843137255)) saturate(0.95)
+      item-icon-transform-hover: drop-shadow(4px 8px 3px rgba(0,0,0,0.5019607843137255)) saturate(2)
+      item-group-shadow: '1px 1px 2px #130f23'
+      context-menu-shadow: '1px 1px 2px #130f23'
+      section-max-height: 3000px
+      settings-container-shadow: none
+      side-bar-width: 3.5rem
+      tooltip-arrow-size: 6px
+      tooltip-width: 250px
+      tooltip-padding: 0.2rem
+      font-body: '"Raleway","Trebuchet MS",sans-serif'
+      font-headings: '"Inconsolata","Georgia",sans-serif'
+      font-monospace: '"PTMono","Courier New",monospace'
 pageInfo:
   title: Agartha
-  description: ""
+  description: ''
   navLinks: []
-  footerText: ""
-  logo: ""
+  footerText: ''
+  logo: ''
 sections:
   - name: Networking
     displayData:
@@ -163,31 +408,31 @@ sections:
       hideForGuests: false
     items:
       - title: Github
-        description: ""
+        description: ''
         icon: hl-github
         url: https://github.com/barrettotte
         target: newtab
         id: 0_1703_github
       - title: Trello
-        description: ""
-        icon: favicon
+        description: ''
+        icon: favicon-iconhorse
         url: https://trello.com/b/orZGAawF/personal
         target: newtab
         id: 1_1703_trello
       - title: Google Drive
-        description: ""
+        description: ''
         icon: hl-google-drive
         url: https://drive.google.com/drive/my-drive
         target: newtab
         id: 2_1703_googledrive
       - title: Anilist
-        description: ""
+        description: ''
         icon: favicon
         url: https://anilist.co/user/barrettotte/
         target: newtab
         id: 3_1703_anilist
       - title: Bitwarden
-        description: ""
+        description: ''
         icon: hl-bitwarden
         url: https://vault.bitwarden.com/#/login
         target: newtab
@@ -202,7 +447,7 @@ sections:
       hideForGuests: false
     items:
       - title: Linode
-        description: ""
+        description: ''
         icon: hl-linode
         url: https://cloud.linode.com/linodes
         target: newtab
@@ -214,7 +459,7 @@ sections:
         target: newtab
         id: 1_1613_barrettotte
       - title: AWS
-        description: ""
+        description: ''
         icon: si-amazonaws
         url: https://aws.amazon.com/console/
         target: newtab

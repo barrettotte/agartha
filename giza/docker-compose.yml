@@ -43,20 +43,6 @@ services:
     logging: *default-logging
     restart: unless-stopped
 
-  # gotify:
-  #   container_name: gotify
-  #   image: gotify/server:latest
-  #   ports:
-  #     - '8001:80'
-  #   env_file:
-  #     - ./env/gotify.env
-  #   volumes:
-  #     - /etc/timezone:/etc/timezone:ro
-  #     - /etc/localtime:/etc/localtime:ro
-  #     - ./gotify/config.yml:/etc/gotify/config.yml
-  #     - /mnt/docker/gotify:/app/data
-  #   restart: unless-stopped
-
   home-assistant:
     container_name: home-assistant
     image: homeassistant/home-assistant:2023.3
