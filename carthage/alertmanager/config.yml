@@ -5,11 +5,13 @@ route:
   group_wait: 10s
   group_interval: 10s
   repeat_interval: 1h
-  receiver: 'web.hook'
+  receiver: 'discord_webhook'
 
 receivers:
-  - name: 'web.hook'
-    webhook_configs:
-      - url: 'http://0.0.0.0:5001/'
+  # - name: 'web.hook'
+  #   webhook_configs:
+  #     - url: 'http://0.0.0.0:5001/'
 
-# TODO: gotify? Discord? email?
+  - name: "discord_webhook"
+    webhook_configs:
+      - url: "http://discord-alerts:9094"

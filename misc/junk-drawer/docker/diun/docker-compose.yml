@@ -7,7 +7,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/diun:/data
+      - /home/docker/data/diun:/data
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - .diun.env

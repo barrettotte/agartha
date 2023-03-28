@@ -18,7 +18,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/alertmanager:/alertmanager-data
+      - /home/docker/data/alertmanager:/alertmanager-data
       - ./alertmanager/config.yml:/etc/alertmanager/config.yml
     command:
       - '--config.file=/etc/alertmanager/config.yml'
@@ -45,8 +45,19 @@ services:
     privileged: true
     devices:
       - /dev/kmsg:/dev/kmsg
+
+  discord-alerts:
+    image: benjojo/alertmanager-discord
+    container_name: discord-alerts
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - ./env/discord-alerts.env
     logging: *default-logging
     restart: unless-stopped
+    depends_on:
+      - alertmanager
 
   graphite-exporter:
     container_name: graphite-exporter
@@ -70,13 +81,13 @@ services:
 
   grafana:
     container_name: grafana
-    image: grafana/grafana:9.4.3
+    image: grafana/grafana:9.3.6
     ports:
       - '3000:3000'
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/grafana:/var/lib/grafana
+      - /home/docker/data/grafana:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
     env_file:
@@ -97,7 +108,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - influxdb_data:/var/lib/influxdb2
+      - /home/docker/data/influxdb:/var/lib/influxdb2
     env_file:
       - ./env/influxdb.env
     logging: *default-logging
@@ -111,7 +122,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/loki:/loki
+      - /home/docker/data/loki:/loki
       - ./loki/loki-config.yml:/etc/loki/local-config.yml
     command:
       - '-config.file=/etc/loki/local-config.yml'
@@ -158,14 +169,14 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/prometheus:/prometheus-data
+      - /home/docker/data/prometheus:/prometheus-data
       - ./prometheus:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus-data'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
+      - '--storage.tsdb.retention.time=7d'
       - '--web.enable-lifecycle'
     user: '65534:65534'
     logging: *default-logging

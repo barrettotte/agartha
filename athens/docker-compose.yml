@@ -38,7 +38,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /mnt:/srv
-      - /mnt/docker/file-browser/filebrowser.db:/database.db
+      - /home/docker/data/file-browser/filebrowser.db:/database.db
     privileged: true
     logging: *default-logging
     restart: unless-stopped
@@ -72,7 +72,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/portainer:/data
+      - /home/docker/data/portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
     logging: *default-logging
     restart: unless-stopped
@@ -103,6 +103,6 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/uptimekuma:/app/data
+      - /home/docker/data/uptimekuma:/app/data
     logging: *default-logging
     restart: unless-stopped

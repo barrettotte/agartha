@@ -122,14 +122,26 @@
 - name: configure grafana volume
   hosts: carthage.agartha
   become: true
-  remote_user: root
   tasks:
-    - name: set owner for grafana
+    - name: set grafana owner for bind mounts
       file:
-        path: /mnt/docker/grafana
+        path: "{{ item }}"
         owner: 472
         group: 472
         recurse: true
+      loop:
+        - /home/docker/carthage/grafana
+        - /home/docker/data/grafana
+
+    - name: set prometheus owner for bind mounts
+      file:
+        path: "{{ item }}"
+        owner: 65534
+        group: 65534
+        recurse: true
+      loop:
+        - /home/docker/carthage/prometheus
+        - /home/docker/data/prometheus
 
 - name: start docker containers
   hosts: core

@@ -10,10 +10,6 @@ scrape_configs:
       - targets: ['cadvisor:8080']
         labels:
           host: carthage.agartha
-
-  - job_name: node-exporter
-    static_configs:
-      - targets: ['node-exporter:9100']
   
   - job_name: prometheus
     static_configs:
@@ -29,10 +25,32 @@ scrape_configs:
     static_configs:
       - targets: ['graphite-exporter:9108']
 
-  # TODO: add athens scrape
-  # TODO: add giza scrape
-  # TODO: add jericho scrape
-  # TODO: add rhodes scrape
+  # core vms
+
+  - job_name: athens
+    honor_labels: true
+    static_configs:
+      - targets: ['athens.agartha:9100']
+
+  - job_name: carthage
+    honor_labels: true
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  - job_name: giza
+    honor_labels: true
+    static_configs:
+      - targets: ['giza.agartha:9100']
+  
+  - job_name: jericho
+    honor_labels: true
+    static_configs:
+      - targets: ['jericho.agartha:9100']
+
+  - job_name: rhodes
+    honor_labels: true
+    static_configs:
+      - targets: ['rhodes.agartha:9100']
 
 alerting:
   alertmanagers:

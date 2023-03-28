@@ -1,4 +1,8 @@
 *.log*
 *.db*
 
+.cloud
+.storage
+.HA_VERSION
+
 secrets.yaml

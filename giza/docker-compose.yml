@@ -64,7 +64,7 @@ services:
   #   volumes:
   #     - /etc/timezone:/etc/timezone:ro
   #     - /etc/localtime:/etc/localtime:ro
-  #     - /mnt/docker/jellyfin/config:/config
+  #     - /home/docker/data/jellyfin/config:/config
   #     # TODO: NFS mounts
   #   # environment:
   #   #   - JELLYFIN_PublishedServerUrl=?
@@ -81,7 +81,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - librespeed_data:/config
+      - /home/docker/data/librespeed:/config
     env_file:
       - ./env/librespeed.env
     logging: *default-logging
@@ -148,12 +148,9 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/docker/ubooquity/config:/config
+      - /home/docker/data/ubooquity:/config
       - /mnt/media/books/:/books
     environment:
       - MAXMEM=2048
     logging: *default-logging
     restart: unless-stopped
-
-volumes:
-  librespeed_data:

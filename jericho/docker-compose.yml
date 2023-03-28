@@ -39,8 +39,8 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./nginx/data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - /home/docker/data/nginx/data:/data
+      - /home/docker/data/nginx/letsencrypt:/etc/letsencrypt
     environment:
       - DISABLE_IPV6=true
     healthcheck:
