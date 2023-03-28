@@ -175,3 +175,27 @@
 
 - name: configure Portainer on athens
   import_playbook: athens_portainer.yml
+
+- name: giza mount media directories
+  hosts: giza.agartha
+  become: true
+  tasks:
+    - name: mount media directories
+      mount:
+        src: "truenas-service.agartha:/mnt/mesopotamia/nfs/media"
+        path: "/mnt/media"
+        opts: rw,soft,intr,nfsvers=4
+        fstype: nfs
+        state: mounted
+
+- name: athens mount media directories
+  hosts: athens.agartha
+  become: true
+  tasks:
+    - name: mount media directories
+      mount:
+        src: "truenas-manage.agartha:/mnt/mesopotamia/nfs/media"
+        path: "/mnt/media"
+        opts: rw,soft,intr,nfsvers=4
+        fstype: nfs
+        state: mounted

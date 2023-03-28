@@ -384,6 +384,18 @@ sections:
         url: http://home-assistant.agartha.barrettotte.com
         target: newtab
         id: 0_836_homeassistant
+      - title: File Browser
+        description: File Browser (Athens)
+        icon: hl-filebrowser
+        url: http://athens.agartha:3080
+        target: newtab
+        id: 1_836_filebrowser
+      - title: Ubooquity
+        description: Books/Comics
+        icon: hl-ubooquity
+        url: http://books.agartha.barrettotte.com/ubooquity
+        target: newtab
+        id: 2_836_ubooquity
   - name: IoT
     icon: fas fa-house-signal
     displayData:

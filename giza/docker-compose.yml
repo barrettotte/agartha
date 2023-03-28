@@ -29,8 +29,6 @@ services:
     logging: *default-logging
     restart: unless-stopped
 
-  # TODO: calibre
-
   dashy:
     container_name: dashy
     image: lissy93/dashy:2.1.1
@@ -55,7 +53,25 @@ services:
     logging: *default-logging
     restart: unless-stopped
 
-  # TODO: jellyfin
+  # jellyfin:
+  #   container_name: jellyfin
+  #   image: linuxserver/jellyfin:10.8.9
+  #   ports:
+  #     - '8096:8096'     # http web UI
+  #     - '8920:8920'     # https web UI
+  #     - '7359:7359/udp' # client discovery on local network
+  #     - '1900:1900/udp' # service discovery for DNLA and clients
+  #   volumes:
+  #     - /etc/timezone:/etc/timezone:ro
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /mnt/docker/jellyfin/config:/config
+  #     # TODO: NFS mounts
+  #   # environment:
+  #   #   - JELLYFIN_PublishedServerUrl=?
+  #   # devices:
+  #   #   - "" # TODO: GPU passthrough
+  #   logging: *default-logging
+  #   restart: unless-stopped
 
   librespeed:
     container_name: librespeed
@@ -120,6 +136,22 @@ services:
     command:
       - '-config.file=/etc/promtail/config.yml'
       - '-config.expand-env'
+    logging: *default-logging
+    restart: unless-stopped
+
+  ubooquity:
+    container_name: ubooquity
+    image: linuxserver/ubooquity:2.1.2
+    ports:
+      - '2202:2202' # library (/ubooquity)
+      - '2203:2203' # admin (/ubooquity/admin)
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/docker/ubooquity/config:/config
+      - /mnt/media/books/:/books
+    environment:
+      - MAXMEM=2048
     logging: *default-logging
     restart: unless-stopped
 

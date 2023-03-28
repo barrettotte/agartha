@@ -28,7 +28,22 @@ services:
       - /dev/kmsg:/dev/kmsg
     logging: *default-logging
     restart: unless-stopped
-  
+
+  file-browser:
+    container_name: file-browser
+    image: filebrowser/filebrowser:v2-s6
+    ports:
+      - '3080:80'
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt:/srv
+      - /mnt/docker/file-browser/filebrowser.db:/database.db
+    privileged: true
+    logging: *default-logging
+    restart: unless-stopped
+    # default creds -> admin/admin
+
   node-exporter:
     container_name: node-exporter
     image: prom/node-exporter:v1.5.0
@@ -47,8 +62,6 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     logging: *default-logging
     restart: unless-stopped
-
-  # TODO: ntopng
 
   portainer:
     container_name: portainer

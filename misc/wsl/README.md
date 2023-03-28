@@ -31,3 +31,16 @@ wsl --shutdown; Start-Sleep -Seconds 10; wsl
 # fix permissions for all repos (rwxrwx---)
 sudo chmod -R 770 /mnt/x/repos
 ```
+
+## NFS mount
+
+```ini
+# /etc/fstab
+truenas-service.agartha:/mnt/mesopotamia/nfs/media /mnt/media nfs rw,soft,intr,nfsvers=4 0 0
+```
+
+```sh
+sudo apt install nfs-common
+
+sudo mount -av
+```

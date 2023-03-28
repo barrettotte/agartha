@@ -26,6 +26,8 @@ services:
       - '--cluster.advertise-address=0.0.0.0:9093'
     logging: *default-logging
     restart: unless-stopped
+    depends_on:
+      - prometheus
 
   cadvisor:
     container_name: cadvisor
@@ -63,6 +65,8 @@ services:
       - '--graphite.sample-expiry=10m' # prevent disk fill up
     logging: *default-logging
     restart: unless-stopped
+    depends_on:
+      - prometheus
 
   grafana:
     container_name: grafana
@@ -80,6 +84,10 @@ services:
     user: '472:472'
     logging: *default-logging
     restart: unless-stopped
+    depends_on:
+      - influxdb
+      - loki
+      - prometheus
 
   influxdb:
     container_name: influxdb
