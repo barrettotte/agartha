@@ -31,7 +31,7 @@ services:
 
   file-browser:
     container_name: file-browser
-    image: filebrowser/filebrowser:v2
+    image: filebrowser/filebrowser:v2-s6
     ports:
       - '3080:80'
     volumes:

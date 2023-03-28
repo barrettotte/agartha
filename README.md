@@ -4,9 +4,21 @@ My network infrastructure.
 
 TODO: network diagram
 
-TODO: summary
+## Summary
 
-TODO: machine summary
+- [athens/](athens/) - Management and network monitoring
+- [carthage/](carthage/) - Centralized logging and metrics
+- [diagram/](diagram/) - Draw.io network diagram
+- [giza/](giza/) - General services
+- [jericho/](jericho/) - Proxy
+- [linode/](linode/) - Services hosted on Linode
+- [luxor/](luxor/) - Packer, Terraform, and Ansible runner
+- [misc/](misc/) - misc docs
+- [opnsense/](opnsense/) - router and firewall
+- [pihole/](pihole/) - DNS and ad-blocking
+- [rhodes/](rhodes/) - Torrenting services
+- [unifi/](unifi/) - Unifi WiFi management
+- [utils/](utils/) - Misc scripts
 
 ## References
 
