@@ -12,7 +12,7 @@ x-logging:
 services:
   cadvisor:
     container_name: cadvisor
-    image: gcr.io/cadvisor/cadvisor:v0.46.0
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
     ports:
       - '8085:8080'
     volumes:
@@ -31,7 +31,7 @@ services:
 
   file-browser:
     container_name: file-browser
-    image: filebrowser/filebrowser:v2-s6
+    image: filebrowser/filebrowser:v2
     ports:
       - '3080:80'
     volumes:
@@ -79,7 +79,7 @@ services:
 
   promtail:
     container_name: promtail
-    image: grafana/promtail:2.7.3
+    image: grafana/promtail:2.7.4
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
