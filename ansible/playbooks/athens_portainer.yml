@@ -68,8 +68,10 @@
           Authorization: "Bearer {{ portainer_jwt }}"
         body_format: form-multipart
         body:
-          Name: "athens"
+          Name: 'athens'
+          EndpointId: 'athens'
           EndpointCreationType: '1'
+          PublicURL: 'athens.agartha'
         validate_certs: false
         status_code: [200]
       when: "'athens' not in portainer_endpoints"
@@ -85,11 +87,13 @@
         body_format: form-multipart
         body:
           Name: "{{ item }}"
+          EndpointId: " {{ item }}"
           URL: "tcp://{{ item }}.agartha:9001"
           EndpointCreationType: '2'
           TLS: 'true'
           TLSSkipVerify: 'true'
           TLSSkipClientVerify: 'true'
+          PublicURL: "{{ item }}.agartha"
         validate_certs: false
         status_code: [200]
       loop:
