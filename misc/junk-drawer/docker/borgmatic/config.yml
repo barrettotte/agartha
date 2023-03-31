@@ -1,0 +1,53 @@
+location:
+  source_directories:
+    - /src/athens
+    - /src/data
+
+  repositories:
+    - /dst
+
+  one_file_system: true
+
+  exclude_patterns:
+    - '**/*.db*'
+    - '**/*.log'
+    - '/**/cache/'
+    - '/**/*.bak*'
+
+storage:
+  compression: lz4
+  archive_name_format: backup-{now}
+
+retention:
+  keep_daily: 7
+  keep_weekly: 3
+  keep_monthly: 2
+  prefix: 'backup-'
+
+consistency:
+  checks:
+    - repository
+    - archives
+  check_last: 3
+  prefix: 'backup-'
+
+hooks:
+  before_backup:
+    - echo 'Starting a backup job.'
+    - "curl -X POST -H 'Content-Type: application/json' -d '{\"content\":\"Borg backup started...\"}' $DISCORD_WEBHOOK"
+  after_backup:
+    - echo 'Backup created.'
+    - "curl -X POST -H 'Content-Type: application/json' -d '{\"content\":\"Borg backup created!\"}' $DISCORD_WEBHOOK"
+  on_error:
+    - echo 'Error occurred during backup'
+    - "curl -X POST -H 'Content-Type: application/json' -d '{\"content\":\"Borg backup failed!\"}' $DISCORD_WEBHOOK"
+
+  sqlite_databases:
+    - name: filebrowser
+      path: /src/data/file-browser/filebrowser.db
+    - name: portainer
+      path: /src/data/portainer/portainer.db
+    - name: kuma
+      path: /src/data/uptimekuma/kuma.db
+
+# https://torsion.org/borgmatic/docs/reference/configuration/
