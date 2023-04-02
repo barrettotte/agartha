@@ -1,4 +1,5 @@
 # rhodes config
 
 repo_subdir: rhodes
-truenas_nfs_path: truenas-torrent.agartha:/mnt/mesopotamia/nfs/proxmox/docker/rhodes
+truenas_interface: truenas-torrent.agartha
+nfs_docker_path: /mnt/mesopotamia/nfs/proxmox/docker/rhodes

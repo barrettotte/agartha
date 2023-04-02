@@ -38,11 +38,9 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /mnt:/srv
-      - /home/docker/data/file-browser/filebrowser.db:/database.db
-    privileged: true
+      - /home/docker/data/file-browser:/database
     logging: *default-logging
     restart: unless-stopped
-    # default creds -> admin/admin
 
   node-exporter:
     container_name: node-exporter

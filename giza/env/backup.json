@@ -1,0 +1,23 @@
+{
+    "databases": {
+        "boltdb": [],
+        "h2": [],
+        "postgres": [],
+        "mariadb": [],
+        "mongodb": [],
+        "sqlite": [
+            "/home/docker/giza/home-assistant/home-assistant_v2.db"
+        ]
+    },
+    "ignore_patterns": {
+        "all": [
+            "*.db*",
+            "*.log",
+            "*.tmp"
+        ],
+        "data": [],
+        "repo": [
+            "*.log.*"
+        ]
+    }
+}

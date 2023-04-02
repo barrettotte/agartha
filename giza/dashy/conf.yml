@@ -250,12 +250,12 @@ appConfig:
       font-monospace: '"PTMono","Courier New",monospace'
 pageInfo:
   title: Agartha
-  description: ''
+  description: Barrett's Homelab
   navLinks: []
   footerText: ''
   logo: ''
 sections:
-  - name: Networking
+  - name: Management
     displayData:
       sortBy: alphabetical
       rows: 1
@@ -268,61 +268,67 @@ sections:
         icon: hl-opnsense
         url: https://opnsense.agartha
         target: newtab
-        id: 0_1064_opnsense
+        id: 0_1021_opnsense
       - title: euphrates
         description: Managed switch
         icon: hl-tplink
         url: http://euphrates.agartha
         target: newtab
-        id: 1_1064_euphrates
+        id: 1_1021_euphrates
       - title: Unifi
         description: WiFi
         icon: hl-unifi
         url: https://unifi.agartha:8443
         target: newtab
-        id: 2_1064_unifi
+        id: 2_1021_unifi
       - title: babylon
         description: Proxmox node
         icon: hl-proxmox
         url: https://babylon.agartha:8006
         target: newtab
-        id: 3_1064_babylon
+        id: 3_1021_babylon
       - title: Portainer
         description: Container management
         icon: hl-portainer
-        url: https://athens.agartha:9443
+        url: https://portainer.agartha.barrettotte.com
         target: newtab
-        id: 4_1064_portainer
+        id: 4_1021_portainer
       - title: TrueNAS
         description: NAS
         icon: hl-truenas
         url: https://truenas-manage.agartha
         target: newtab
-        id: 5_1064_truenas
+        id: 5_1021_truenas
       - title: Pihole
         description: DNS + Ad-blocking
         icon: hl-pihole
         url: http://pihole.agartha/admin
         target: newtab
-        id: 6_1064_pihole
+        id: 6_1021_pihole
       - title: sumer
         description: Proxmox node
         icon: hl-proxmox
         url: https://sumer.agartha:8006
         target: newtab
-        id: 7_1064_sumer
+        id: 7_1021_sumer
       - title: ISP
         description: ISP edge router
         icon: hl-router
         url: http://wan.agartha
         target: newtab
-        id: 8_1064_isp
+        id: 8_1021_isp
       - title: Proxy Admin
         description: Nginx Proxy Manager
         icon: hl-nginxproxymanager
         url: http://proxy-admin.agartha.barrettotte.com
         target: newtab
-        id: 9_1064_proxyadmin
+        id: 9_1021_proxyadmin
+      - title: Vault
+        description: HashiCorp Vault
+        icon: hl-vault
+        url: '#'
+        target: newtab
+        id: 10_1021_vault
     icon: fas fa-network-wired
   - name: Monitoring
     displayData:
@@ -350,12 +356,12 @@ sections:
         url: http://alertmanager.agartha.barrettotte.com
         target: newtab
         id: 2_1062_alertmanager
-      - title: Uptime Kuma
-        description: Uptime monitoring
+      - title: Kuma
+        description: Uptime Kuma
         icon: hl-uptime-kuma
         url: http://kuma.agartha.barrettotte.com
         target: newtab
-        id: 3_1062_uptimekuma
+        id: 3_1062_kuma
       - title: Librespeed
         description: Speed test
         icon: hl-librespeed
@@ -368,6 +374,12 @@ sections:
         url: https://influxdb.agartha.barrettotte.com
         target: newtab
         id: 5_1062_influxdb
+      - title: Shinobi
+        description: Shinobi
+        icon: hl-shinobi
+        url: '#'
+        target: newtab
+        id: 6_1062_shinobi
     icon: fas fa-monitor-heart-rate
   - name: Services
     icon: mdi mdi-hammer-wrench
@@ -384,7 +396,7 @@ sections:
         url: http://home-assistant.agartha.barrettotte.com
         target: newtab
         id: 0_836_homeassistant
-      - title: File Browser
+      - title: FileBrowser
         description: File Browser (Athens)
         icon: hl-filebrowser
         url: http://athens.agartha:3080
@@ -396,21 +408,66 @@ sections:
         url: http://books.agartha.barrettotte.com/ubooquity
         target: newtab
         id: 2_836_ubooquity
-  - name: IoT
-    icon: fas fa-house-signal
-    displayData:
-      sortBy: alphabetical
-      rows: 1
-      cols: 1
-      collapsed: false
-      hideForGuests: false
-    items:
+      - title: Jellyfin
+        description: Jellyfin
+        icon: hl-jellyfin
+        url: '#'
+        target: newtab
+        id: 3_836_jellyfin
+      - title: NextCloud
+        description: NextCloud
+        icon: hl-nextcloud
+        url: '#'
+        target: newtab
+        id: 4_836_nextcloud
+      - title: Transmission
+        description: Transmission
+        icon: hl-transmission
+        url: '#'
+        target: newtab
+        id: 5_836_transmission
+      - title: Guacamole
+        description: Guacamole
+        icon: hl-guacamole
+        url: '#'
+        target: newtab
+        id: 6_836_guacamole
+      - title: Vaultwarden
+        description: Vaultwarden
+        icon: hl-vaultwarden
+        url: '#'
+        target: newtab
+        id: 7_836_vaultwarden
+      - title: CloudBeaver
+        description: CloudBeaver
+        icon: hl-cloudbeaver
+        url: '#'
+        target: newtab
+        id: 8_836_cloudbeaver
+      - title: FreshRSS
+        description: FreshRSS
+        icon: hl-freshrss
+        url: '#'
+        target: newtab
+        id: 9_836_freshrss
       - title: OctoPrint
         description: 3D printer
         icon: hl-octoprint
         url: http://octoprint.agartha.barrettotte.com
-        id: 0_268_octoprint
-  - name: External Services
+        id: 10_836_octoprint
+      - title: Gitlab
+        description: Gitlab
+        icon: hl-gitlab
+        url: '#'
+        target: newtab
+        id: 11_836_gitlab
+      - title: Code Server
+        description: VS Code Server
+        icon: hl-code
+        url: '#'
+        target: newtab
+        id: 12_836_codeserver
+  - name: External
     icon: mdi mdi-cloud-circle
     displayData:
       sortBy: alphabetical
@@ -419,72 +476,63 @@ sections:
       collapsed: false
       hideForGuests: false
     items:
-      - title: Github
-        description: ''
-        icon: hl-github
-        url: https://github.com/barrettotte
-        target: newtab
-        id: 0_1703_github
-      - title: Trello
-        description: ''
-        icon: favicon-iconhorse
-        url: https://trello.com/b/orZGAawF/personal
-        target: newtab
-        id: 1_1703_trello
-      - title: Google Drive
-        description: ''
-        icon: hl-google-drive
-        url: https://drive.google.com/drive/my-drive
-        target: newtab
-        id: 2_1703_googledrive
-      - title: Anilist
-        description: ''
-        icon: favicon
-        url: https://anilist.co/user/barrettotte/
-        target: newtab
-        id: 3_1703_anilist
-      - title: Bitwarden
-        description: ''
-        icon: hl-bitwarden
-        url: https://vault.bitwarden.com/#/login
-        target: newtab
-        id: 4_1703_bitwarden
-  - name: External Servers
-    icon: mdi mdi-cloud-circle
-    displayData:
-      sortBy: alphabetical
-      rows: 1
-      cols: 1
-      collapsed: false
-      hideForGuests: false
-    items:
-      - title: Linode
-        description: ''
-        icon: hl-linode
-        url: https://cloud.linode.com/linodes
-        target: newtab
-        id: 0_1613_linode
-      - title: barrettotte
-        description: Personal site
-        icon: 🗿
-        url: https://barrettotte.github.io
-        target: newtab
-        id: 1_1613_barrettotte
       - title: AWS
         description: ''
         icon: si-amazonaws
         url: https://aws.amazon.com/console/
         target: newtab
-        id: 2_1613_aws
-      - title: PUB400
-        icon: >-
-          https://usercontent.one/wp/www.rzkh-gmbh.de/wp-content/uploads/2021/06/cropped-Bunkerlogo-192x192.jpeg
-        url: https://www.pub400.com/
+        id: 0_835_aws
+      - title: barrettotte
+        description: Personal site
+        icon: 🗿
+        url: https://barrettotte.github.io
         target: newtab
-        id: 3_1613_pub
+        id: 1_835_barrettotte
       - title: Cloudflare
         description: Cloudflare dashboard
         icon: hl-cloudflare
         url: https://dash.cloudflare.com
         target: newtab
-        id: 4_1613_cloudflare
+        id: 2_835_cloudflare
+      - title: Linode
+        description: ''
+        icon: hl-linode
+        url: https://cloud.linode.com/linodes
+        target: newtab
+        id: 3_835_linode
+      - title: PUB400
+        icon: >-
+          https://usercontent.one/wp/www.rzkh-gmbh.de/wp-content/uploads/2021/06/cropped-Bunkerlogo-192x192.jpeg
+        url: https://www.pub400.com/
+        target: newtab
+        id: 4_835_pub
+      - title: Anilist
+        description: ''
+        icon: favicon
+        url: https://anilist.co/user/barrettotte/
+        target: newtab
+        id: 5_835_anilist
+      - title: Bitwarden
+        description: ''
+        icon: hl-bitwarden
+        url: https://vault.bitwarden.com/#/login
+        target: newtab
+        id: 6_835_bitwarden
+      - title: Github
+        description: ''
+        icon: hl-github
+        url: https://github.com/barrettotte
+        target: newtab
+        id: 7_835_github
+      - title: Google Drive
+        description: ''
+        icon: hl-google-drive
+        url: https://drive.google.com/drive/my-drive
+        target: newtab
+        id: 8_835_googledrive
+      - title: Trello
+        description: ''
+        icon: favicon-iconhorse
+        url: https://trello.com/b/orZGAawF/personal
+        target: newtab
+        id: 9_835_trello

@@ -1,4 +1,6 @@
 # giza config
 
 repo_subdir: giza
-truenas_nfs_path: truenas-service.agartha:/mnt/mesopotamia/nfs/proxmox/docker/giza
+truenas_interface: truenas-service.agartha
+nfs_docker_path: /mnt/mesopotamia/nfs/proxmox/docker/giza
+nfs_media_path: /mnt/mesopotamia/nfs/media

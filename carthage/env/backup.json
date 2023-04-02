@@ -1,0 +1,26 @@
+{
+    "databases": {
+        "boltdb": [
+            "/home/docker/data/influxdb/influxd.sqlite"
+        ],
+        "h2": [],
+        "postgres": [],
+        "mariadb": [],
+        "mongodb": [],
+        "sqlite": [
+            "/home/docker/data/grafana/grafana.db",
+            "/home/docker/data/influxdb/influxd.sqlite"
+        ]
+    },
+    "ignore_patterns": {
+        "all": [
+            "*.db*",
+            "*.sqlite",
+            "*.bolt",
+            "*.log",
+            "*.tmp"
+        ],
+        "data": [],
+        "repo": []
+    }
+}

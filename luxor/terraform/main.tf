@@ -38,6 +38,8 @@ module "carthage" {
   dns           = local.pihole_dns
   domain        = local.agartha_domain
 
+  memory = 8192
+
   proxmox_node             = local.primary_proxmox_node
   proxmox_api_url          = local.proxmox_api_urls[local.primary_proxmox_node]
   proxmox_api_token_id     = var.proxmox_secrets[local.primary_proxmox_node]["api_token_id"]

@@ -17,7 +17,7 @@ TODO: network diagram
 - [opnsense/](opnsense/) - router and firewall
 - [pihole/](pihole/) - DNS and ad-blocking
 - [rhodes/](rhodes/) - Torrenting services
-- [unifi/](unifi/) - Unifi WiFi management
+- [unifi/](unifi/) - Unifi WiFi management TODO: move to docker (athens?)
 - [utils/](utils/) - Misc scripts
 
 ## References

@@ -1,0 +1,122 @@
+- name: push repo subdirectory files to each core vm
+  hosts: core
+  become: true
+  vars:
+    backup_script_path: "/home/docker/scripts/core_vm_backup.sh"
+  tasks:
+    - name: push docker files to remote
+      synchronize:
+        src: "../../../{{ repo_subdir }}"
+        dest: "/home/docker"
+        recursive: true
+        checksum: true
+        archive: false
+      register: docker_compose_files
+
+    - name: set docker compose files changed fact
+      set_fact:
+        docker_compose_files_changed: "{{ docker_compose_files.changed }}"
+
+    - name: set owner and permissions of pushed files
+      file:
+        path: "/home/docker/{{ repo_subdir }}"
+        owner: docker
+        group: nogroup
+        mode: '0770'
+        recurse: yes
+      changed_when: false
+    
+    - name: make sure directories exists
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - "/home/docker/data"
+        - "/home/docker/scripts"
+
+    - name: push backup script
+      synchronize:
+        src: "../../../scripts/core_vm_backup.sh"
+        dest: "{{ backup_script_path }}"
+        recursive: true
+        checksum: true
+        archive: false
+    
+    - name: set cronjob for backups to NFS
+      cron:
+        name: "backup files and databases"
+        minute: 0
+        hour: 12
+        job: "sudo {{ backup_script_path }}"
+        state: present
+      # NOTE: backup script may move to luxor crontab in the future
+
+- name: configure grafana, prometheus, loki mounts
+  hosts: carthage.agartha
+  become: true
+  tasks:
+    - name: set grafana owner for bind mounts
+      file:
+        path: "{{ item }}"
+        owner: 472
+        group: 472
+        recurse: true
+        state: directory
+      loop:
+        - /home/docker/carthage/grafana
+        - /home/docker/data/grafana
+      changed_when: false
+
+    - name: set prometheus owner for bind mounts
+      file:
+        path: "{{ item }}"
+        owner: 65534
+        group: 65534
+        recurse: true
+      loop:
+        - /home/docker/carthage/prometheus
+        - /home/docker/data/prometheus
+      changed_when: false
+    
+    - name: set loki owner for bind mounts
+      file:
+        path: "/home/docker/carthage/loki"
+        owner: 10001
+        group: 10001
+        recurse: true
+      changed_when: false
+
+- name: start docker containers
+  hosts: core
+  become: true
+  become_user: docker
+  remote_user: docker
+  tasks:
+    - name: start docker containers
+      shell:
+        cmd: 'docker compose up --detach --remove-orphans'
+        chdir: "/home/docker/{{ repo_subdir }}"
+      changed_when: false
+      when: docker_compose_files_changed
+
+    - name: restart docker containers
+      shell:
+        cmd: 'docker compose restart'
+        chdir: "/home/docker/{{ repo_subdir }}"
+      when: docker_compose_files_changed
+
+    - name: get docker container info
+      shell: docker ps
+      register: docker_info
+      when: docker_compose_files_changed
+
+    - debug:
+        msg: "{{ docker_info.stdout_lines }}"
+      when: docker_compose_files_changed
+
+    - name: remove unused docker images, containers, volumes
+      shell: docker system prune --all --force
+      changed_when: false
+      when: docker_compose_files_changed
+
+    # TODO: this play could probably be a handler triggered by docker_compose_files_changed?

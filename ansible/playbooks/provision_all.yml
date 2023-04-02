@@ -53,3 +53,9 @@
 
 - name: provision and configure core VMs
   import_playbook: provision_vms.yml
+
+- name: start/configure docker containers on core VMs
+  import_playbook: core_docker.yml
+
+- name: configure main Portainer instance on athens
+  import_playbook: athens_portainer.yml

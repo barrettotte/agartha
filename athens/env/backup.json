@@ -1,0 +1,24 @@
+{
+    "databases": {
+        "boltdb": [
+            "/home/docker/data/file-browser/filebrowser.db",
+            "/home/docker/data/portainer/portainer.db"
+        ],
+        "h2": [],
+        "postgres": [],
+        "mariadb": [],
+        "mongodb": [],
+        "sqlite": [
+            "/home/docker/data/uptimekuma/kuma.db"
+        ]
+    },
+    "ignore_patterns": {
+        "all": [
+            "*.db*",
+            "*.log",
+            "*.tmp"
+        ],
+        "data": [],
+        "repo": []
+    }
+}

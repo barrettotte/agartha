@@ -1,0 +1,20 @@
+{
+    "databases": {
+        "boltdb": [],
+        "h2": [],
+        "postgres": [],
+        "mariadb": [],
+        "mongodb": [],
+        "sqlite": []
+    },
+    "ignore_patterns": {
+        "all": [
+            "*.db*",
+            "*.sqlite",
+            "*.log",
+            "*.tmp"
+        ],
+        "data": [],
+        "repo": []
+    }
+}

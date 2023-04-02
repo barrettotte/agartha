@@ -75,6 +75,9 @@
           - rsync
           - nfs-common
           - apparmor
+          - borgbackup
+          - sqlite3
+          - jq
         state: latest
         update_cache: true
 
@@ -97,56 +100,11 @@
   tasks:
     - name: Mount TrueNAS NFS
       mount:
-        src: "{{ truenas_nfs_path }}"
+        src: "{{ truenas_interface + ':' + nfs_docker_path }}"
         path: /mnt/docker
         opts: rw,soft,intr,nfsvers=4
         fstype: nfs
         state: mounted
-    
-    - name: push docker files to remote
-      synchronize:
-        src: "../../../{{ repo_subdir }}"
-        dest: /home/docker
-        recursive: true
-        checksum: true
-        archive: false
-
-    - name: set owner and permissions of pushed files
-      file:
-        path: "/home/docker/{{ repo_subdir }}"
-        owner: docker
-        group: nogroup
-        mode: '0776'
-        recurse: yes
-
-- name: configure grafana volume
-  hosts: carthage.agartha
-  become: true
-  tasks:
-    - name: set grafana owner for bind mounts
-      file:
-        path: "{{ item }}"
-        owner: 472
-        group: 472
-        recurse: true
-      loop:
-        - /home/docker/carthage/grafana
-        - /home/docker/data/grafana
-
-    - name: set prometheus owner for bind mounts
-      file:
-        path: "{{ item }}"
-        owner: 65534
-        group: 65534
-        recurse: true
-      loop:
-        - /home/docker/carthage/prometheus
-        - /home/docker/data/prometheus
-
-- name: start docker containers
-  hosts: core
-  become: true
-  remote_user: docker
   roles:
     - name: install docker
       role: geerlingguy.docker
@@ -159,55 +117,25 @@
         docker_compose_package: docker-compose-plugin
         docker_compose_package_state: present
 
-  tasks:
-    - name: start docker containers
-      shell:
-        cmd: 'docker compose up --detach --remove-orphans'
-        chdir: "/home/docker/{{ repo_subdir }}"
-      changed_when: false
-    
-    - name: restart docker containers
-      shell:
-        cmd: 'docker compose restart'
-        chdir: "/home/docker/{{ repo_subdir }}"
-      changed_when: false
-    # TODO: somehow only fire this on changes to pushed repo?
-
-    - name: get docker container info
-      shell: docker ps
-      register: docker_info
-      changed_when: false
-
-    - debug:
-        msg: "{{ docker_info.stdout_lines }}"
-
-    - name: remove unused docker images, containers, volumes
-      shell: docker system prune --all --force
-      changed_when: false
-
-- name: configure Portainer on athens
-  import_playbook: athens_portainer.yml
-
-- name: giza mount media directories
-  hosts: giza.agartha
+- name: mount media directories
+  hosts: giza.agartha,athens.agartha
   become: true
   tasks:
     - name: mount media directories
       mount:
-        src: "truenas-service.agartha:/mnt/mesopotamia/nfs/media"
+        src: "{{ truenas_interface + ':' + nfs_media_path }}"
         path: "/mnt/media"
         opts: rw,soft,intr,nfsvers=4
         fstype: nfs
         state: mounted
 
-- name: athens mount media directories
-  hosts: athens.agartha
+- name: setup core vm backups
+  hosts: core
   become: true
   tasks:
-    - name: mount media directories
-      mount:
-        src: "truenas-manage.agartha:/mnt/mesopotamia/nfs/media"
-        path: "/mnt/media"
-        opts: rw,soft,intr,nfsvers=4
-        fstype: nfs
-        state: mounted
+    - name: init borg repository
+      shell:
+        cmd: borg init --encryption=none /mnt/backups
+      changed_when: false
+
+    # TODO: set crontab with backup script

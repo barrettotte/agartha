@@ -53,7 +53,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
-      - ./env/discord-alerts.env
+      - ./env/discord.env
     logging: *default-logging
     restart: unless-stopped
     depends_on:

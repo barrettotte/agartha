@@ -1,4 +1,6 @@
 # athens config
 
 repo_subdir: athens
-truenas_nfs_path: truenas-manage.agartha:/mnt/mesopotamia/nfs/proxmox/docker/athens
+truenas_interface: truenas-manage.agartha
+nfs_docker_path: /mnt/mesopotamia/nfs/proxmox/docker/athens
+nfs_media_path: /mnt/mesopotamia/nfs/media
