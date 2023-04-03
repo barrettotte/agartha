@@ -27,6 +27,7 @@ services:
     devices:
       - /dev/kmsg:/dev/kmsg
     logging: *default-logging
+    mem_limit: 256M
     restart: unless-stopped
 
   dashy:
@@ -87,7 +88,32 @@ services:
     logging: *default-logging
     restart: unless-stopped
 
-  # TODO: nextcloud
+  mariadb:
+    container_name: mariadb
+    image: mariadb:10.7
+    ports:
+      - '3306:3306'
+    volumes:
+      - './mariadb/init-mariadb.sh:/docker-entrypoint-initdb.d/1-init.sh'
+      - '/home/docker/data/mariadb:/var/lib/mysql'
+    env_file:
+      - ./env/mariadb.env
+    logging: *default-logging
+    restart: unless-stopped
+
+  nextcloud:
+    container_name: nextcloud
+    image: nextcloud:25.0-apache
+    ports:
+      - '8180:80'
+    volumes:
+      - '/home/docker/data/nextcloud/:/var/www/html'
+    env_file:
+      - ./env/nextcloud.env
+    logging: *default-logging
+    restart: unless-stopped
+    depends_on:
+      - mariadb
 
   node-exporter:
     container_name: node-exporter
@@ -106,6 +132,7 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     logging: *default-logging
+    mem_limit: 256M
     restart: unless-stopped
 
   portainer-agent:
@@ -137,6 +164,7 @@ services:
       - '-config.file=/etc/promtail/config.yml'
       - '-config.expand-env'
     logging: *default-logging
+    mem_limit: 256M
     restart: unless-stopped
 
   ubooquity:

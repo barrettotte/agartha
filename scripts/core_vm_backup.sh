@@ -97,6 +97,7 @@ backup_mariadb_databases() {
   jq -c --raw-output '.databases.postgres[]' $config_json | while read db; do
     echo Backing up mariadb database $db...
     return 1 # TODO: not supported yet
+    # docker exec some-mariadb sh -c 'exec mariadb-dump --all-databases -uroot -p"$MARIADB_ROOT_PASSWORD"' > /some/path/on/your/host/all-databases.sql
   done
 }
 

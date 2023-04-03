@@ -63,7 +63,7 @@ module "giza" {
   dns           = local.pihole_dns
   domain        = local.agartha_domain
 
-  memory = 8192
+  memory = 16384
   disk_size = "32G"
   
   proxmox_node             = local.primary_proxmox_node

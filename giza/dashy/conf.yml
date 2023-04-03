@@ -417,7 +417,7 @@ sections:
       - title: NextCloud
         description: NextCloud
         icon: hl-nextcloud
-        url: '#'
+        url: http://nextcloud.agartha.barrettotte.com
         target: newtab
         id: 4_836_nextcloud
       - title: Transmission

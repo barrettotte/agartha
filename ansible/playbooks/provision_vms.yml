@@ -132,10 +132,15 @@
 - name: setup core vm backups
   hosts: core
   become: true
+  vars:
+    borg_path: /mnt/backups
   tasks:
-    - name: init borg repository
-      shell:
-        cmd: borg init --encryption=none /mnt/backups
+    - name: check if borg repo already exists
+      shell: "borg list --short {{ borg_path }}"
+      register: borg_listing
+      ignore_errors: true
       changed_when: false
 
-    # TODO: set crontab with backup script
+    - name: init borg repository
+      shell: "borg init --encryption=none {{ borg_path }}"
+      when: borg_listing.rc != 0

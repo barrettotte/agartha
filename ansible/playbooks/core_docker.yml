@@ -51,7 +51,7 @@
         state: present
       # NOTE: backup script may move to luxor crontab in the future
 
-- name: configure grafana, prometheus, loki mounts
+- name: set misc permissions on carthage
   hosts: carthage.agartha
   become: true
   tasks:
@@ -85,6 +85,19 @@
         group: 10001
         recurse: true
       changed_when: false
+# TODO: should probably be separate playbook
+
+- name: set misc permissions on giza
+  hosts: giza.agartha
+  become: true
+  tasks:
+    - name: set mariab init permissions
+      file:
+        path: "/home/docker/giza/mariadb"
+        mode: '0776'
+        recurse: true
+      changed_when: false
+# TODO: should probably be separate playbook
 
 - name: start docker containers
   hosts: core
