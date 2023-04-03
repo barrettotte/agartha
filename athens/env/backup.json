@@ -4,7 +4,10 @@
             "/home/docker/data/file-browser/filebrowser.db",
             "/home/docker/data/portainer/portainer.db"
         ],
-        "h2": [],
+        "h2": [
+            "/home/docker/data/cloudbeaver/workspace/.data/cb.h2.dat.mv.db",
+            "/home/docker/data/cloudbeaver/workspace/.data/cb.h2.dat.trace.db"
+        ],
         "postgres": [],
         "mariadb": [],
         "mongodb": [],

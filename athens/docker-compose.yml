@@ -30,6 +30,22 @@ services:
     mem_limit: 256M
     restart: unless-stopped
 
+  cloudbeaver:
+    container_name: cloudbeaver
+    image: dbeaver/cloudbeaver:23.0.1
+    ports:
+      - '3086:8978'
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./cloudbeaver:/opt/cloudbeaver/conf
+      - /home/docker/data/cloudbeaver/data:/opt/cloudbeaver/data
+      - /home/docker/data/cloudbeaver/workspace:/opt/cloudbeaver/workspace
+    env_file:
+      - ./env/cloudbeaver.env
+    logging: *default-logging
+    restart: unless-stopped
+
   file-browser:
     container_name: file-browser
     image: filebrowser/filebrowser:v2-s6
