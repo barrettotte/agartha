@@ -3,7 +3,14 @@
         "boltdb": [],
         "h2": [],
         "postgres": [],
-        "mariadb": [],
+        "mariadb": [
+            {
+                "env_file": "/home/docker/giza/env/mariadb.env",
+                "database": "nextcloud",
+                "username": "MARIADB_NEXTCLOUD_USER",
+                "password": "MARIADB_NEXTCLOUD_PASSWORD"
+            }
+        ],
         "mongodb": [],
         "sqlite": [
             "/home/docker/giza/home-assistant/home-assistant_v2.db"

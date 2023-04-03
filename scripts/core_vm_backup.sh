@@ -19,9 +19,16 @@
 #         ],
 #         "sqlite": [
 #             "/home/docker/data/uptimekuma/kuma.db"
+#         ],
+#         "mariadb": [
+#             {
+#                 "env_file": "/home/docker/giza/env/mariadb.env",
+#                 "database": "nextcloud",
+#                 "username": "MARIADB_NEXTCLOUD_USER",
+#                 "password": "MARIADB_NEXTCLOUD_PASSWORD"
+#             }
 #         ]
-#     },
-#
+#     }
 #     // files to ignore during rsync
 #     // database files should always be listed here
 #     "ignore_patterns": {
@@ -76,13 +83,16 @@ backup_boltdb_databases() {
   jq -c --raw-output '.databases.boltdb[]' $config_json | while read db; do
     echo Backing up boltdb $db...
     cp $db $local_backup_path/db/backup_$(basename $db) || return 1
+    # Ignore WAL files; Regular copying will lose transactions in progress, but it should be good enough
   done
 }
 
 backup_h2_databases() {
   jq -c --raw-output '.databases.h2[]' $config_json | while read db; do
     echo Backing up h2 database $db...
-    return 1 # TODO: requires h2 jar and java to be installed...ubooquity is the only one right now...worth doing?
+    cp $db $local_backup_path/db/backup_$(basename $db) || return 1
+    # TODO: requires h2 jar and java to be installed...ubooquity and cloudbeaver are the only ones...worth doing?
+    # This has the chance to corrupt the h2 database, but not critical data at the moment
   done
 }
 
@@ -94,15 +104,21 @@ backup_postgres_databases() {
 }
 
 backup_mariadb_databases() {
-  jq -c --raw-output '.databases.postgres[]' $config_json | while read db; do
+  username=''
+  password=''
+  database=''
+  jq -c --raw-output '.databases.mariadb[]' $config_json | while read db_config; do
     echo Backing up mariadb database $db...
-    return 1 # TODO: not supported yet
-    # docker exec some-mariadb sh -c 'exec mariadb-dump --all-databases -uroot -p"$MARIADB_ROOT_PASSWORD"' > /some/path/on/your/host/all-databases.sql
+    source "$(echo $db_config | jq -c --raw-output '.env_file')"
+    username="$(echo $db_config | jq -c --raw-output '.username')"
+    password="$(echo $db_config | jq -c --raw-output '.password')"
+    database="$(echo $db_config | jq -c --raw-output '.database')"
+    docker exec mariadb sh -c "exec mysqldump -u${!username} -p${!password} $database" > "$local_backup_path/backup-$database.sql" || return 1
   done
 }
 
 backup_mongodb_databases() {
-  jq -c --raw-output '.databases.postgres[]' $config_json | while read db; do
+  jq -c --raw-output '.databases.mongodb[]' $config_json | while read db; do
     echo Backing up mongodb database $db...
     return 1 # TODO: not supported yet
   done
