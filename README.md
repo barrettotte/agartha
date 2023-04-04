@@ -1,4 +1,4 @@
-# infra
+# agartha
 
 My network infrastructure.
 

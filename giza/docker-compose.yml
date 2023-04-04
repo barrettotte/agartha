@@ -39,6 +39,10 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./dashy/conf.yml:/app/public/conf.yml
+      - ./dashy/entrypoint.sh:/entrypoint.sh
+    env_file:
+      - ./env/dashy.env
+    command: ['/entrypoint.sh']
     logging: *default-logging
     restart: unless-stopped
 
@@ -94,6 +98,8 @@ services:
     ports:
       - '3306:3306'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - './mariadb/init-mariadb.sh:/docker-entrypoint-initdb.d/1-init.sh'
       - '/home/docker/data/mariadb:/var/lib/mysql'
     env_file:
@@ -107,6 +113,8 @@ services:
     ports:
       - '8180:80'
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - '/home/docker/data/nextcloud/:/var/www/html'
     env_file:
       - ./env/nextcloud.env

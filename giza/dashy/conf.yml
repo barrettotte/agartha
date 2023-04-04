@@ -3,6 +3,15 @@ appConfig:
   language: en
   layout: auto
   iconSize: medium
+  showSplashScreen: false
+  preventWriteToDisk: true
+  auth:
+    enableGuestAccess: true
+    users:
+      - user: "$DASHY_ADMIN_USER"
+        hash: "$DASHY_ADMIN_PASSWORD_SHA256"
+        type: admin
+    enableKeycloak: false
   customColors:
     fallout:
       primary: '#aabbc3'
@@ -251,9 +260,6 @@ appConfig:
 pageInfo:
   title: Agartha
   description: Barrett's Homelab
-  navLinks: []
-  footerText: ''
-  logo: ''
 sections:
   - name: Management
     displayData:
@@ -441,7 +447,7 @@ sections:
       - title: CloudBeaver
         description: CloudBeaver
         icon: hl-cloudbeaver
-        url: '#'
+        url: http://cloudbeaver.agartha.barrettotte.com
         target: newtab
         id: 8_836_cloudbeaver
       - title: FreshRSS
