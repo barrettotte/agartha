@@ -1,2 +1,2 @@
-shell: /bin/bash
-create_home: true
+user_shell: /bin/bash
+user_create_home: true

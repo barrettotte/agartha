@@ -1,0 +1,15 @@
+update_cache_valid_time: 3600
+
+update_send_alert: false
+update_discord_webhook: ''
+
+update_auto_reboot: true
+update_auto_reboot_msg: "Updated {{ ansible_hostname }}; Auto reboot started."
+update_manual_reboot_msg: "Updated {{ ansible_hostname }}; Reboot required!"
+
+update_connect_timeout: 5
+update_reboot_timeout: 300
+update_pre_reboot_delay: 0
+update_post_reboot_delay: 30
+update_test_command: uptime
+update_reboot_msg: 'Reboot started by Ansible to install kernel updates'

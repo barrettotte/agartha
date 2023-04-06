@@ -32,6 +32,7 @@
         state: directory
       loop:
         - "/home/docker/data"
+        - "/home/docker/restore"
         - "/home/docker/scripts"
 
     - name: push backup script
@@ -41,7 +42,7 @@
         recursive: true
         checksum: true
         archive: false
-    
+
     - name: set cronjob for backups to NFS
       cron:
         name: "backup files and databases"
@@ -110,7 +111,6 @@
         cmd: 'docker compose up --detach --remove-orphans'
         chdir: "/home/docker/{{ repo_subdir }}"
       changed_when: false
-      when: docker_compose_files_changed
 
     - name: restart docker containers
       shell:

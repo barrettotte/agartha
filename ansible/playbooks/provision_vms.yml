@@ -28,6 +28,12 @@
   vars_files:
     - ../vars/secrets.yml
   roles:
+    - name: update packages
+      role: ../roles/update
+    
+    - name: configure time
+      role: ../roles/time
+
     - name: configure sshd
       role: ../roles/sshd
 
@@ -37,19 +43,19 @@
     - name: add personal user
       role: ../roles/user
       vars:
-        user: "{{ personal_user }}"
-        comment: 'personal user'
-        password: "{{ personal_password }}"
+        user_username: "{{ personal_user }}"
+        user_comment: 'personal user'
+        user_password: "{{ personal_password }}"
         user_groups: 'wheel'
-        ssh_pub: "{{ personal_ssh_pub }}"
+        user_ssh_pub: "{{ personal_ssh_pub }}"
     
     - name: add docker user
       role: ../roles/user
       vars:
-        user: docker
-        comment: 'docker service user'
+        user_username: docker
+        user_comment: 'docker service user'
         user_groups: 'wheel'
-        ssh_pub: "{{ docker_ssh_pub }}"
+        user_ssh_pub: "{{ docker_ssh_pub }}"
 
   tasks:
     - name: ensure packer user is removed
@@ -144,3 +150,5 @@
     - name: init borg repository
       shell: "borg init --encryption=none {{ borg_path }}"
       when: borg_listing.rc != 0
+
+# TODO: auto-configure discord.env in each VM

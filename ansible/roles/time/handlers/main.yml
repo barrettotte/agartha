@@ -1,0 +1,21 @@
+- name: make sure timedatectl is running
+  systemd:
+    name: timedatectl
+    daemon_reload: true
+    state: started
+  listen: setup ntp
+
+- name: enable NTP
+  shell: timedatectl set-ntp true
+  listen: setup ntp
+
+- name: restart time service
+  systemd:
+    name: timedatectl
+    state: restarted
+  listen: setup ntp
+
+- name: set hardware clock
+  shell: sudo hwclock --systohc
+  listen: setup ntp
+  when: time_set_hwclock

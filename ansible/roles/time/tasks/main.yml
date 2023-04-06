@@ -1,0 +1,21 @@
+- name: install dependencies
+  apt:
+    pkg:
+      - sudo
+      - ntp
+    state: present
+
+- name: set timezone
+  timezone:
+    name: "{{ time_timezone }}"
+
+- name: check time service
+  shell: timedatectl
+  register: timedatectl_output
+  changed_when: false
+
+- name: setup NTP
+  debug:
+    msg: 'Notifying NTP setup handler'
+  changed_when: "('NTP service: inactive' in timedatectl_output.stdout) and time_setup_ntp"
+  notify: setup ntp

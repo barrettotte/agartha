@@ -102,3 +102,6 @@
         - jericho
         - rhodes
       when: "item not in portainer_endpoints"
+
+  # TODO: might need to detect if portainer agents exist and recreate them
+  # Otherwise, portainer can't add environments

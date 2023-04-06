@@ -1,0 +1,3 @@
+time_timezone: 'America/New_York'
+time_setup_ntp: true
+time_set_hwclock: true

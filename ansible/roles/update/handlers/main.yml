@@ -1,0 +1,29 @@
+- name: Make sure curl is installed
+  apt:
+    name: curl
+    state: present
+    listen: handle reboot
+    when: update_send_alert
+
+- name: Send discord alert if configured (manual reboot)
+  shell: "curl -X POST -H 'Content-Type: application/json' -d '{\"content\":\"{{ update_manual_reboot_msg }}\"}' {{ update_discord_webhook }}"
+  listen: handle reboot
+  when: update_send_alert and not update_auto_reboot
+  changed_when: false
+
+- name: Send discord alert if configured (auto reboot)
+  shell: "curl -X POST -H 'Content-Type: application/json' -d '{\"content\":\"{{ auto_reboot_msg }}\"}' {{ update_discord_webhook }}"
+  listen: handle reboot
+  when: update_send_alert and update_auto_reboot
+  changed_when: false
+
+- name: Auto reboot if kernel updates need installed
+  reboot:
+    msg: "{{ update_reboot_msg }}"
+    connect_timeout: "{{ update_connect_timeout }}"
+    reboot_timeout: "{{ update_reboot_timeout }}"
+    pre_reboot_delay: "{{ update_pre_reboot_delay }}"
+    post_reboot_delay: "{{ update_post_reboot_delay }}"
+    test_command: "{{ update_test_command }}"
+  listen: handle reboot
+  when: update_auto_reboot

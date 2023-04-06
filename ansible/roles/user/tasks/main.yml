@@ -1,10 +1,10 @@
 - name: Create user
   user:
-    name: "{{ user }}"
-    comment: "{{ comment }}"
-    password: "{{ password }}"
-    shell: "{{ shell }}"
-    createhome: "{{ create_home }}"
+    name: "{{ user_username }}"
+    comment: "{{ user_comment }}"
+    password: "{{ user_password }}"
+    shell: "{{ user_shell }}"
+    createhome: "{{ user_create_home }}"
     groups: "{{ user_groups }}"
     append: true
     state: present
@@ -12,6 +12,6 @@
 
 - name: Add user authorized keys
   ansible.posix.authorized_key:
-    user: "{{ user }}"
-    key: "{{ ssh_pub }}"
+    user: "{{ user_username }}"
+    key: "{{ user_ssh_pub }}"
     state: present
