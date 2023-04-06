@@ -20,11 +20,6 @@ scrape_configs:
     static_configs:
       - targets: ['pushgateway:9091']
 
-  - job_name: graphite-exporter
-    honor_labels: true
-    static_configs:
-      - targets: ['graphite-exporter:9108']
-
   # core vms
 
   - job_name: athens

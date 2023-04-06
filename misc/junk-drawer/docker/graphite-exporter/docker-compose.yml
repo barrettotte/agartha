@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  graphite-exporter:
+    container_name: graphite-exporter
+    image: prom/graphite-exporter:v0.13.3
+    ports:
+      - '2003:9109/tcp' # mock graphite carbon receiver (plaintext), TrueNAS needs to use graphite on port 2003
+      - '2003:9109/udp'
+      - '9108:9108' # prometheus scrape target
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./graphite-exporter/graphite_mapping.yml:/etc/graphite_mapping.yml
+    command:
+      - '--graphite.mapping-config=/etc/graphite_mapping.yml'
+      - '--log.level=debug'
+      - '--graphite.sample-expiry=10m' # prevent disk fill up
+      - '--graphite.mapping-strict-match' # drop unmatched lines
+    mem_limit: 512m
+    restart: unless-stopped
+    depends_on:
+      - prometheus

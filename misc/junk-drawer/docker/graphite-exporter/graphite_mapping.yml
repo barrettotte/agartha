@@ -16,22 +16,32 @@
 # Mapping syntax is based on statsd_exporter.
 # https://github.com/prometheus/statsd_exporter#regular-expression-matching
 
-# line="servers.truenas_agartha.aggregation-cpu-sum.gauge-nice 0 1677462341"
-# servers\.([^_]*)_([^_]*)
+# TrueNAS samples:
+# 
+# line="servers.truenas_agartha.aggregation-cpu-sum.gauge-nice 0 1680797390"
+#                      1              2                 3
+# line="servers.truenas_agartha.disktemp-da4.temperature 29 1680797320"
+#                      1              2            3
+# line="servers.truenas_agartha.df-mnt-mesopotamia-nfs-media-anime.df_complex-reserved 0 1680797450"
+#                      1              2                              3
+# line="servers.truenas_agartha.df-mnt-mesopotamia-nfs-proxmox-docker-rhodes.df_complex-reserved 0 1680797500"
+#                      1              2                                           3
+# line="servers.truenas_agartha.aggregation-cpu-average.gauge-idle 99.8425196850394 1680797720"
+#                      1              2                      3
+# line="servers.truenas_agartha.disk-da9.disk_ops.read 0.000000 1680797900"
+#                      1           2         3      4
+# line="servers.truenas_agartha.cpu-1.percent-system 0.2360346184107 1680797990"
+#                      1           2         3
+# line="servers.truenas_agartha.rrdcached.counter-journal-rotates 0.000000 1680798040"
+#                      1           2         3
 
 mappings:
   - match: "servers.*.*.*"
-    name: "${3}"
+    name: "truenas_${2}"
     labels:
-      instance: "${1}"
+      instance: "$1"
       job: "truenas-graphite"
-      type: "${2}"
-  - match: "servers.*.*.*.*"
-    name: "${3}_${4}"
-    labels:
-      instance: "${1}"
-      job: "truenas-graphite"
-      type: "${2}"
+      type: "$3"
 
 # mappings:
 
