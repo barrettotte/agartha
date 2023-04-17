@@ -58,25 +58,26 @@ services:
     logging: *default-logging
     restart: unless-stopped
 
-  # jellyfin:
-  #   container_name: jellyfin
-  #   image: linuxserver/jellyfin:10.8.9
-  #   ports:
-  #     - '8096:8096'     # http web UI
-  #     - '8920:8920'     # https web UI
-  #     - '7359:7359/udp' # client discovery on local network
-  #     - '1900:1900/udp' # service discovery for DNLA and clients
-  #   volumes:
-  #     - /etc/timezone:/etc/timezone:ro
-  #     - /etc/localtime:/etc/localtime:ro
-  #     - /home/docker/data/jellyfin/config:/config
-  #     # TODO: NFS mounts
-  #   # environment:
-  #   #   - JELLYFIN_PublishedServerUrl=?
-  #   # devices:
-  #   #   - "" # TODO: GPU passthrough
-  #   logging: *default-logging
-  #   restart: unless-stopped
+  jellyfin:
+    container_name: jellyfin
+    image: linuxserver/jellyfin:10.8.9
+    ports:
+      - '8096:8096'     # http web UI
+      - '8920:8920'     # https web UI
+      # - '7359:7359/udp' # client discovery on local network
+      # - '1900:1900/udp' # service discovery for DNLA and clients
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /home/docker/data/jellyfin/config:/config
+      - /mnt/media/anime:/media/anime
+      - /mnt/media/movies:/media/movies
+      - /mnt/media/tv:/media/tv
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=GPU-8d09812d-bf2a-aa91-11ea-3c212d4cb622 
+      # nvidia-smi --query-gpu=gpu_uuid --format=csv
+    logging: *default-logging
+    restart: unless-stopped
 
   librespeed:
     container_name: librespeed

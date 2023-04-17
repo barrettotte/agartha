@@ -84,6 +84,7 @@
           - borgbackup
           - sqlite3
           - jq
+          - software-properties-common
         state: latest
         update_cache: true
 
@@ -152,3 +153,7 @@
       when: borg_listing.rc != 0
 
 # TODO: auto-configure discord.env in each VM
+
+# TODO: auto-configure GPU passthrough for Giza?
+# /etc/pve/qemu-server/203.conf 
+# hostpci0: 0000:0a:00,pcie=1,x-vga=1

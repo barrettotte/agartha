@@ -12,11 +12,12 @@ VLAN 30 (services)
 - https://github.com/pi-hole/pi-hole/#one-step-automated-install
   - `curl -sSL https://install.pi-hole.net | bash`
 - Wizard; defaults
-- `pihole -a -p`
+- set new password: `pihole -a -p`
 - Web UI: 
   - Settings > DNS > Interface Settings > Respond only on interface `eth0`
   - Set since pihole is in a separate VLAN
   - Tools > Update Gravity
+- also created personal user with ssh access
 
 ## Update
 

@@ -53,9 +53,9 @@ TODO: double check this
 | 8    |                        |          |          |
 | 9    | tigris (wireless AP)   | 20,25,50 | 10       |
 | 10   |                        |          |          |
-| 11   |                        |          |          |
+| 11   | guest                  |          | 25       |
 | 12   |                        |          |          |
-| 13   | test guest             |          | 25       |
+| 13   | babylon (proxmox)      |          | 40       |
 | 14   | babylon (proxmox)      |          | 30       |
 | 15   | babylon (proxmox)      |          | 35       |
 | 16   | babylon (proxmox)      |          | 10       |

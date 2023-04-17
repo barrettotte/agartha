@@ -25,7 +25,9 @@ qm set VM_ID -scsi# /dev/disk/by-id/HDD_ID,serial=HDD_SERIAL
   - 10 3TB disks -> 21.82 TB
 - https://www.youtube.com/watch?v=M4DLChRXJog
 
-## SMB Shares
+## Shares
+
+### SMB
 
 - create dataset
 - edit permissions > use ACL manager
@@ -37,27 +39,16 @@ NOTE: When testing adding user to group on Windows, disconnect all SMB shares.
 It seems like having an open SMB share causes issues with updating permissions or something.
 Relog into Windows to update permissions.
 
-## NFS
+### NFS
 
 - Setting up NFS for docker volume
   - All dirs
   - Maproot user = root, Maproot group = wheel
 - also needed to enable `NMFSv3 ownership model for NFSv4` for docker volumes...not sure why
 
-```txt
-/mesopotamia/nfs/proxmox/docker/
-```
+`/mesopotamia/nfs/proxmox/docker/`
 
-## TrusNAS Misc Config
-
-- Network > Interfaces 
-  - `vtnet0` > `10.42.10.21`
-  - `vtnet1` > `10.42.30.21`
-- System > General
-  - Web Interface IPv4 Address: `10.42.10.21`
-  - Enable Web Interface HTTP -> HTTPS Redirect
-
-## iSCSI
+### iSCSI
 
 - Wizard
 - Setup two zvols: `proxmox/proxmox-shared-0` and `proxmox/proxmox-shared-1` each 500GB
@@ -75,9 +66,18 @@ Relog into Windows to update permissions.
   - Authorized Networks: `10.42.30.0/24`, `10.42.10.0/24`
 - See proxmox notes for next steps
 
+## TrusNAS Misc Config
+
+- Network > Interfaces 
+  - `vtnet0` > `10.42.10.21`
+  - `vtnet1` > `10.42.30.21`
+- System > General
+  - Web Interface IPv4 Address: `10.42.10.21`
+  - Enable Web Interface HTTP -> HTTPS Redirect
+
 ## Logging/Metrics
 
-## Graphite Metrics
+### Graphite Metrics
 
 - setup graphite-exporter container to convert graphite metrics to prometheus
 - report CPU as percent
@@ -85,13 +85,27 @@ Relog into Windows to update permissions.
 - graph age in months = 12
 - number of graph points 1200
 
-## Syslogs To Loki
+### Syslogs To Loki
 
 - System > Advanced > Syslog
   - use FQDN for logging
   - Syslog level=Debug
   - Syslog server=syslog.carthage.agartha
   - Syslog transport=UDP
+
+## Configuration Backup
+
+Manually, go to System > General > Save Config
+
+TODO: script to backup config periodically
+
+## InfluxDB
+
+I couldn't get graphite-exporter working, but if I just use Telegraf I can use one less container and stop losing my mind.
+In TrueNAS, set graphite exporter url to influxdb instance.
+
+- https://blog.victormendonca.com/2020/10/28/how-to-install-telegraf-on-freenas/
+- https://www.reddit.com/r/homelab/comments/8c7o2c/telegraf_on_freenas/
 
 ## References
 

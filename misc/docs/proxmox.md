@@ -146,3 +146,15 @@ https://3os.org/infrastructure/proxmox/lets-encrypt-cloudflare/#instalaion-and-c
     - Domain: *.agartha.barrettotte.com
 
 hmm not doing this for now...
+
+## External GPU
+
+`lspci -k | grep -A 2 -i "VGA"`
+
+BIOS settings:
+
+- Miscellaneous
+  - PCIEX16 Slot Configuration = gen3
+  - PCIe Slot Configuration = gen3
+
+(got from old crypto mining notes)

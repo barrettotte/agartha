@@ -260,6 +260,8 @@ appConfig:
 pageInfo:
   title: Agartha
   description: Barrett's Homelab
+  navLinks: []
+  footerText: ''
 sections:
   - name: Management
     displayData:
@@ -398,7 +400,7 @@ sections:
     items:
       - title: Home Assistant
         description: Home Assistant
-        icon: hl-home-assistant-circle
+        icon: hl-home-assistant
         url: http://home-assistant.agartha.barrettotte.com
         target: newtab
         id: 0_836_homeassistant
@@ -417,7 +419,7 @@ sections:
       - title: Jellyfin
         description: Jellyfin
         icon: hl-jellyfin
-        url: '#'
+        url: http://jellyfin.agartha.barrettotte.com
         target: newtab
         id: 3_836_jellyfin
       - title: NextCloud

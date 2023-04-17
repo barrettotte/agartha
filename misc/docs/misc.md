@@ -7,6 +7,8 @@
 - monitor CPU usage - `top -aSH`
 - disk usage by folder - `du -h / | less`
 - check port - `nc -zv 10.42.30.26 22`
+- list drives - `lsblk -o +MODEL,SERIAL`
+- list GPUs - `lspci -k | grep -A 2 -i "VGA"`
 
 ## Docker
 
