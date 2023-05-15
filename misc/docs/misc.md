@@ -5,10 +5,30 @@
 - sanity check open ports - `sudo nmap -sS EDGE_ROUTER_GATEWAY_IP`
 - check eth port speed - `sudo ethtool eth0 | grep -i speed`
 - monitor CPU usage - `top -aSH`
-- disk usage by folder - `du -h / | less`
+- disk usage by folder
+  - `du -h / | less`
+  - `du -sh /* | sort -hr | head -n 20`
 - check port - `nc -zv 10.42.30.26 22`
 - list drives - `lsblk -o +MODEL,SERIAL`
 - list GPUs - `lspci -k | grep -A 2 -i "VGA"`
+
+### Disk Commands
+
+- `lsblk`
+- `fdisk -l`
+- `pvdisplay`
+- `vgdisplay`
+- `lvdisplay`
+- `lvs`
+- `pvs`
+- `vgs`
+- `lvresize`
+- `partprobe /dev/sda`
+
+- `pvresize /dev/sda5`
+- `lvextend -l +100%FREE /dev/debian-vg/root`
+- `resize2fs /dev/debian-vg/root`
+- `echo 1 > /sys/block/<device>/device/rescan`
 
 ## Docker
 

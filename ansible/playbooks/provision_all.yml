@@ -7,8 +7,11 @@
 - name: provision vm templates
   import_playbook: provision_vm_templates.yml
 
-- name: provision and configure core VMs
+- name: provision core VMs
   import_playbook: provision_vms.yml
+
+- name: configure core VMs
+  import_playbook: configure_vms.yml
 
 - name: start/configure docker containers on core VMs
   import_playbook: core_docker.yml

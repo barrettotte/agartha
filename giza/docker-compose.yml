@@ -64,18 +64,23 @@ services:
     ports:
       - '8096:8096'     # http web UI
       - '8920:8920'     # https web UI
+      - '1900:1900/udp' # service discovery for DNLA and clients
       # - '7359:7359/udp' # client discovery on local network
-      # - '1900:1900/udp' # service discovery for DNLA and clients
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /home/docker/data/jellyfin/config:/config
+      - /mnt/docker/jellyfin/artwork:/artwork
+      - /mnt/docker/jellyfin/config:/config
+      - /mnt/docker/jellyfin/transcode:/transcode
       - /mnt/media/anime:/media/anime
       - /mnt/media/movies:/media/movies
       - /mnt/media/tv:/media/tv
     environment:
-      - NVIDIA_VISIBLE_DEVICES=GPU-8d09812d-bf2a-aa91-11ea-3c212d4cb622 
+      - NVIDIA_VISIBLE_DEVICES=GPU-8d09812d-bf2a-aa91-11ea-3c212d4cb622
       # nvidia-smi --query-gpu=gpu_uuid --format=csv
+      - DOTNET_SYSTEM_IO_DISABLEFILELOCKING=1
+    env_file:
+      - ./env/jellyfin.env
     logging: *default-logging
     restart: unless-stopped
 

@@ -83,10 +83,13 @@ sudo systemctl restart docker
 
 # verify GPU is still there
 nvidia-smi -L
+nvidia-smi --loop=1
 
 # verify GPU passed to container
 docker run --rm --gpus all nvidia/cuda:12.1.0-base-ubuntu18.04 nvidia-smi
 ```
+
+TODO: convert to ansible playbook
 
 ## Jellyfin Config
 

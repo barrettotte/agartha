@@ -1,0 +1,137 @@
+- name: base configuration for each vm
+  hosts: core
+  become: true
+  vars_files:
+    - ../vars/secrets.yml
+  roles:
+    - name: update packages
+      role: ../roles/update
+    
+    - name: configure time
+      role: ../roles/time
+
+    - name: configure sshd
+      role: ../roles/sshd
+
+    - name: add wheel group
+      role: ../roles/wheel
+
+    - name: add personal user
+      role: ../roles/user
+      vars:
+        user_username: "{{ personal_user }}"
+        user_comment: 'personal user'
+        user_password: "{{ personal_password }}"
+        user_groups: 'wheel'
+        user_ssh_pub: "{{ personal_ssh_pub }}"
+    
+    - name: add docker user
+      role: ../roles/user
+      vars:
+        user_username: docker
+        user_comment: 'docker service user'
+        user_groups: 'wheel'
+        user_ssh_pub: "{{ docker_ssh_pub }}"
+
+  tasks:
+    - name: ensure packer user is removed
+      user:
+        name: packer
+        state: absent
+        remove: yes
+
+- name: configure each vm
+  hosts: core
+  become: true
+  pre_tasks:
+    - name: install general dependencies
+      apt:
+        pkg:
+          - sudo
+          - git
+          - vim
+          - curl
+          - python3-pip
+          - build-essential
+          - lsb-release
+          - rsync
+          - nfs-common
+          - apparmor
+          - borgbackup
+          - sqlite3
+          - jq
+          - software-properties-common
+        state: latest
+        update_cache: true
+
+    - name: Check for reboot
+      stat:
+        path: /var/run/reboot-required
+        get_md5: false
+      register: reboot_required
+
+    - name: Reboot if kernel updates need installed
+      reboot:
+        msg: "Reboot started by Ansible to install kernel updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required.stat.exists
+
+  tasks:
+    - name: Mount TrueNAS NFS
+      mount:
+        src: "{{ truenas_interface + ':' + nfs_docker_path }}"
+        path: /mnt/docker
+        opts: rw,soft,intr,nfsvers=4
+        fstype: nfs
+        state: mounted
+  roles:
+    - name: install docker
+      role: geerlingguy.docker
+      vars:
+        docker_users: 
+          - docker
+          - ansible
+          - "{{ personal_user }}"
+        docker_install_compose_plugin: true
+        docker_compose_package: docker-compose-plugin
+        docker_compose_package_state: present
+
+- name: mount media directories
+  hosts: giza.agartha,athens.agartha
+  become: true
+  tasks:
+    - name: mount media directories
+      mount:
+        src: "{{ truenas_interface + ':' + nfs_media_path }}"
+        path: "/mnt/media"
+        opts: rw,soft,intr,nfsvers=4
+        fstype: nfs
+        state: mounted
+
+# TODO: mount path for rhodes to download to
+
+- name: setup core vm backups
+  hosts: core
+  become: true
+  vars:
+    borg_path: /mnt/backups
+  tasks:
+    - name: check if borg repo already exists
+      shell: "borg list --short {{ borg_path }}"
+      register: borg_listing
+      ignore_errors: true
+      changed_when: false
+
+    - name: init borg repository
+      shell: "borg init --encryption=none {{ borg_path }}"
+      when: borg_listing.rc != 0
+
+# TODO: auto-configure discord.env in each VM
+
+# TODO: auto-configure GPU passthrough for Giza?
+# /etc/pve/qemu-server/203.conf 
+# hostpci0: 0000:0a:00,pcie=1,x-vga=1

@@ -14,7 +14,7 @@ build {
     execute_command = "chmod +x {{ .Path }}; sudo env {{ .Vars }} {{ .Path }};"
     inline = [
       "apt-get update",
-      "apt-get install -y sudo cloud-init cloud-guest-utils",
+      "apt-get install -y sudo cloud-init cloud-guest-utils parted",
 
       # "echo 'datasource_list: [ NoCloud, ConfigDrive, None ]' > /etc/cloud/cloud.cfg.d/99_pve.cfg",
       "sudo cp /tmp/99_pve.cfg /etc/cloud/cloud.cfg.d/99_pve.cfg",

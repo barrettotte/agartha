@@ -14,8 +14,8 @@
         "mongodb": [],
         "sqlite": [
             "/home/docker/giza/home-assistant/home-assistant_v2.db",
-            "/home/docker/data/jellyfin/config/data/data/jellyfin.db",
-            "/home/docker/data/jellyfin/config/data/data/library.db"
+            "/mnt/docker/jellyfin/config/data/data/jellyfin.db",
+            "/mnt/docker/jellyfin/config/data/data/library.db"
         ]
     },
     "ignore_patterns": {

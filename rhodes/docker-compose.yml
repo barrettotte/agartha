@@ -50,6 +50,32 @@ services:
     mem_limit: 256M
     restart: unless-stopped
 
+  gluetun:
+    container_name: gluetun
+    image: qmcgaw/private-internet-access:v3
+    ports:
+      - 8888:8888     # proxy
+      - 8388:8388/tcp # shadowsocks
+      - 8388:8388/udp # shadowsocks
+      - 8000:8000     # control server
+      - 8112:8112     # deluge
+      - 8989:8989     # sonarr
+      - 9117:9117     # jackett
+      - 7878:7878     # radarr
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /data/gluetun:/gluetun
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    env_file:
+      - ./env/gluetun.env
+    cap_add:
+      - NET_ADMIN
+    network_mode: bridge
+    logging: *default-logging
+    restart: unless-stopped
+
   portainer-agent:
     container_name: portainer-agent
     image: portainer/agent:2.17.1-alpine

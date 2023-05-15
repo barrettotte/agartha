@@ -25,8 +25,7 @@ d-i netcfg/wireless_wep string
 
 # GRUB
 d-i grub-installer/only_debian boolean true
-d-i grub-installer/with_other_os boolean true
-d-i grub-installer/bootdev string default
+d-i grub-installer/bootdev string /dev/sda
 
 # Mirror
 d-i mirror/country string United States
@@ -35,24 +34,48 @@ d-i mirror/http/directory string /debian
 d-i mirror/http/proxy string
 
 # Partitioning
-d-i partman-auto/disk string /dev/sda
-# d-i partman-auto/method string lvm
-d-i partman-auto/method string regular
-d-i partman-auto/choose_recipe select atomic
-d-i partman/default_filesystem string ext4
-d-i partman-basicfilesystems/no_swap boolean false
-
+d-i partman-auto/method string lvm
 d-i partman-auto-lvm/guided_size string max
+d-i partman-auto-lvm/new_vg_name string vg01
+d-i partman/alignment string "optimal"
+
+d-i partman-md/device_remove_md boolean true
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/default_filesystem string ext4
+
+# https://github.com/xobs/debian-installer/blob/master/doc/devel/partman-auto-recipe.txt
+
+d-i partman-auto/expert_recipe string      \
+  custom ::                                \
+    128 256 256 ext4                       \
+      method{ format } format{ }           \
+      use_filesystem{ } filesystem{ ext4 } \
+      mountpoint{ /boot }                  \
+    .                                      \
+    4096 4096 4096 linux-swap              \
+      $lvmok{ }                            \
+      method{ swap } format{ }             \
+    .                                      \
+    -1 10000 -1 ext4                       \
+      $lvmok{ }                            \
+      method{ format } format{ }           \
+      use_filesystem{ } filesystem{ ext4 } \
+      mountpoint{ / }                      \
+    .                                      \
+
+d-i partman-auto/choose_recipe select custom
+d-i partman/swapfile_size string 4096
+
+# Answer yes to all partition and LVM prompts
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/purge_lvm_from_device boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
+d-i partman/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
 d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
-d-i partman-partitioning/confirm_write_new_label boolean true
-
-# Overwrite old RAIDs and LVMs
-d-i partman-lvm/device_remove_lvm boolean true
-d-i partman-md/device_remove_md boolean true
-d-i partman-lvm/confirm boolean true
-d-i partman-lvm/confirm_nooverwrite boolean true
 
 # Account setup
 d-i passwd/root-login boolean false
