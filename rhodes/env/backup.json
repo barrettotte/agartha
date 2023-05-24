@@ -5,7 +5,12 @@
         "postgres": [],
         "mariadb": [],
         "mongodb": [],
-        "sqlite": []
+        "sqlite": [
+            "/home/docker/data/prowlarr/prowlarr.db",
+            "/home/docker/data/radarr/radarr.db",
+            "/home/docker/data/readarr/readarr.db",
+            "/home/docker/data/sonarr/sonarr.db"
+        ]
     },
     "ignore_patterns": {
         "all": [

@@ -12,8 +12,8 @@
 
 - name: Upgrade all packages
   apt:
-    upgrade: dist
     force_apt_get: true
+    state: latest
 
 - name: Check for reboot
   stat:

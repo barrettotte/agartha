@@ -50,32 +50,6 @@ services:
     mem_limit: 256M
     restart: unless-stopped
 
-  gluetun:
-    container_name: gluetun
-    image: qmcgaw/private-internet-access:v3
-    ports:
-      - 8888:8888     # proxy
-      - 8388:8388/tcp # shadowsocks
-      - 8388:8388/udp # shadowsocks
-      - 8000:8000     # control server
-      - 8112:8112     # deluge
-      - 8989:8989     # sonarr
-      - 9117:9117     # jackett
-      - 7878:7878     # radarr
-    volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /data/gluetun:/gluetun
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    env_file:
-      - ./env/gluetun.env
-    cap_add:
-      - NET_ADMIN
-    network_mode: bridge
-    logging: *default-logging
-    restart: unless-stopped
-
   portainer-agent:
     container_name: portainer-agent
     image: portainer/agent:2.17.1-alpine
@@ -106,4 +80,106 @@ services:
       - '-config.expand-env'
     logging: *default-logging
     mem_limit: 256M
+    restart: unless-stopped
+
+  prowlarr:
+    container_name: prowlarr
+    image: linuxserver/prowlarr:1.5.1-nightly
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /home/docker/data/prowlarr:/config
+    security_opt:
+      - no-new-privileges:true
+    network_mode: service:transmission-openvpn
+    logging: *default-logging
+    restart: unless-stopped
+    depends_on:
+      - transmission-openvpn
+
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr:4.5.2-nightly
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /home/docker/data/radarr:/config
+      - /mnt/docker/radarr/MediaCover:/config/MediaCover
+      - /mnt/docker/downloads/completed:/data/completed
+      - /mnt/media/movies:/movies
+    security_opt:
+      - no-new-privileges:true
+    network_mode: service:transmission-openvpn
+    logging: *default-logging
+    restart: unless-stopped
+    depends_on:
+      - transmission-openvpn
+      - prowlarr
+
+  readarr:
+    container_name: readarr
+    image: linuxserver/readarr:amd64-0.1.5-nightly
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /home/docker/data/readarr:/config
+      - /mnt/docker/downloads/completed:/data/completed
+      - /mnt/media/books:/books
+    security_opt:
+      - no-new-privileges:true
+    network_mode: service:transmission-openvpn
+    logging: *default-logging
+    restart: unless-stopped
+    depends_on:
+      - transmission-openvpn
+      - prowlarr
+
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr:3.0.10
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /home/docker/data/sonarr:/config
+      - /mnt/docker/sonarr/MediaCover:/config/MediaCover
+      - /mnt/docker/downloads/completed:/data/completed
+      - /mnt/media/anime:/anime
+      - /mnt/media/tv:/tv
+    security_opt:
+      - no-new-privileges:true
+    network_mode: service:transmission-openvpn
+    logging: *default-logging
+    restart: unless-stopped
+    depends_on:
+      - transmission-openvpn
+      - prowlarr
+
+  transmission-openvpn:
+    container_name: transmission-openvpn
+    image: haugene/transmission-openvpn:5.0
+    ports:
+      - 9091:9091 # transmission
+      - 9696:9696 # prowlarr
+      - 8787:8787 # readarr
+      - 7878:7878 # radarr
+      - 8989:8989 # sonarr
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/docker/downloads:/data
+      - /mnt/docker/torrents:/media/torrents
+      - /mnt/docker/transmission/config:/config
+      - /mnt/docker/transmission/watch:/data/watch
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - ./env/transmission.env
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=1"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    logging: *default-logging
     restart: unless-stopped

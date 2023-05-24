@@ -263,7 +263,7 @@ pageInfo:
   navLinks: []
   footerText: ''
 sections:
-  - name: Management
+  - name: Management / Monitoring
     displayData:
       sortBy: alphabetical
       rows: 1
@@ -276,119 +276,98 @@ sections:
         icon: hl-opnsense
         url: https://opnsense.agartha
         target: newtab
-        id: 0_1021_opnsense
+        id: 0_2194_opnsense
       - title: euphrates
         description: Managed switch
         icon: hl-tplink
         url: http://euphrates.agartha
         target: newtab
-        id: 1_1021_euphrates
+        id: 1_2194_euphrates
       - title: Unifi
         description: WiFi
         icon: hl-unifi
         url: https://unifi.agartha:8443
         target: newtab
-        id: 2_1021_unifi
+        id: 2_2194_unifi
       - title: babylon
         description: Proxmox node
         icon: hl-proxmox
         url: https://babylon.agartha:8006
         target: newtab
-        id: 3_1021_babylon
+        id: 3_2194_babylon
       - title: Portainer
         description: Container management
         icon: hl-portainer
         url: https://portainer.agartha.barrettotte.com
         target: newtab
-        id: 4_1021_portainer
+        id: 4_2194_portainer
       - title: TrueNAS
         description: NAS
         icon: hl-truenas
         url: https://truenas-manage.agartha
         target: newtab
-        id: 5_1021_truenas
+        id: 5_2194_truenas
       - title: Pihole
         description: DNS + Ad-blocking
         icon: hl-pihole
         url: http://pihole.agartha/admin
         target: newtab
-        id: 6_1021_pihole
-      - title: sumer
-        description: Proxmox node
-        icon: hl-proxmox
-        url: https://sumer.agartha:8006
-        target: newtab
-        id: 7_1021_sumer
+        id: 6_2194_pihole
       - title: ISP
         description: ISP edge router
         icon: hl-router
         url: http://wan.agartha
         target: newtab
-        id: 8_1021_isp
+        id: 7_2194_isp
       - title: Proxy Admin
         description: Nginx Proxy Manager
         icon: hl-nginxproxymanager
         url: http://proxy-admin.agartha.barrettotte.com
         target: newtab
-        id: 9_1021_proxyadmin
+        id: 8_2194_proxyadmin
       - title: Vault
         description: HashiCorp Vault
         icon: hl-vault
         url: '#'
         target: newtab
-        id: 10_1021_vault
-    icon: fas fa-network-wired
-  - name: Monitoring
-    displayData:
-      sortBy: alphabetical
-      rows: 1
-      cols: 1
-      collapsed: false
-      hideForGuests: false
-    items:
-      - title: Prometheus
-        description: Metrics
-        icon: hl-prometheus
-        url: http://prometheus.agartha.barrettotte.com
-        target: newtab
-        id: 0_1062_prometheus
-      - title: Grafana
-        description: Dashboards
-        icon: hl-grafana
-        url: http://grafana.agartha.barrettotte.com
-        target: newtab
-        id: 1_1062_grafana
+        id: 9_2194_vault
       - title: AlertManager
         description: Prometheus alerting
         icon: hl-alertmanager
         url: http://alertmanager.agartha.barrettotte.com
         target: newtab
-        id: 2_1062_alertmanager
-      - title: Kuma
-        description: Uptime Kuma
-        icon: hl-uptime-kuma
-        url: http://kuma.agartha.barrettotte.com
+        id: 10_2194_alertmanager
+      - title: Grafana
+        description: Dashboards
+        icon: hl-grafana
+        url: http://grafana.agartha.barrettotte.com
         target: newtab
-        id: 3_1062_kuma
-      - title: Librespeed
-        description: Speed test
-        icon: hl-librespeed
-        url: http://speedtest.agartha.barrettotte.com
-        target: newtab
-        id: 4_1062_librespeed
+        id: 11_2194_grafana
       - title: InfluxDB
         description: InfluxDB
         icon: hl-influxdb
         url: https://influxdb.agartha.barrettotte.com
         target: newtab
-        id: 5_1062_influxdb
-      - title: Shinobi
-        description: Shinobi
-        icon: hl-shinobi
-        url: '#'
+        id: 12_2194_influxdb
+      - title: Kuma
+        description: Uptime Kuma
+        icon: hl-uptime-kuma
+        url: http://kuma.agartha.barrettotte.com
         target: newtab
-        id: 6_1062_shinobi
-    icon: fas fa-monitor-heart-rate
+        id: 13_2194_kuma
+      - title: Librespeed
+        description: Speed test
+        icon: hl-librespeed
+        url: http://speedtest.agartha.barrettotte.com
+        target: newtab
+        id: 14_2194_librespeed
+      - title: Prometheus
+        description: Metrics
+        icon: hl-prometheus
+        url: http://prometheus.agartha.barrettotte.com
+        target: newtab
+        id: 15_2194_prometheus
+    icon: fas fa-network-wired
   - name: Services
     icon: mdi mdi-hammer-wrench
     displayData:
@@ -428,53 +407,83 @@ sections:
         url: http://nextcloud.agartha.barrettotte.com
         target: newtab
         id: 4_836_nextcloud
-      - title: Transmission
-        description: Transmission
-        icon: hl-transmission
-        url: '#'
-        target: newtab
-        id: 5_836_transmission
       - title: Guacamole
         description: Guacamole
         icon: hl-guacamole
         url: '#'
         target: newtab
-        id: 6_836_guacamole
+        id: 5_836_guacamole
       - title: Vaultwarden
         description: Vaultwarden
         icon: hl-vaultwarden
         url: '#'
         target: newtab
-        id: 7_836_vaultwarden
+        id: 6_836_vaultwarden
       - title: CloudBeaver
         description: CloudBeaver
         icon: hl-cloudbeaver
         url: http://cloudbeaver.agartha.barrettotte.com
         target: newtab
-        id: 8_836_cloudbeaver
+        id: 7_836_cloudbeaver
       - title: FreshRSS
         description: FreshRSS
         icon: hl-freshrss
         url: '#'
         target: newtab
-        id: 9_836_freshrss
+        id: 8_836_freshrss
       - title: OctoPrint
         description: 3D printer
         icon: hl-octoprint
         url: http://octoprint.agartha.barrettotte.com
-        id: 10_836_octoprint
+        id: 9_836_octoprint
       - title: Gitlab
         description: Gitlab
         icon: hl-gitlab
         url: '#'
         target: newtab
-        id: 11_836_gitlab
+        id: 10_836_gitlab
       - title: Code Server
         description: VS Code Server
         icon: hl-code
         url: '#'
         target: newtab
-        id: 12_836_codeserver
+        id: 11_836_codeserver
+      - title: Transmission
+        description: Transmission
+        icon: hl-transmission
+        url: https://transmission.agartha.barrettotte.com/transmission/web/
+        target: newtab
+        id: 12_836_transmission
+      - title: Prowlarr
+        description: Prowlarr
+        icon: hl-prowlarr
+        url: https://prowlarr.agartha.barrettotte.com/
+        target: newtab
+        id: 13_836_prowlarr
+      - title: Sonarr
+        description: Sonarr
+        icon: hl-sonarr
+        url: https://sonarr.agartha.barrettotte.com/
+        target: newtab
+        id: 14_836_sonarr
+      - title: Radarr
+        description: Radarr
+        icon: hl-radarr
+        url: https://radarr.agartha.barrettotte.com/
+        target: newtab
+        id: 15_836_radarr
+      - title: Readarr
+        description: Readarr
+        icon: hl-readarr
+        url: https://readarr.agartha.barrettotte.com/
+        target: newtab
+        id: 16_836_readarr
+      - title: Shinobi
+        description: Shinobi
+        icon: hl-shinobi
+        url: '#'
+        target: newtab
+        id: 17_836_shinobi
   - name: External
     icon: mdi mdi-cloud-circle
     displayData:

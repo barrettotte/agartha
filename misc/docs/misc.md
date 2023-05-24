@@ -11,6 +11,11 @@
 - check port - `nc -zv 10.42.30.26 22`
 - list drives - `lsblk -o +MODEL,SERIAL`
 - list GPUs - `lspci -k | grep -A 2 -i "VGA"`
+- Check external IP
+  - `wget http://ipecho.net/plain -O - -q ; echo`
+  - `curl -s https://api.ipify.org`
+  - `docker exec radarr curl -s https://api.ipify.org`
+  - `docker exec transmission-openvpn curl -s https://api.ipify.org`
 
 ### Disk Commands
 

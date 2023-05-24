@@ -3,3 +3,4 @@
 repo_subdir: rhodes
 truenas_interface: truenas-torrent.agartha
 nfs_docker_path: /mnt/mesopotamia/nfs/proxmox/docker/rhodes
+nfs_media_path: /mnt/mesopotamia/nfs/media

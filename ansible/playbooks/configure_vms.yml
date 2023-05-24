@@ -101,7 +101,7 @@
         docker_compose_package_state: present
 
 - name: mount media directories
-  hosts: giza.agartha,athens.agartha
+  hosts: athens.agartha,giza.agartha,rhodes.agartha
   become: true
   tasks:
     - name: mount media directories
@@ -111,8 +111,6 @@
         opts: rw,soft,intr,nfsvers=4
         fstype: nfs
         state: mounted
-
-# TODO: mount path for rhodes to download to
 
 - name: setup core vm backups
   hosts: core
