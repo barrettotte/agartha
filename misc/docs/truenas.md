@@ -107,6 +107,14 @@ In TrueNAS, set graphite exporter url to influxdb instance.
 - https://blog.victormendonca.com/2020/10/28/how-to-install-telegraf-on-freenas/
 - https://www.reddit.com/r/homelab/comments/8c7o2c/telegraf_on_freenas/
 
+## TrueNAS Core
+
+https://discord.com/developers/docs/resources/webhook#execute-slackcompatible-webhook
+
+System / Alert Services / Add Alert Service
+
+`https://discord.com/api/webhooks/{webhook.id}/{webhook.token}/slack`
+
 ## References
 
 - [TrueNAS Core: Configuring Shares, Permissions, Snapshots & Shadow Copies](https://www.youtube.com/watch?v=QIdy6sR0HrI)

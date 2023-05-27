@@ -2,22 +2,24 @@
 
 My homelab
 
-TODO: network diagram
+![diagram/network.drawio.svg](diagram/network.drawio.svg)
 
 ## Summary
+
+I still have a lot I want to add in the future, homelabs are never "done".
 
 - [athens/](athens/) - management and network monitoring
 - [carthage/](carthage/) - centralized logging and metrics
 - [diagram/](diagram/) - Draw.io network diagram
 - [giza/](giza/) - general services
-- [jericho/](jericho/) - proxy
+- [jericho/](jericho/) - Nginx proxy manager
 - [linode/](linode/) - services hosted on Linode
 - [luxor/](luxor/) - Packer, Terraform, and Ansible runner
 - [misc/](misc/) - misc notes and junk
 - [opnsense/](opnsense/) - router and firewall
 - [pihole/](pihole/) - DNS and ad-blocking
 - [rhodes/](rhodes/) - torrenting services
-- [unifi/](unifi/) - Unifi WiFi management TODO: move to docker (athens?)
+- [unifi/](unifi/) - Unifi WiFi management
 - [utils/](utils/) - misc scripts
 
 ## References
