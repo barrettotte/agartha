@@ -2,7 +2,7 @@
 
 My homelab
 
-![diagram/network-readme.svg](diagram/network-readme.svg)
+![diagram/network-readme.png](diagram/network-readme.png)
 
 ## Summary
 
