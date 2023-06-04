@@ -113,6 +113,22 @@ services:
     logging: *default-logging
     restart: unless-stopped
 
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:2
+    ports:
+      - '1883:1883' # MQTT
+      - '9011:9011' # MQTT over websocket
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /home/docker/data/mosquitto/data:/mosquitto/data
+      - /home/docker/data/mosquitto/logs:/mosquitto/log
+    network_mode: host
+    logging: *default-logging
+    restart: unless-stopped
+
   nextcloud:
     container_name: nextcloud
     image: nextcloud:25.0-apache

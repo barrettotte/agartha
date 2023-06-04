@@ -16,6 +16,7 @@
   - `curl -s https://api.ipify.org`
   - `docker exec radarr curl -s https://api.ipify.org`
   - `docker exec transmission-openvpn curl -s https://api.ipify.org`
+- Check container IP `docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mosquitto`
 
 ### Disk Commands
 
