@@ -112,7 +112,7 @@ module "rhodes" {
   dns           = local.pihole_dns
   domain        = local.agartha_domain
 
-  memory = 16384
+  memory = 24576
   disk_size = "32G"
   
   proxmox_node             = local.primary_proxmox_node
