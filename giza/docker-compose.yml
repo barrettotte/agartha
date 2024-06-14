@@ -98,6 +98,22 @@ services:
     logging: *default-logging
     restart: unless-stopped
 
+  linkwarden:
+    container_name: linkwarden
+    image: ghcr.io/linkwarden/linkwarden:v2.5.3
+    ports:
+      - '8300:3000'
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/docker/linkwarden:/data/data
+    env_file:
+      - ./env/linkwarden.env
+    logging: *default-logging
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    
   mariadb:
     container_name: mariadb
     image: mariadb:10.7
@@ -175,6 +191,26 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
+    logging: *default-logging
+    restart: unless-stopped
+
+  postgres:
+    container_name: postgres
+    image: postgres:16-alpine
+    ports:
+      - '5432:5432'
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - '/home/docker/data/postgres:/var/lib/postgresql/data'
+      - './postgres/init-postgres.sh:/docker-entrypoint-initdb.d/init.sh'
+      - './postgres/postgresql.conf:/etc/postgres/postgresql.conf'
+      # default: show config_file; /var/lib/postgresql/data/postgresql.conf
+      - './postgres/pg_hba.conf:/etc/postgres/pg_hba.conf'
+      # default: show hba_file; /var/lib/postgresql/data/pg_hba.conf
+    env_file:
+      - ./env/postgres.env
+    command: 'postgres -c config_file=/etc/postgres/postgresql.conf'
     logging: *default-logging
     restart: unless-stopped
 

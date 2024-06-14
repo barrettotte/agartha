@@ -22,6 +22,18 @@ I still have a lot I want to add in the future, homelabs are never "done".
 - [unifi/](unifi/) - Unifi WiFi management
 - [utils/](utils/) - misc scripts
 
+## Quick Commands
+
+I completely forget what to run when revisiting this...
+
+```sh
+# Reload docker compose + containers for specific machine
+ansible-playbook playbooks/core_docker.yml --limit giza.agartha
+
+# Connect to postgres container
+docker exec -it $(docker container ls | grep 'postgres' | head -c 12) psql -U postgres -d postgres
+```
+
 ## References
 
 - [awesome-selfhosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
