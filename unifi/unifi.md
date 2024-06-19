@@ -6,7 +6,7 @@
 - setup MFA
 - https://gist.github.com/davecoutts/5ccb403c3d90fcf9c8c4b1ea7616948d?permalink_comment_id=4240092#gistcomment-4240092
 - LXC Debian 11.3
-- 1GB RAM, 512MB swap, 1 Core, 4GB disk
+- 2GB RAM, 1GB swap, 1 Core, 4GB disk
 - network `en01`, static IP `10.42.10.8`
 
 https://florianmuller.com/setup-a-self-hosted-unifi-controller-on-a-hardened-proxmox-lxc-ubuntu-container
@@ -34,6 +34,33 @@ https://community.ui.com/questions/UniFi-Installation-Scripts-or-UniFi-Easy-Upda
   - SSID: `agartha-iot`, network: `iot`
 - Settings > System
   - Advanced > Disable Device Authentication
+
+## Reset Admin Password
+
+- https://cwl.cc/2020/10/resetting-a-unifi-controllers-admin-password.html
+- https://stackoverflow.com/questions/67310229/unifi-contoller-password-reset
+
+```sh
+# dependencies
+apt-get install -y mongodb-org whois
+
+# find admin account
+mongo --port 27117 ace --eval "db.admin.find().forEach(printjson);"
+
+# reset admin password to 'password', make sure admin.name matches what was found in prior step
+mongo -port 27117 ace --eval 'db.admin.update( { name: "administrator" }, {$set: { x_shadow: "$6$9Ter1EZ9$lSt6/tkoPguHqsDK0mXmUsZ1WE2qCM4m9AQ.x9/eVNJxws.hAxt2Pe8oA9TFB7LPBgzaHBcAfKFoLpRQlpBiX1" } } );'
+
+# confirm able to login to admin panel
+
+# reset password to specified value
+# (salt for UniFi mongo install is 9Ter1EZ9$lSt6)
+mkpasswd --method=sha-512 --salt=9Ter1EZ9$lSt6 NEW_PASSWORD
+
+# update admin account with new hashed password
+mongo -port 27117 ace --eval 'db.admin.update({ "_id" : ObjectId("MY_ADMIN_OBJECT_ID")},{$set: {"x_shadow" : "PASSWORD_HASH_FROM_MKPASSWD"}})'
+
+# should now be able to login with new password
+```
 
 ### Opnsense
 

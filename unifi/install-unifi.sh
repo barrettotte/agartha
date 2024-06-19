@@ -49,4 +49,7 @@ journalctl --no-pager --unit unifi.service
 cat /usr/lib/unifi/logs/server.log
 cat /usr/lib/unifi/logs/mongod.log
 
+# Misc Dependencies
+apt-get install -y mongodb-org whois
+
 # TODO: convert to ansible playbook!
